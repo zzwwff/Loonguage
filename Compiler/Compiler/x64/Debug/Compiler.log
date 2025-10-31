@@ -1,0 +1,15 @@
+﻿  lex.yy.c
+/lex.yy.c(921,3): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+/lex.yy.c(1088,28): warning C4244: “初始化”: 从“__int64”转换到“int”，可能丢失数据
+/lex.yy.c(1250,12): warning C4273: “_isatty”: dll 链接不一致
+/lex.yy.c(1469,2): warning C4013: “exit”未定义；假设外部返回 int
+/lex.yy.c(1532,18): warning C4013: “malloc”未定义；假设外部返回 int
+/lex.yy.c(1532,9): warning C4312: “类型强制转换”: 从“int”转换到更大的“void *”
+/lex.yy.c(1550,18): warning C4013: “realloc”未定义；假设外部返回 int
+/lex.yy.c(1550,9): warning C4312: “类型强制转换”: 从“int”转换到更大的“void *”
+/lex.yy.c(1560,2): warning C4013: “free”未定义；假设外部返回 int
+  main.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\lex.yy.c(921,3): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\lex.yy.c(1088,15): warning C4244: “初始化”: 从“__int64”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\lex.yy.c(1250,12): warning C4273: “_isatty”: dll 链接不一致
+  Compiler.vcxproj -> E:\source\repos\Loonguage\Compiler\x64\Debug\Compiler.exe
