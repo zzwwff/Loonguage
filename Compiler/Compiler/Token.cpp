@@ -14,15 +14,34 @@ namespace Loonguage {
 		throw;
 	}
 
+	void Token::string2TokenType(const std::string& str)
+	{
+		if (str == "TokenIden")
+			tokenType = TokenType::TokenIden;
+		if (str == "TokenInt")
+			tokenType = TokenType::TokenInt;
+		if (str == "TokenKeyWord")
+			tokenType = TokenType::TokenKeyWord;
+		if (str == "TokenSymbol")
+			tokenType = TokenType::TokenSymbol;
+		throw;
+	}
+
 	void Token::dump(std::ostream& cout) const
 	{
 		cout << "{ \"tokenType\" : \"" << tokenType2String() << "\", \"line\" : " << line << "\" }";
 	}
 
+
 	Token::Token(TokenType t, int i) :
 		tokenType(t), line(i)
 	{
 
+	}
+
+	Token::Token():
+		tokenType(TokenType::TokenNoType), line(0)
+	{
 	}
 
 };

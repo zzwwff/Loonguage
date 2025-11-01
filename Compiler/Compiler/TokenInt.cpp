@@ -6,9 +6,17 @@ namespace Loonguage {
 			<< ", \"value\" : \"" << value << "\" }";
 	}
 
+
+
 	TokenInt::TokenInt(int l, int v) :
 		Token(Token::TokenType::TokenInt, l), value(v)
 	{
 
+	}
+
+	TokenInt::TokenInt(std::istream& cin)
+	{
+		tokenType = TokenType::TokenInt;
+		cin >> line >> value;
 	}
 }

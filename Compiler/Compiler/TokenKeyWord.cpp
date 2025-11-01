@@ -5,9 +5,18 @@ namespace Loonguage {
 	{
 		if (keyWordType == KeyWordType::KeyWordIf)
 			return "KeyWordIf";
-		if (keyWordType == KeyWordType::KeyWordWhile)
+		else if (keyWordType == KeyWordType::KeyWordWhile)
 			return "KeyWordWhile";
-		throw;
+		else throw;
+	}
+
+	void TokenKeyWord::string2KeyWordType(std::string str)
+	{
+		if (str == "KeyWordIf")
+			keyWordType = KeyWordType::KeyWordIf;
+		else if (str == "KeyWordWhile")
+			keyWordType = KeyWordType::KeyWordWhile;
+		else throw;
 	}
 
 	void TokenKeyWord::dump(std::ostream& cout) const
@@ -16,9 +25,18 @@ namespace Loonguage {
 			line << "\", \"KeyWordType\" : \"" << keyWordType2String() << "\" }";
 	}
 
+
+
 	TokenKeyWord::TokenKeyWord(int i, KeyWordType t2) :
 		Token(TokenType::TokenKeyWord, i), keyWordType(t2)
 	{
 
+	}
+	TokenKeyWord::TokenKeyWord(std::istream& cin)
+	{
+		tokenType = TokenType::TokenKeyWord;
+		std::string keyWordStr;
+		cin >> line >> keyWordStr;
+		string2KeyWordType(keyWordStr);
 	}
 };

@@ -1,10 +1,16 @@
 #include <iostream>
 #include <cstring>
-#include "TokenInt.h"
 #include "lex.yy.c"
+#include "Tokens.h"
 
 signed main()
 {
-	lexical();
+	std::string str = lexical();
+	Loonguage::Tokens tokens(str);
+	tokens.dump(std::cout);
+
+
+
+
 	return 0;
 }
