@@ -5,8 +5,9 @@
 
 signed main()
 {
+	Loonguage::SymbolTable<std::string> idenTable;
 	std::string str = lexical();
-	Loonguage::Tokens tokens(str);
+	Loonguage::Tokens tokens(str, idenTable);
 	tokens.dump(std::cout);
 
 

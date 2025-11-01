@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <cstring>
+#include "GeneralSetting.h"
 namespace Loonguage {
 
 	class Token

@@ -1,7 +1,7 @@
 #include "Tokens.h"
 #include <sstream>
 namespace Loonguage {
-	Tokens::Tokens(std::string& str)
+	Tokens::Tokens(std::string& str, SymbolTable<std::string>& table)
 	{
 		std::stringstream stream(str);
 		while (stream.peek() != EOF)
@@ -14,6 +14,8 @@ namespace Loonguage {
 				push_back(new TokenInt(stream));
 			else if (type == "TokenSymbol")
 				push_back(new TokenSymbol(stream));
+			else if (type == "TokenIden")
+				push_back(new TokenIden(stream, table));
 			else throw;
 		}
 	}

@@ -1,17 +1,26 @@
 ﻿  lex.yy.c
 /lexScan.flex(16,22): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-/lex.yy.c(1010,3): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
-/lex.yy.c(1177,28): warning C4244: “初始化”: 从“__int64”转换到“int”，可能丢失数据
-/lex.yy.c(1339,12): warning C4273: “_isatty”: dll 链接不一致
-/lex.yy.c(1558,2): warning C4013: “exit”未定义；假设外部返回 int
-/lex.yy.c(1621,18): warning C4013: “malloc”未定义；假设外部返回 int
-/lex.yy.c(1621,9): warning C4312: “类型强制转换”: 从“int”转换到更大的“void *”
-/lex.yy.c(1639,18): warning C4013: “realloc”未定义；假设外部返回 int
-/lex.yy.c(1639,9): warning C4312: “类型强制转换”: 从“int”转换到更大的“void *”
-/lex.yy.c(1649,2): warning C4013: “free”未定义；假设外部返回 int
+/lex.yy.c(1009,3): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+/lex.yy.c(1176,28): warning C4244: “初始化”: 从“__int64”转换到“int”，可能丢失数据
+/lex.yy.c(1338,12): warning C4273: “_isatty”: dll 链接不一致
+/lex.yy.c(1557,2): warning C4013: “exit”未定义；假设外部返回 int
+/lex.yy.c(1620,18): warning C4013: “malloc”未定义；假设外部返回 int
+/lex.yy.c(1620,9): warning C4312: “类型强制转换”: 从“int”转换到更大的“void *”
+/lex.yy.c(1638,18): warning C4013: “realloc”未定义；假设外部返回 int
+/lex.yy.c(1638,9): warning C4312: “类型强制转换”: 从“int”转换到更大的“void *”
+/lex.yy.c(1648,2): warning C4013: “free”未定义；假设外部返回 int
+  SymbolTable.cpp
+  Token.cpp
+  TokenIden.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\SymbolTable.cpp(15,27): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  TokenInt.cpp
+  TokenKeyWord.cpp
+  TokenSymbol.cpp
+  Tokens.cpp
   main.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\lexScan.flex(16,16): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-E:\source\repos\Loonguage\Compiler\Compiler\lex.yy.c(1010,3): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
-E:\source\repos\Loonguage\Compiler\Compiler\lex.yy.c(1177,15): warning C4244: “初始化”: 从“__int64”转换到“int”，可能丢失数据
-E:\source\repos\Loonguage\Compiler\Compiler\lex.yy.c(1339,12): warning C4273: “_isatty”: dll 链接不一致
+E:\source\repos\Loonguage\Compiler\Compiler\lex.yy.c(1009,3): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\lex.yy.c(1176,15): warning C4244: “初始化”: 从“__int64”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\lex.yy.c(1338,12): warning C4273: “_isatty”: dll 链接不一致
+  正在生成代码...
   Compiler.vcxproj -> E:\source\repos\Loonguage\Compiler\x64\Debug\Compiler.exe

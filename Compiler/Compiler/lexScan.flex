@@ -25,7 +25,7 @@ void addString()
 
 UNSIGNEDDIGIT [0-9]
 DIGIT {UNSIGNEDDIGIT}+
-IDEN [a-z][a-zA-Z0-9]*
+IDEN [a-zA-Z][a-zA-Z0-9]*
 
 
 
