@@ -1,0 +1,12 @@
+{ "tokenType" : "TokenKeyWord", "line" : 1", "KeyWordType" : "KeyWordWhile" }
+{ "tokenType" : "TokenSymbol", "line" : 1", "symbol" : "(" }
+{ "tokenType" : "TokenInt", "line" : "1", "value" : "0", "realName" : "x" }
+{ "tokenType" : "TokenSymbol", "line" : 1", "symbol" : "=" }
+{ "tokenType" : "TokenInt", "line" : "1", "value" : "1" }
+{ "tokenType" : "TokenSymbol", "line" : 1", "symbol" : ")" }
+{ "tokenType" : "TokenInt", "line" : "2", "value" : "1", "realName" : "y" }
+{ "tokenType" : "TokenSymbol", "line" : 2", "symbol" : "=" }
+{ "tokenType" : "TokenInt", "line" : "2", "value" : "1", "realName" : "y" }
+{ "tokenType" : "TokenSymbol", "line" : 2", "symbol" : "+" }
+{ "tokenType" : "TokenInt", "line" : "2", "value" : "1" }
+{ "tokenType" : "TokenSymbol", "line" : 2", "symbol" : ";" }

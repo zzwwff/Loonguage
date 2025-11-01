@@ -1,17 +1,10 @@
 #include <iostream>
 #include <cstring>
-#include "lex.yy.c"
-#include "Tokens.h"
+#include "Lexical.h"
 
 signed main()
 {
-	Loonguage::SymbolTable<std::string> idenTable;
-	std::string str = lexical();
-	Loonguage::Tokens tokens(str, idenTable);
-	tokens.dump(std::cout);
-
-
-
-
+	Loonguage::Lexical lexx = Loonguage::Lexical();
+	lexx.dump();
 	return 0;
 }

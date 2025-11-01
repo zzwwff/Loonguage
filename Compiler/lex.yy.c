@@ -396,13 +396,13 @@ static char *yy_last_accepting_cpos;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "lexScan.flex"
+#line 1 "Compiler/lexScan.flex"
 #define INITIAL 0
 /* scanner for a toy Pascal-like language */
-#line 5 "lexScan.flex"
+#line 5 "Compiler/lexScan.flex"
 #include "unistd.h"
 #include <string.h>
-#include "lexicalConfig.h"
+
 int curLine = 1;
 
 char output[1024 * 16];
@@ -570,7 +570,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 35 "lexScan.flex"
+#line 35 "Compiler/lexScan.flex"
 
 
 #line 577 "lex.yy.c"
@@ -658,47 +658,47 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 37 "lexScan.flex"
+#line 37 "Compiler/lexScan.flex"
 { yyterminate(); }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 39 "lexScan.flex"
+#line 39 "Compiler/lexScan.flex"
 BEGIN(COMMENT);
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 40 "lexScan.flex"
+#line 40 "Compiler/lexScan.flex"
 BEGIN(SINGLE_COMMENT);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 42 "lexScan.flex"
+#line 42 "Compiler/lexScan.flex"
 { curLine++; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 43 "lexScan.flex"
+#line 43 "Compiler/lexScan.flex"
 { }       /* eat anything that's not a '*' */
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 44 "lexScan.flex"
+#line 44 "Compiler/lexScan.flex"
 { }  /* eat up '*'s not followed by '/'s */
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 45 "lexScan.flex"
+#line 45 "Compiler/lexScan.flex"
 BEGIN(INITIAL);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 47 "lexScan.flex"
+#line 47 "Compiler/lexScan.flex"
 
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 48 "lexScan.flex"
+#line 48 "Compiler/lexScan.flex"
 {
     curLine++;
     BEGIN(INITIAL);
@@ -706,74 +706,68 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 53 "lexScan.flex"
+#line 53 "Compiler/lexScan.flex"
 { curLine++; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 55 "lexScan.flex"
+#line 55 "Compiler/lexScan.flex"
 { }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 58 "lexScan.flex"
+#line 58 "Compiler/lexScan.flex"
 {
                 snprintf(buffer, sizeof(buffer), " TokenInt %d %s", curLine, yytext);
                 addString();
-                return INT;
             }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 64 "lexScan.flex"
+#line 63 "Compiler/lexScan.flex"
 {
                 snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordIf", curLine);
                 addString();
-                return IF;
             }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 70 "lexScan.flex"
+#line 68 "Compiler/lexScan.flex"
 {
                 snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordWhile", curLine);
                 addString();
-                return WHILE;
             }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 76 "lexScan.flex"
+#line 73 "Compiler/lexScan.flex"
 {
                 snprintf(buffer, sizeof(buffer), " TokenIden %d %s", curLine, yytext);
                 addString();
-                return IDEN;
             }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 82 "lexScan.flex"
+#line 78 "Compiler/lexScan.flex"
 {
                 snprintf(buffer, sizeof(buffer), " TokenSymbol %d #", curLine);
                 addString();
-                return '#';
             }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 88 "lexScan.flex"
+#line 83 "Compiler/lexScan.flex"
 {
                 snprintf(buffer, sizeof(buffer), " TokenSymbol %d %c", curLine, yytext[0]);
                 addString();
-                return yytext[0];
             }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 96 "lexScan.flex"
+#line 90 "Compiler/lexScan.flex"
 ECHO;
 	YY_BREAK
-#line 777 "lex.yy.c"
+#line 771 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(SINGLE_COMMENT):
@@ -1661,26 +1655,25 @@ int main()
 	return 0;
 	}
 #endif
-#line 96 "lexScan.flex"
+#line 90 "Compiler/lexScan.flex"
 
 
 
 
-int lexical(const char* input)
+char* lexical(const char* input)
     {
-    output[0] = len = 0;
     if (strcmp(input, "cin") != 0)
     {
            FILE *input_file = fopen(input, "r");
         if (input_file == NULL) {
             perror("Error opening file");
-            return 0;
+            return NULL;
         }
         yyin = input_file;
     }
-    int t = yylex();
+    yylex();
     if (strcmp(input, "cin") != 0)
         fclose(yyin);
 
-    return t;
+    return output;
     }

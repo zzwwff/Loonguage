@@ -1,13 +1,13 @@
 #include "TokenIden.h"
 #include "SymbolTable.cpp"
 namespace Loonguage {
-	void TokenIden::dump(std::ostream&) const
+	void TokenIden::dump(std::ostream& cout) const
 	{
 #ifdef REAL_NAME
-		std::cout << "{ \"tokenType\" : \"" << tokenType2String() << "\", \"line\" : \"" << line << "\""
+		cout << "{ \"tokenType\" : \"" << tokenType2String() << "\", \"line\" : \"" << line << "\""
 			<< ", \"value\" : \"" << value.getId() << "\", \"realName\" : \"" << value.getString() << "\" }";
 #else // REAL_NAME
-		std::cout << "{ \"tokenType\" : \"" << tokenType2String() << "\", \"line\" : \"" << line << "\""
+		cout << "{ \"tokenType\" : \"" << tokenType2String() << "\", \"line\" : \"" << line << "\""
 			<< ", \"value\" : \"" << value.getId() << "\" }";
 #endif
 	}

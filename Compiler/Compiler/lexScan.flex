@@ -4,7 +4,7 @@
 %{
 #include "unistd.h"
 #include <string.h>
-
+#include "lexicalConfig.h"
 int curLine = 1;
 
 char output[1024 * 16];
@@ -58,31 +58,37 @@ EOF { yyterminate(); }
 <INITIAL>{DIGIT}    {
                 snprintf(buffer, sizeof(buffer), " TokenInt %d %s", curLine, yytext);
                 addString();
+                return INT;
             }
 
 <INITIAL>if        {
                 snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordIf", curLine);
                 addString();
+                return IF;
             }
 
 <INITIAL>while        {
                 snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordWhile", curLine);
                 addString();
+                return WHILE;
             }
 
 <INITIAL>{IDEN}  {
                 snprintf(buffer, sizeof(buffer), " TokenIden %d %s", curLine, yytext);
                 addString();
+                return IDEN;
             }
 
 <INITIAL>==  {
                 snprintf(buffer, sizeof(buffer), " TokenSymbol %d #", curLine);
                 addString();
+                return '#';
             }
 
 <INITIAL>"+"|"-"|"*"|"/"|"{"|"}"|"("|")"|";"|"="|"&"|"|"|"^"|"<"|"~"|"," {
                 snprintf(buffer, sizeof(buffer), " TokenSymbol %d %c", curLine, yytext[0]);
                 addString();
+                return yytext[0];
             }
 
 
@@ -91,8 +97,21 @@ EOF { yyterminate(); }
 
 
 
-char* lexical(  )
+int lexical(const char* input)
     {
-    yylex();
-    return output;
+    output[0] = len = 0;
+    if (strcmp(input, "cin") != 0)
+    {
+           FILE *input_file = fopen(input, "r");
+        if (input_file == NULL) {
+            perror("Error opening file");
+            return 0;
+        }
+        yyin = input_file;
+    }
+    int t = yylex();
+    if (strcmp(input, "cin") != 0)
+        fclose(yyin);
+
+    return t;
     }

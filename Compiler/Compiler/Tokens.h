@@ -13,7 +13,9 @@ namespace Loonguage {
 		public std::vector<Token*>
 	{
 	public:
+		Tokens() {};
 		Tokens(std::string&, SymbolTable<std::string>&);
+		void load(std::string&, SymbolTable<std::string>&);
 		void dump(std::ostream&) const;					//dump in JSON
 	};
 };

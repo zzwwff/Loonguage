@@ -3,6 +3,10 @@
 namespace Loonguage {
 	Tokens::Tokens(std::string& str, SymbolTable<std::string>& table)
 	{
+		load(str, table);
+	}
+	void Tokens::load(std::string& str, SymbolTable<std::string>& table)
+	{
 		std::stringstream stream(str);
 		while (stream.peek() != EOF)
 		{
