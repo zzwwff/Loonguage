@@ -1,13 +1,14 @@
 /* scanner for a toy Pascal-like language */
 %option noyywrap
-
 %{
 #include "unistd.h"
 #include <string.h>
 #include "lexicalConfig.h"
+#include "synScan.tab.h"
 int curLine = 1;
 
-char output[1024 * 16];
+char last[4096];
+char output[4096];
 char buffer[1024];
 int len = 0;
 
@@ -15,6 +16,7 @@ void addString()
 {
     int newLen = len + strlen(buffer);
     strcat_s(output + len, 1024 * 16, buffer);
+    strcpy_s(last, sizeof(last), output);
     len = newLen;
 }
 %}
@@ -58,24 +60,28 @@ EOF { yyterminate(); }
 <INITIAL>{DIGIT}    {
                 snprintf(buffer, sizeof(buffer), " TokenInt %d %s", curLine, yytext);
                 addString();
+                strcpy(yylval.yytext, yytext);
                 return INT;
             }
 
 <INITIAL>if        {
                 snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordIf", curLine);
                 addString();
+                strcpy(yylval.yytext, yytext);
                 return IF;
             }
 
 <INITIAL>while        {
                 snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordWhile", curLine);
                 addString();
+                strcpy(yylval.yytext, yytext);
                 return WHILE;
             }
 
 <INITIAL>{IDEN}  {
                 snprintf(buffer, sizeof(buffer), " TokenIden %d %s", curLine, yytext);
                 addString();
+                strcpy(yylval.yytext, yytext);
                 return IDEN;
             }
 
@@ -91,7 +97,15 @@ EOF { yyterminate(); }
                 return yytext[0];
             }
 
-
+. {
+    if (strlen(last) < 10)
+        snprintf(yylval.errorMsg, sizeof(yylval.errorMsg), "An error occurs at lexical analysis at line %d after %s.", curLine, last);
+    else{
+        last[10] = 0;
+        snprintf(yylval.errorMsg, sizeof(yylval.errorMsg), "An error occurs at lexical analysis at line %d after %s...", curLine, last);
+    }
+    return ERROR;
+}
 
 %%
 

@@ -3,7 +3,7 @@
 /* Scanner skeleton version:
  * $Header: /home/daffy/u0/vern/flex/RCS/flex.skl,v 2.91 96/09/10 16:58:48 vern Exp $
  */
-
+#pragma once
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
@@ -285,11 +285,11 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 	*yy_cp = '\0'; \
 	yy_c_buf_p = yy_cp;
 
-#define YY_NUM_RULES 18
-#define YY_END_OF_BUFFER 19
+#define YY_NUM_RULES 19
+#define YY_END_OF_BUFFER 20
 static yyconst short int yy_accept[42] =
     {   0,
-        0,    0,    5,    5,    0,    0,   19,   18,   11,   10,
+        0,    0,    5,    5,    0,    0,   20,   18,   11,   10,
        17,   17,   12,   17,   15,   15,   15,   15,    5,    4,
         6,    8,    9,   11,    2,    3,   12,   16,   15,   15,
        13,   15,    5,    6,    6,    7,    1,   15,   15,   14,
@@ -399,13 +399,15 @@ char *yytext;
 #line 1 "lexScan.flex"
 #define INITIAL 0
 /* scanner for a toy Pascal-like language */
-#line 5 "lexScan.flex"
+#line 4 "lexScan.flex"
 #include "unistd.h"
 #include <string.h>
 #include "lexicalConfig.h"
+#include "synScan.tab.h"
 int curLine = 1;
 
-char output[1024 * 16];
+char last[4096];
+char output[4096];
 char buffer[1024];
 int len = 0;
 
@@ -413,13 +415,14 @@ void addString()
 {
     int newLen = len + strlen(buffer);
     strcat_s(output + len, 1024 * 16, buffer);
+    strcpy_s(last, sizeof(last), output);
     len = newLen;
 }
 #define COMMENT 1
 
 #define SINGLE_COMMENT 2
 
-#line 423 "lex.yy.c"
+#line 426 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -570,10 +573,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 35 "lexScan.flex"
+#line 37 "lexScan.flex"
 
 
-#line 577 "lex.yy.c"
+#line 580 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -658,47 +661,47 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 37 "lexScan.flex"
+#line 39 "lexScan.flex"
 { yyterminate(); }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 39 "lexScan.flex"
+#line 41 "lexScan.flex"
 BEGIN(COMMENT);
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 40 "lexScan.flex"
+#line 42 "lexScan.flex"
 BEGIN(SINGLE_COMMENT);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 42 "lexScan.flex"
+#line 44 "lexScan.flex"
 { curLine++; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 43 "lexScan.flex"
+#line 45 "lexScan.flex"
 { }       /* eat anything that's not a '*' */
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 44 "lexScan.flex"
+#line 46 "lexScan.flex"
 { }  /* eat up '*'s not followed by '/'s */
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 45 "lexScan.flex"
+#line 47 "lexScan.flex"
 BEGIN(INITIAL);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 47 "lexScan.flex"
+#line 49 "lexScan.flex"
 
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 48 "lexScan.flex"
+#line 50 "lexScan.flex"
 {
     curLine++;
     BEGIN(INITIAL);
@@ -706,53 +709,57 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 53 "lexScan.flex"
+#line 55 "lexScan.flex"
 { curLine++; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 55 "lexScan.flex"
+#line 57 "lexScan.flex"
 { }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 58 "lexScan.flex"
+#line 60 "lexScan.flex"
 {
                 snprintf(buffer, sizeof(buffer), " TokenInt %d %s", curLine, yytext);
                 addString();
+                strcpy(yylval.yytext, yytext);
                 return INT;
             }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 64 "lexScan.flex"
+#line 67 "lexScan.flex"
 {
                 snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordIf", curLine);
                 addString();
+                strcpy(yylval.yytext, yytext);
                 return IF;
             }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 70 "lexScan.flex"
+#line 74 "lexScan.flex"
 {
                 snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordWhile", curLine);
                 addString();
+                strcpy(yylval.yytext, yytext);
                 return WHILE;
             }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 76 "lexScan.flex"
+#line 81 "lexScan.flex"
 {
                 snprintf(buffer, sizeof(buffer), " TokenIden %d %s", curLine, yytext);
                 addString();
+                strcpy(yylval.yytext, yytext);
                 return IDEN;
             }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 82 "lexScan.flex"
+#line 88 "lexScan.flex"
 {
                 snprintf(buffer, sizeof(buffer), " TokenSymbol %d #", curLine);
                 addString();
@@ -761,7 +768,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 88 "lexScan.flex"
+#line 94 "lexScan.flex"
 {
                 snprintf(buffer, sizeof(buffer), " TokenSymbol %d %c", curLine, yytext[0]);
                 addString();
@@ -770,10 +777,23 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 96 "lexScan.flex"
+#line 100 "lexScan.flex"
+{
+    if (strlen(last) < 10)
+        snprintf(yylval.errorMsg, sizeof(yylval.errorMsg), "An error occurs at lexical analysis at line %d after %s.", curLine, last);
+    else{
+        last[10] = 0;
+        snprintf(yylval.errorMsg, sizeof(yylval.errorMsg), "An error occurs at lexical analysis at line %d after %s...", curLine, last);
+    }
+    return ERROR;
+}
+	YY_BREAK
+case 19:
+YY_RULE_SETUP
+#line 110 "lexScan.flex"
 ECHO;
 	YY_BREAK
-#line 777 "lex.yy.c"
+#line 797 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(SINGLE_COMMENT):
@@ -1661,7 +1681,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 96 "lexScan.flex"
+#line 110 "lexScan.flex"
 
 
 

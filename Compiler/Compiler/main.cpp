@@ -1,10 +1,10 @@
 #include <iostream>
 #include <cstring>
 #include "Lexical.h"
+#include "synScan.tab.c"
 
 signed main()
 {
-	Loonguage::Lexical lexx = Loonguage::Lexical();
-	lexx.dump();
+	parses();
 	return 0;
 }
