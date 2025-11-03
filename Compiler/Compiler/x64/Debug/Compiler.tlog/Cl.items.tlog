@@ -1,9 +1,9 @@
-E:\source\repos\Loonguage\Compiler\Compiler\lex.yy.c;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\lex.yy.obj
+E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\lex.Loon_.obj
 E:\source\repos\Loonguage\Compiler\Compiler\Lexical.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\Lexical.obj
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\LoonParser.obj
 E:\source\repos\Loonguage\Compiler\Compiler\main.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\main.obj
 E:\source\repos\Loonguage\Compiler\Compiler\Node.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\Node.obj
 E:\source\repos\Loonguage\Compiler\Compiler\SymbolTable.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\SymbolTable.obj
-E:\source\repos\Loonguage\Compiler\Compiler\synScan.tab.c;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\synScan.tab.obj
 E:\source\repos\Loonguage\Compiler\Compiler\Token.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\Token.obj
 E:\source\repos\Loonguage\Compiler\Compiler\TokenIden.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\TokenIden.obj
 E:\source\repos\Loonguage\Compiler\Compiler\TokenInt.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\TokenInt.obj

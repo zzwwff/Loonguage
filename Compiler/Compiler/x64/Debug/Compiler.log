@@ -1,2 +1,22 @@
-﻿  main.cpp
+﻿  LoonParser.y:10.1-36: warning: deprecated directive: '%define parser_class_name { Parser }', use '%define api.parser.class { Parser }' [-Wdeprecated]
+     10 | %define parser_class_name { Parser }
+        | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        | %define api.parser.class { Parser }
+LoonParser.y : warning : fix-its can be applied.  Rerun with option '--update'. [-Wother]
+  lex.Loon_.cc
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(49,9): warning C4005: “INT8_MIN”: 宏重定义
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(50,9): warning C4005: “INT16_MIN”: 宏重定义
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(51,9): warning C4005: “INT32_MIN”: 宏重定义
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(53,9): warning C4005: “INT8_MAX”: 宏重定义
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(54,9): warning C4005: “INT16_MAX”: 宏重定义
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(55,9): warning C4005: “INT32_MAX”: 宏重定义
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(57,9): warning C4005: “UINT8_MAX”: 宏重定义
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(58,9): warning C4005: “UINT16_MAX”: 宏重定义
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(59,9): warning C4005: “UINT32_MAX”: 宏重定义
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(655,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+  LoonParser.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(655,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+  main.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(655,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+  正在生成代码...
   Compiler.vcxproj -> E:\source\repos\Loonguage\Compiler\x64\Debug\Compiler.exe

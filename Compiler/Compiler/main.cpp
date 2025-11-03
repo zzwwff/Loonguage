@@ -1,13 +1,15 @@
 #include <iostream>
-#include <cstring>
-#include "synScan.tab.h"
+#include "LoonParser.hpp"
+#include "LoonScanner.h"
 
-extern "C" {
-	void parses(); 
-}
 
 signed main()
 {
-	parses();
+
+
+	LoonScanner::Scanner scanner;
+	scanner.switch_streams(std::cin, std::cout);
+	LoonScanner::Parser parser(scanner);
+	parser.parse();
 	return 0;
 }

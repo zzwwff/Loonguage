@@ -1,6 +1,7 @@
+%option c++
 
 %{
-#include "synScan.tab.h"
+#include "synScan.tab.hh"
 #include <string.h>
 #include <stdlib.h>
 #include "lexicalConfig.h"
@@ -60,29 +61,29 @@ EOF { yyterminate(); }
 <INITIAL>{DIGIT}    {
                 snprintf(buffer, sizeof(buffer), " TokenInt %d %s", curLine, yytext);
                 addString();
-                strcpy(yylval.text, yytext);
-                return INT;
+                strcpy(yylval->text, yytext);
+                return yy::parser::token::INT;
             }
 
 <INITIAL>if        {
                 snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordIf", curLine);
                 addString();
-                strcpy(yylval.text, yytext);
-                return IF;
+                strcpy(yylval->text, yytext);
+                return yy::parser::token::IF;
             }
 
 <INITIAL>while        {
                 snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordWhile", curLine);
                 addString();
-                strcpy(yylval.text, yytext);
-                return WHILE;
+                strcpy(yylval->text, yytext);
+                return yy::parser::token::WHILE;
             }
 
 <INITIAL>{IDEN}  {
                 snprintf(buffer, sizeof(buffer), " TokenIden %d %s", curLine, yytext);
                 addString();
-                strcpy(yylval.text, yytext);
-                return IDEN;
+                strcpy(yylval->text, yytext);
+                return yy::parser::token::IDEN;
             }
 
 <INITIAL>==  {
@@ -99,12 +100,12 @@ EOF { yyterminate(); }
 
 . {
     if (strlen(last) < 10)
-        snprintf(yylval.errorMsg, sizeof(yylval.errorMsg), "An error occurs at lexical analysis at line %d after %s.", curLine, last);
+        snprintf(yylval->errorMsg, sizeof(yylval->errorMsg), "An error occurs at lexical analysis at line %d after %s.", curLine, last);
     else{
         last[10] = 0;
-        snprintf(yylval.errorMsg, sizeof(yylval.errorMsg), "An error occurs at lexical analysis at line %d after %s...", curLine, last);
+        snprintf(yylval->errorMsg, sizeof(yylval->errorMsg), "An error occurs at lexical analysis at line %d after %s...", curLine, last);
     }
-    return ERROR;
+    return yy::parser::token::ERROR;
 }
 
 %%

@@ -1,9 +1,11 @@
-
+%language "c++"
+%define api.token.constructor
 
 %{
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cstring>
 #include "lexicalConfig.h"
 
  
@@ -16,15 +18,10 @@ int yylex(void);  // ÉùÃ÷Cº¯Êý
 
 %}
  
-%union {
-    char text[100];
-    char errorMsg[100];
-    int res;
-}
  
-%token <text> IDEN IF WHILE INT
-%token <errorMsg> ERROR
-%type<res> program
+%token <std::string> IDEN IF WHILE INT
+%token <std::string> ERROR
+%nterm<int> program
  
  
 %%
