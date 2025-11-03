@@ -1,10 +1,10 @@
-/* scanner for a toy Pascal-like language */
-%option noyywrap
+
 %{
-#include "unistd.h"
-#include <string.h>
-#include "lexicalConfig.h"
 #include "synScan.tab.h"
+#include <string.h>
+#include <stdlib.h>
+#include "lexicalConfig.h"
+ 
 int curLine = 1;
 
 char last[4096];
@@ -15,7 +15,7 @@ int len = 0;
 void addString()
 {
     int newLen = len + strlen(buffer);
-    strcat_s(output + len, 1024 * 16, buffer);
+    strcat_s(output + len, sizeof(output) - len, buffer);
     strcpy_s(last, sizeof(last), output);
     len = newLen;
 }
@@ -60,28 +60,28 @@ EOF { yyterminate(); }
 <INITIAL>{DIGIT}    {
                 snprintf(buffer, sizeof(buffer), " TokenInt %d %s", curLine, yytext);
                 addString();
-                strcpy(yylval.yytext, yytext);
+                strcpy(yylval.text, yytext);
                 return INT;
             }
 
 <INITIAL>if        {
                 snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordIf", curLine);
                 addString();
-                strcpy(yylval.yytext, yytext);
+                strcpy(yylval.text, yytext);
                 return IF;
             }
 
 <INITIAL>while        {
                 snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordWhile", curLine);
                 addString();
-                strcpy(yylval.yytext, yytext);
+                strcpy(yylval.text, yytext);
                 return WHILE;
             }
 
 <INITIAL>{IDEN}  {
                 snprintf(buffer, sizeof(buffer), " TokenIden %d %s", curLine, yytext);
                 addString();
-                strcpy(yylval.yytext, yytext);
+                strcpy(yylval.text, yytext);
                 return IDEN;
             }
 
@@ -108,24 +108,13 @@ EOF { yyterminate(); }
 }
 
 %%
-
-
+ 
+int yywrap()
+{
+    return 1;
+}
 
 int lexical(const char* input)
-    {
-    output[0] = len = 0;
-    if (strcmp(input, "cin") != 0)
-    {
-           FILE *input_file = fopen(input, "r");
-        if (input_file == NULL) {
-            perror("Error opening file");
-            return 0;
-        }
-        yyin = input_file;
-    }
-    int t = yylex();
-    if (strcmp(input, "cin") != 0)
-        fclose(yyin);
-
-    return t;
-    }
+{
+    return 0;
+}

@@ -1,7 +1,10 @@
 #include <iostream>
 #include <cstring>
-#include "Lexical.h"
-#include "synScan.tab.c"
+#include "synScan.tab.h"
+
+extern "C" {
+	void parses(); 
+}
 
 signed main()
 {

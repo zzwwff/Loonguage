@@ -1,4 +1,4 @@
-
+#pragma once
 /* A Bison parser, made by GNU Bison 2.4.1.  */
 
 /* Skeleton interface for Bison's Yacc-like parsers in C
@@ -32,7 +32,6 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#include "lex.yy.c"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -40,11 +39,11 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     ERROR = 264,
-     INT = 265,
-     IDEN = 266,
-     WHILE = 261,
-     IF = 262
+     IDEN = 258,
+     IF = 259,
+     WHILE = 260,
+     INT = 261,
+     ERROR = 262
    };
 #endif
 
@@ -55,15 +54,16 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 32 "synScan.y"
+#line 19 "synScan.y"
 
-      char yytext[200];
-      char errorMsg[200];
-    
+    char text[100];
+    char errorMsg[100];
+    int res;
+
 
 
 /* Line 1676 of yacc.c  */
-#line 66 "synScan.tab.h"
+#line 67 "synScan.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -71,5 +71,3 @@ typedef union YYSTYPE
 #endif
 
 extern YYSTYPE yylval;
-
-

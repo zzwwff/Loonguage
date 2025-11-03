@@ -68,39 +68,25 @@
 /* Copy the first part of user declarations.  */
 
 /* Line 189 of yacc.c  */
-#line 1 "synScan.y"
+#line 3 "synScan.y"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "lexicalConfig.h"
 
-/*
- * ±¾yaccµÄÉú³ÉÎÄ¼şÊÇyacc.tab.cºÍyacc.tab.h
- * yaccÎÄ¼şÓÉ3¶Î×é³É£¬ÓÃ2¸ö%%ĞĞ°ÑÕâ3¶Î¸ô¿ª¡£
- *
- * µÚ1¶ÎÊÇÉùÃ÷¶Î£¬°üÀ¨£º
- * 1-C´úÂë²¿·Ö£ºincludeÍ·ÎÄ¼ş¡¢º¯Êı¡¢ÀàĞÍµÈÉùÃ÷£¬ÕâĞ©ÉùÃ÷»áÔ­Ñù¿½µ½Éú³ÉµÄ.cÎÄ¼şÖĞ¡£
- * 2-¼ÇºÅÉùÃ÷£¬Èç%token
- * 3-ÀàĞÍÉùÃ÷£¬Èç%type
- *
- * µÚ2¶ÎÊÇ¹æÔò¶Î£¬ÊÇyaccÎÄ¼şµÄÖ÷Ìå£¬°üÀ¨Ã¿¸ö²úÉúÊ½ÊÇÈçºÎÆ¥ÅäµÄ£¬ÒÔ¼°Æ¥ÅäºóÒªÖ´ĞĞµÄC´úÂë¶¯×÷¡£
- *
- * µÚ3¶ÎÊÇCº¯Êı¶¨Òå¶Î£¬Èçyyerror()µÄ¶¨Òå£¬ÕâĞ©C´úÂë»áÔ­Ñù¿½µ½Éú³ÉµÄ.cÎÄ¼şÖĞ¡£¸Ã¶ÎÄÚÈİ¿ÉÒÔÎª¿Õ
- */
-
-/* µÚ1¶Î£ºÉùÃ÷¶Î */
-#include "lexicalConfig.h"	// lexºÍyaccÒª¹²ÓÃµÄÍ·ÎÄ¼ş£¬ÀïÃæ°üº¬ÁËÒ»Ğ©Í·ÎÄ¼ş£¬ÖØ¶¨ÒåÁËYYSTYPE
-#include "stdio.h"
-/*
- * ÎªÁËÄÜ¹»ÔÚC++³ÌĞòÀïÃæµ÷ÓÃCº¯Êı£¬±ØĞë°ÑÃ¿Ò»¸öĞèÒªÊ¹ÓÃµÄCº¯Êı£¬ÆäÉùÃ÷¶¼°üÀ¨ÔÚextern "C"{}¿éÀïÃæ£¬
- * ÕâÑùC++Á´½ÓÊ±²ÅÄÜ³É¹¦Á´½ÓËüÃÇ¡£extern "C"ÓÃÀ´ÔÚC++»·¾³ÏÂÉèÖÃCÁ´½ÓÀàĞÍ¡£
- */
-   //lex.lÖĞÒ²ÓĞÀàËÆµÄÕâ¶Îextern "C"£¬¿ÉÒÔ°ÑËüÃÇºÏ²¢³ÉÒ»¶Î£¬·Åµ½¹²Í¬µÄÍ·ÎÄ¼şmain.hÖĞ
-void yyerror(const char *s) {} ;
-extern int yylex(void);	//¸Ãº¯ÊıÊÇÔÚlex.yy.cÀï¶¨ÒåµÄ£¬yyparse()ÀïÒªµ÷ÓÃ¸Ãº¯Êı£¬ÎªÁËÄÜ±àÒëºÍÁ´½Ó£¬±ØĞëÓÃextern¼ÓÒÔÉùÃ÷
-
+ 
+void yyerror(const char *s) {
+    fprintf(stderr, "error: %s\n", s);
+}
+ 
+int yylex(void);  // ÉùÃ÷Cº¯Êı
+ 
 
 
 
 /* Line 189 of yacc.c  */
-#line 105 "synScan.tab.c"
+#line 90 "synScan.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -127,11 +113,11 @@ extern int yylex(void);	//¸Ãº¯ÊıÊÇÔÚlex.yy.cÀï¶¨ÒåµÄ£¬yyparse()ÀïÒªµ÷ÓÃ¸Ãº¯Êı£¬Î
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     ERROR = 264,
-     INT = 265,
-     IDEN = 266,
-     WHILE = 261,
-     IF = 262
+     IDEN = 258,
+     IF = 259,
+     WHILE = 260,
+     INT = 261,
+     ERROR = 262
    };
 #endif
 
@@ -142,15 +128,16 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 32 "synScan.y"
+#line 19 "synScan.y"
 
-      char yytext[200];
-      char errorMsg[200];
-    
+    char text[100];
+    char errorMsg[100];
+    int res;
+
 
 
 /* Line 214 of yacc.c  */
-#line 155 "synScan.tab.c"
+#line 141 "synScan.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -162,7 +149,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 167 "synScan.tab.c"
+#line 153 "synScan.tab.c"
 
 #ifdef short
 # undef short
@@ -304,14 +291,14 @@ YYID (yyi)
 #   define YYMALLOC malloc
 #   if ! defined malloc && ! defined _STDLIB_H && (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
-int malloc (); /* INFRINGES ON USER NAME SPACE */
+void *malloc (YYSIZE_T); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 #  ifndef YYFREE
 #   define YYFREE free
 #   if ! defined free && ! defined _STDLIB_H && (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
-;
+void free (void *); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 # endif
@@ -377,7 +364,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   7
+#define YYLAST   9
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  10
@@ -390,7 +377,7 @@ union yyalloc
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   266
+#define YYMAXUTOK   262
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -423,8 +410,8 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2,     2,     2,
-       2,     6,     7,     2,     3,     4,     5
+       2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
+       5,     6,     7
 };
 
 #if YYDEBUG
@@ -438,13 +425,13 @@ static const yytype_uint8 yyprhs[] =
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-      11,     0,    -1,     5,     5,     8,     4,     9,    -1
+      11,     0,    -1,     3,     3,     8,     6,     9,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    60,    60
+       0,    32,    32
 };
 #endif
 
@@ -453,7 +440,7 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "ERROR", "INT", "IDEN", "WHILE", "IF",
+  "$end", "error", "$undefined", "IDEN", "IF", "WHILE", "INT", "ERROR",
   "'='", "';'", "$accept", "program", 0
 };
 #endif
@@ -463,7 +450,7 @@ static const char *const yytname[] =
    token YYLEX-NUM.  */
 static const yytype_uint16 yytoknum[] =
 {
-       0,   256,   263,   264,   265,   266,   261,   262,    61,    59
+       0,   256,   257,   258,   259,   260,   261,   262,    61,    59
 };
 # endif
 
@@ -498,7 +485,7 @@ static const yytype_int8 yydefgoto[] =
 #define YYPACT_NINF -6
 static const yytype_int8 yypact[] =
 {
-      -5,    -4,     2,    -3,    -6,    -1,    -2,    -6
+      -3,    -2,     2,    -5,    -6,    -1,     0,    -6
 };
 
 /* YYPGOTO[NTERM-NUM].  */
@@ -514,19 +501,19 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-       1,     3,     4,     6,     0,     5,     0,     7
+       1,     3,     4,     5,     0,     6,     0,     0,     0,     7
 };
 
 static const yytype_int8 yycheck[] =
 {
-       5,     5,     0,     4,    -1,     8,    -1,     9
+       3,     3,     0,     8,    -1,     6,    -1,    -1,    -1,     9
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     5,    11,     5,     0,     8,     4,     9
+       0,     3,    11,     3,     0,     8,     6,     9
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1340,14 +1327,14 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 61 "synScan.y"
-    { printf("hello world\n"); ;}
+#line 33 "synScan.y"
+    { printf("hello world\n"); (yyval.res) = 1; ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1352 "synScan.tab.c"
+#line 1338 "synScan.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1559,16 +1546,11 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 63 "synScan.y"
+#line 36 "synScan.y"
 
-
-
-
-
-int parses()//³ÌĞòÖ÷º¯Êı£¬Õâ¸öº¯ÊıÒ²¿ÉÒÔ·Åµ½ÆäËü.c, .cppÎÄ¼şÀï
-{
+ 
+int parses() {
     printf("Enter expression: \n");
     yyparse();
     return 0;
 }
-
