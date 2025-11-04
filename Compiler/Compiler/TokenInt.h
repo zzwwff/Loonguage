@@ -10,6 +10,7 @@ namespace Loonguage {
 		//override
 		void dump(std::ostream&) const;
 		//constructor
+		TokenInt();
 		TokenInt(int, int);
 		TokenInt(std::istream&);
 

@@ -2,6 +2,12 @@
 #include <iostream>
 namespace Loonguage{
 	template<typename T>
+	SymbolTable<T>::SymbolTable()
+	{
+	}
+
+
+	template<typename T>
 	inline Symbol_<T> SymbolTable<T>::operator[](const T& t) const
 	{
 		return Symbol(m.at(t), this);
@@ -59,3 +65,5 @@ namespace Loonguage{
 
 
 }
+
+

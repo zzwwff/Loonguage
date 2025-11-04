@@ -2,7 +2,7 @@
 #include "Token.h"
 #include "SymbolTable.h"
 namespace Loonguage {
-	class TokenIden :
+	class TokenString :
 		public Token
 	{
 		SymbolTable<std::string>::Symbol value;									//value of int literal
@@ -10,8 +10,11 @@ namespace Loonguage {
 		//override
 		void dump(std::ostream&) const;
 		//constructor
-		TokenIden();
-		TokenIden(int, std::string, SymbolTable<std::string>&);
-		TokenIden(std::istream&, SymbolTable<std::string>&);
+
+		TokenString();
+		TokenString(int, std::string, SymbolTable<std::string>&);
+		TokenString(std::istream&, SymbolTable<std::string>&);
 	};
-};
+}
+
+

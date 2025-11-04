@@ -27,6 +27,10 @@ namespace Loonguage {
 
 
 
+	TokenKeyWord::TokenKeyWord()
+	{
+	}
+
 	TokenKeyWord::TokenKeyWord(int i, KeyWordType t2) :
 		Token(TokenType::TokenKeyWord, i), keyWordType(t2)
 	{

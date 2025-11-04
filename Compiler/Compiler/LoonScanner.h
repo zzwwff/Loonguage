@@ -10,7 +10,9 @@
 #endif
 
 #undef YY_DECL
-#define YY_DECL LoonScanner::Parser::symbol_type LoonScanner::Scanner::nextToken()
+#define YY_DECL LoonScanner::Parser::symbol_type LoonScanner::Scanner::nextToken(\
+                                        Loonguage::SymbolTable<std::string>& idenTable,\
+                                        Loonguage::SymbolTable<std::string>& strTable)
 
 #include "LoonParser.hpp"
 
@@ -24,7 +26,9 @@ namespace LoonScanner {
     public:
         Scanner() {}
 
-        virtual LoonScanner::Parser::symbol_type nextToken(); // 不需要手动实现这个函数，Flex会生成YY_DECL宏定义的代码来实现这个函数
+        virtual LoonScanner::Parser::symbol_type nextToken(
+            Loonguage::SymbolTable<std::string>& idenTable,
+            Loonguage::SymbolTable<std::string>& strTable); // 不需要手动实现这个函数，Flex会生成YY_DECL宏定义的代码来实现这个函数
 
         virtual ~Scanner() {}
     };

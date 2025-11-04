@@ -20,6 +20,8 @@ namespace Loonguage {
 				push_back(new TokenSymbol(stream));
 			else if (type == "TokenIden")
 				push_back(new TokenIden(stream, table));
+			else if (type == "TokenString")
+				push_back(new TokenString(stream, table));
 			else throw;
 		}
 	}

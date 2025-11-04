@@ -1,15 +1,23 @@
 #pragma once
 #include <cstring>
 #include "Tokens.h"
+#include "LoonParser.hpp"
+#include "LoonScanner.h"
+
 namespace Loonguage {
+
 	class Lexical
 	{
+		Loonguage::SymbolTable<std::string> strTable, idenTable;
+
+		LoonScanner::Scanner scanner;
+		LoonScanner::Parser parser;
 	public:
 		Tokens tokens;
-		SymbolTable<std::string> idenTable;
 		//cin of file path
-		Lexical(std::string str = "cin");
-		void dump(std::string str = "cout") const;
+		Lexical();
+		void parse();
+		void dump() const;
 	};
 }
 

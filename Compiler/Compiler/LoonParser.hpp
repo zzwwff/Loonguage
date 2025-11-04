@@ -52,12 +52,13 @@
   #include <vector>
   #include <stdint.h>
   #include <cmath>
+  #include "Tokens.h"
 
   namespace LoonScanner { 
     class Scanner;
   }
 
-#line 61 "LoonParser.hpp"
+#line 62 "LoonParser.hpp"
 
 # include <cassert>
 # include <cstdlib> // std::abort
@@ -198,7 +199,7 @@
 
 #line 9 "LoonParser.y"
 namespace LoonScanner {
-#line 202 "LoonParser.hpp"
+#line 203 "LoonParser.hpp"
 
 
 
@@ -417,18 +418,52 @@ namespace LoonScanner {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
-      // SYMBOL
-      char dummy1[sizeof (char)];
-
-      // program
-      char dummy2[sizeof (int)];
-
       // IDEN
+      char dummy1[sizeof (Loonguage::TokenIden)];
+
+      // INT
+      char dummy2[sizeof (Loonguage::TokenInt)];
+
       // IF
       // WHILE
-      // INT
+      char dummy3[sizeof (Loonguage::TokenKeyWord)];
+
+      // STR
+      char dummy4[sizeof (Loonguage::TokenString)];
+
+      // PLUS
+      // MINUS
+      // TIME
+      // DIVISION
+      // AND
+      // OR
+      // XOR
+      // REV
+      // LBRACKET
+      // RBRACKET
+      // LBRACE
+      // RBRACE
+      // SEMICOLON
+      // COMMA
+      // ASSIGN
+      // EQUAL
+      // LESS
+      char dummy5[sizeof (Loonguage::TokenSymbol)];
+
+      // program
+      // functions
+      // formal
+      // formals
+      // function
+      // sentence
+      // sentences
+      // expr
+      // actual
+      // actuals
+      char dummy6[sizeof (int)];
+
       // ERROR
-      char dummy3[sizeof (std::string)];
+      char dummy7[sizeof (std::string)];
     };
 
     /// The size of the largest semantic type.
@@ -481,12 +516,29 @@ namespace LoonScanner {
     TOKEN_END = 0,                 // END
     TOKEN_YYerror = 256,           // error
     TOKEN_YYUNDEF = 257,           // "invalid token"
-    TOKEN_IDEN = 258,              // IDEN
-    TOKEN_IF = 259,                // IF
-    TOKEN_WHILE = 260,             // WHILE
-    TOKEN_INT = 261,               // INT
-    TOKEN_ERROR = 262,             // ERROR
-    TOKEN_SYMBOL = 263             // SYMBOL
+    TOKEN_IF = 258,                // IF
+    TOKEN_WHILE = 259,             // WHILE
+    TOKEN_INT = 260,               // INT
+    TOKEN_STR = 261,               // STR
+    TOKEN_IDEN = 262,              // IDEN
+    TOKEN_PLUS = 263,              // PLUS
+    TOKEN_MINUS = 264,             // MINUS
+    TOKEN_TIME = 265,              // TIME
+    TOKEN_DIVISION = 266,          // DIVISION
+    TOKEN_AND = 267,               // AND
+    TOKEN_OR = 268,                // OR
+    TOKEN_XOR = 269,               // XOR
+    TOKEN_REV = 270,               // REV
+    TOKEN_LBRACKET = 271,          // LBRACKET
+    TOKEN_RBRACKET = 272,          // RBRACKET
+    TOKEN_LBRACE = 273,            // LBRACE
+    TOKEN_RBRACE = 274,            // RBRACE
+    TOKEN_SEMICOLON = 275,         // SEMICOLON
+    TOKEN_COMMA = 276,             // COMMA
+    TOKEN_ASSIGN = 277,            // ASSIGN
+    TOKEN_EQUAL = 278,             // EQUAL
+    TOKEN_LESS = 279,              // LESS
+    TOKEN_ERROR = 280              // ERROR
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -503,19 +555,45 @@ namespace LoonScanner {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 9, ///< Number of tokens.
+        YYNTOKENS = 26, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // END
         S_YYerror = 1,                           // error
         S_YYUNDEF = 2,                           // "invalid token"
-        S_IDEN = 3,                              // IDEN
-        S_IF = 4,                                // IF
-        S_WHILE = 5,                             // WHILE
-        S_INT = 6,                               // INT
-        S_ERROR = 7,                             // ERROR
-        S_SYMBOL = 8,                            // SYMBOL
-        S_YYACCEPT = 9,                          // $accept
-        S_program = 10                           // program
+        S_IF = 3,                                // IF
+        S_WHILE = 4,                             // WHILE
+        S_INT = 5,                               // INT
+        S_STR = 6,                               // STR
+        S_IDEN = 7,                              // IDEN
+        S_PLUS = 8,                              // PLUS
+        S_MINUS = 9,                             // MINUS
+        S_TIME = 10,                             // TIME
+        S_DIVISION = 11,                         // DIVISION
+        S_AND = 12,                              // AND
+        S_OR = 13,                               // OR
+        S_XOR = 14,                              // XOR
+        S_REV = 15,                              // REV
+        S_LBRACKET = 16,                         // LBRACKET
+        S_RBRACKET = 17,                         // RBRACKET
+        S_LBRACE = 18,                           // LBRACE
+        S_RBRACE = 19,                           // RBRACE
+        S_SEMICOLON = 20,                        // SEMICOLON
+        S_COMMA = 21,                            // COMMA
+        S_ASSIGN = 22,                           // ASSIGN
+        S_EQUAL = 23,                            // EQUAL
+        S_LESS = 24,                             // LESS
+        S_ERROR = 25,                            // ERROR
+        S_YYACCEPT = 26,                         // $accept
+        S_program = 27,                          // program
+        S_functions = 28,                        // functions
+        S_formal = 29,                           // formal
+        S_formals = 30,                          // formals
+        S_function = 31,                         // function
+        S_sentence = 32,                         // sentence
+        S_sentences = 33,                        // sentences
+        S_expr = 34,                             // expr
+        S_actual = 35,                           // actual
+        S_actuals = 36                           // actuals
       };
     };
 
@@ -552,18 +630,56 @@ namespace LoonScanner {
       {
         switch (this->kind ())
     {
-      case symbol_kind::S_SYMBOL: // SYMBOL
-        value.move< char > (std::move (that.value));
+      case symbol_kind::S_IDEN: // IDEN
+        value.move< Loonguage::TokenIden > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_INT: // INT
+        value.move< Loonguage::TokenInt > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_IF: // IF
+      case symbol_kind::S_WHILE: // WHILE
+        value.move< Loonguage::TokenKeyWord > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_STR: // STR
+        value.move< Loonguage::TokenString > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_PLUS: // PLUS
+      case symbol_kind::S_MINUS: // MINUS
+      case symbol_kind::S_TIME: // TIME
+      case symbol_kind::S_DIVISION: // DIVISION
+      case symbol_kind::S_AND: // AND
+      case symbol_kind::S_OR: // OR
+      case symbol_kind::S_XOR: // XOR
+      case symbol_kind::S_REV: // REV
+      case symbol_kind::S_LBRACKET: // LBRACKET
+      case symbol_kind::S_RBRACKET: // RBRACKET
+      case symbol_kind::S_LBRACE: // LBRACE
+      case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_SEMICOLON: // SEMICOLON
+      case symbol_kind::S_COMMA: // COMMA
+      case symbol_kind::S_ASSIGN: // ASSIGN
+      case symbol_kind::S_EQUAL: // EQUAL
+      case symbol_kind::S_LESS: // LESS
+        value.move< Loonguage::TokenSymbol > (std::move (that.value));
         break;
 
       case symbol_kind::S_program: // program
+      case symbol_kind::S_functions: // functions
+      case symbol_kind::S_formal: // formal
+      case symbol_kind::S_formals: // formals
+      case symbol_kind::S_function: // function
+      case symbol_kind::S_sentence: // sentence
+      case symbol_kind::S_sentences: // sentences
+      case symbol_kind::S_expr: // expr
+      case symbol_kind::S_actual: // actual
+      case symbol_kind::S_actuals: // actuals
         value.move< int > (std::move (that.value));
         break;
 
-      case symbol_kind::S_IDEN: // IDEN
-      case symbol_kind::S_IF: // IF
-      case symbol_kind::S_WHILE: // WHILE
-      case symbol_kind::S_INT: // INT
       case symbol_kind::S_ERROR: // ERROR
         value.move< std::string > (std::move (that.value));
         break;
@@ -592,13 +708,69 @@ namespace LoonScanner {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, char&& v, location_type&& l)
+      basic_symbol (typename Base::kind_type t, Loonguage::TokenIden&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
         , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const char& v, const location_type& l)
+      basic_symbol (typename Base::kind_type t, const Loonguage::TokenIden& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, Loonguage::TokenInt&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const Loonguage::TokenInt& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, Loonguage::TokenKeyWord&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const Loonguage::TokenKeyWord& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, Loonguage::TokenString&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const Loonguage::TokenString& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, Loonguage::TokenSymbol&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const Loonguage::TokenSymbol& v, const location_type& l)
         : Base (t)
         , value (v)
         , location (l)
@@ -657,18 +829,56 @@ namespace LoonScanner {
         // Value type destructor.
 switch (yykind)
     {
-      case symbol_kind::S_SYMBOL: // SYMBOL
-        value.template destroy< char > ();
+      case symbol_kind::S_IDEN: // IDEN
+        value.template destroy< Loonguage::TokenIden > ();
+        break;
+
+      case symbol_kind::S_INT: // INT
+        value.template destroy< Loonguage::TokenInt > ();
+        break;
+
+      case symbol_kind::S_IF: // IF
+      case symbol_kind::S_WHILE: // WHILE
+        value.template destroy< Loonguage::TokenKeyWord > ();
+        break;
+
+      case symbol_kind::S_STR: // STR
+        value.template destroy< Loonguage::TokenString > ();
+        break;
+
+      case symbol_kind::S_PLUS: // PLUS
+      case symbol_kind::S_MINUS: // MINUS
+      case symbol_kind::S_TIME: // TIME
+      case symbol_kind::S_DIVISION: // DIVISION
+      case symbol_kind::S_AND: // AND
+      case symbol_kind::S_OR: // OR
+      case symbol_kind::S_XOR: // XOR
+      case symbol_kind::S_REV: // REV
+      case symbol_kind::S_LBRACKET: // LBRACKET
+      case symbol_kind::S_RBRACKET: // RBRACKET
+      case symbol_kind::S_LBRACE: // LBRACE
+      case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_SEMICOLON: // SEMICOLON
+      case symbol_kind::S_COMMA: // COMMA
+      case symbol_kind::S_ASSIGN: // ASSIGN
+      case symbol_kind::S_EQUAL: // EQUAL
+      case symbol_kind::S_LESS: // LESS
+        value.template destroy< Loonguage::TokenSymbol > ();
         break;
 
       case symbol_kind::S_program: // program
+      case symbol_kind::S_functions: // functions
+      case symbol_kind::S_formal: // formal
+      case symbol_kind::S_formals: // formals
+      case symbol_kind::S_function: // function
+      case symbol_kind::S_sentence: // sentence
+      case symbol_kind::S_sentences: // sentences
+      case symbol_kind::S_expr: // expr
+      case symbol_kind::S_actual: // actual
+      case symbol_kind::S_actuals: // actuals
         value.template destroy< int > ();
         break;
 
-      case symbol_kind::S_IDEN: // IDEN
-      case symbol_kind::S_IF: // IF
-      case symbol_kind::S_WHILE: // WHILE
-      case symbol_kind::S_INT: // INT
       case symbol_kind::S_ERROR: // ERROR
         value.template destroy< std::string > ();
         break;
@@ -775,15 +985,63 @@ switch (yykind)
 #endif
       }
 #if 201103L <= YY_CPLUSPLUS
-      symbol_type (int tok, char v, location_type l)
+      symbol_type (int tok, Loonguage::TokenIden v, location_type l)
         : super_type (token_kind_type (tok), std::move (v), std::move (l))
 #else
-      symbol_type (int tok, const char& v, const location_type& l)
+      symbol_type (int tok, const Loonguage::TokenIden& v, const location_type& l)
         : super_type (token_kind_type (tok), v, l)
 #endif
       {
 #if !defined _MSC_VER || defined __clang__
-        YY_ASSERT (tok == token::TOKEN_SYMBOL);
+        YY_ASSERT (tok == token::TOKEN_IDEN);
+#endif
+      }
+#if 201103L <= YY_CPLUSPLUS
+      symbol_type (int tok, Loonguage::TokenInt v, location_type l)
+        : super_type (token_kind_type (tok), std::move (v), std::move (l))
+#else
+      symbol_type (int tok, const Loonguage::TokenInt& v, const location_type& l)
+        : super_type (token_kind_type (tok), v, l)
+#endif
+      {
+#if !defined _MSC_VER || defined __clang__
+        YY_ASSERT (tok == token::TOKEN_INT);
+#endif
+      }
+#if 201103L <= YY_CPLUSPLUS
+      symbol_type (int tok, Loonguage::TokenKeyWord v, location_type l)
+        : super_type (token_kind_type (tok), std::move (v), std::move (l))
+#else
+      symbol_type (int tok, const Loonguage::TokenKeyWord& v, const location_type& l)
+        : super_type (token_kind_type (tok), v, l)
+#endif
+      {
+#if !defined _MSC_VER || defined __clang__
+        YY_ASSERT ((token::TOKEN_IF <= tok && tok <= token::TOKEN_WHILE));
+#endif
+      }
+#if 201103L <= YY_CPLUSPLUS
+      symbol_type (int tok, Loonguage::TokenString v, location_type l)
+        : super_type (token_kind_type (tok), std::move (v), std::move (l))
+#else
+      symbol_type (int tok, const Loonguage::TokenString& v, const location_type& l)
+        : super_type (token_kind_type (tok), v, l)
+#endif
+      {
+#if !defined _MSC_VER || defined __clang__
+        YY_ASSERT (tok == token::TOKEN_STR);
+#endif
+      }
+#if 201103L <= YY_CPLUSPLUS
+      symbol_type (int tok, Loonguage::TokenSymbol v, location_type l)
+        : super_type (token_kind_type (tok), std::move (v), std::move (l))
+#else
+      symbol_type (int tok, const Loonguage::TokenSymbol& v, const location_type& l)
+        : super_type (token_kind_type (tok), v, l)
+#endif
+      {
+#if !defined _MSC_VER || defined __clang__
+        YY_ASSERT ((token::TOKEN_PLUS <= tok && tok <= token::TOKEN_LESS));
 #endif
       }
 #if 201103L <= YY_CPLUSPLUS
@@ -795,13 +1053,13 @@ switch (yykind)
 #endif
       {
 #if !defined _MSC_VER || defined __clang__
-        YY_ASSERT ((token::TOKEN_IDEN <= tok && tok <= token::TOKEN_ERROR));
+        YY_ASSERT (tok == token::TOKEN_ERROR);
 #endif
       }
     };
 
     /// Build a parser object.
-     Parser  (LoonScanner::Scanner& scanner_yyarg);
+     Parser  (LoonScanner::Scanner& scanner_yyarg, Loonguage::SymbolTable<std::string>& idenTable_yyarg, Loonguage::SymbolTable<std::string>& strTable_yyarg);
     virtual ~ Parser  ();
 
 #if 201103L <= YY_CPLUSPLUS
@@ -894,29 +1152,14 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_IDEN (std::string v, location_type l)
-      {
-        return symbol_type (token::TOKEN_IDEN, std::move (v), std::move (l));
-      }
-#else
-      static
-      symbol_type
-      make_IDEN (const std::string& v, const location_type& l)
-      {
-        return symbol_type (token::TOKEN_IDEN, v, l);
-      }
-#endif
-#if 201103L <= YY_CPLUSPLUS
-      static
-      symbol_type
-      make_IF (std::string v, location_type l)
+      make_IF (Loonguage::TokenKeyWord v, location_type l)
       {
         return symbol_type (token::TOKEN_IF, std::move (v), std::move (l));
       }
 #else
       static
       symbol_type
-      make_IF (const std::string& v, const location_type& l)
+      make_IF (const Loonguage::TokenKeyWord& v, const location_type& l)
       {
         return symbol_type (token::TOKEN_IF, v, l);
       }
@@ -924,14 +1167,14 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_WHILE (std::string v, location_type l)
+      make_WHILE (Loonguage::TokenKeyWord v, location_type l)
       {
         return symbol_type (token::TOKEN_WHILE, std::move (v), std::move (l));
       }
 #else
       static
       symbol_type
-      make_WHILE (const std::string& v, const location_type& l)
+      make_WHILE (const Loonguage::TokenKeyWord& v, const location_type& l)
       {
         return symbol_type (token::TOKEN_WHILE, v, l);
       }
@@ -939,16 +1182,301 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_INT (std::string v, location_type l)
+      make_INT (Loonguage::TokenInt v, location_type l)
       {
         return symbol_type (token::TOKEN_INT, std::move (v), std::move (l));
       }
 #else
       static
       symbol_type
-      make_INT (const std::string& v, const location_type& l)
+      make_INT (const Loonguage::TokenInt& v, const location_type& l)
       {
         return symbol_type (token::TOKEN_INT, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_STR (Loonguage::TokenString v, location_type l)
+      {
+        return symbol_type (token::TOKEN_STR, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_STR (const Loonguage::TokenString& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_STR, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_IDEN (Loonguage::TokenIden v, location_type l)
+      {
+        return symbol_type (token::TOKEN_IDEN, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_IDEN (const Loonguage::TokenIden& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_IDEN, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_PLUS (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_PLUS, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_PLUS (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_PLUS, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_MINUS (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_MINUS, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_MINUS (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_MINUS, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_TIME (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_TIME, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_TIME (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_TIME, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_DIVISION (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_DIVISION, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_DIVISION (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_DIVISION, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_AND (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_AND, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_AND (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_AND, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_OR (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_OR, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_OR (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_OR, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_XOR (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_XOR, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_XOR (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_XOR, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_REV (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_REV, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_REV (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_REV, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_LBRACKET (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_LBRACKET, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_LBRACKET (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_LBRACKET, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_RBRACKET (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_RBRACKET, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_RBRACKET (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_RBRACKET, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_LBRACE (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_LBRACE, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_LBRACE (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_LBRACE, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_RBRACE (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_RBRACE, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_RBRACE (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_RBRACE, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_SEMICOLON (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_SEMICOLON, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_SEMICOLON (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_SEMICOLON, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_COMMA (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_COMMA, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_COMMA (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_COMMA, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_ASSIGN (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_ASSIGN, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_ASSIGN (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_ASSIGN, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_EQUAL (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_EQUAL, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_EQUAL (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_EQUAL, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_LESS (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_LESS, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_LESS (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_LESS, v, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -964,21 +1492,6 @@ switch (yykind)
       make_ERROR (const std::string& v, const location_type& l)
       {
         return symbol_type (token::TOKEN_ERROR, v, l);
-      }
-#endif
-#if 201103L <= YY_CPLUSPLUS
-      static
-      symbol_type
-      make_SYMBOL (char v, location_type l)
-      {
-        return symbol_type (token::TOKEN_SYMBOL, std::move (v), std::move (l));
-      }
-#else
-      static
-      symbol_type
-      make_SYMBOL (const char& v, const location_type& l)
-      {
-        return symbol_type (token::TOKEN_SYMBOL, v, l);
       }
 #endif
 
@@ -1051,7 +1564,7 @@ switch (yykind)
     // Tables.
     // YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
     // STATE-NUM.
-    static const signed char yypact_[];
+    static const short yypact_[];
 
     // YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
     // Performed when YYTABLE does not specify something else to do.  Zero
@@ -1084,7 +1597,7 @@ switch (yykind)
 
 #if YYDEBUG
     // YYRLINE[YYN] -- Source line where rule number YYN was defined.
-    static const signed char yyrline_[];
+    static const unsigned char yyrline_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
     virtual void yy_reduce_print_ (int r) const;
     /// Print the state stack on the debug stream.
@@ -1311,14 +1824,16 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 5,     ///< Last index in yytable_.
-      yynnts_ = 2,  ///< Number of nonterminal symbols.
-      yyfinal_ = 4 ///< Termination state number.
+      yylast_ = 151,     ///< Last index in yytable_.
+      yynnts_ = 11,  ///< Number of nonterminal symbols.
+      yyfinal_ = 6 ///< Termination state number.
     };
 
 
     // User arguments.
     LoonScanner::Scanner& scanner;
+    Loonguage::SymbolTable<std::string>& idenTable;
+    Loonguage::SymbolTable<std::string>& strTable;
 
   };
 
@@ -1358,10 +1873,12 @@ switch (yykind)
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
+      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
+      25
     };
     // Last valid token kind.
-    const int code_max = 263;
+    const int code_max = 280;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -1380,18 +1897,56 @@ switch (yykind)
   {
     switch (this->kind ())
     {
-      case symbol_kind::S_SYMBOL: // SYMBOL
-        value.copy< char > (YY_MOVE (that.value));
+      case symbol_kind::S_IDEN: // IDEN
+        value.copy< Loonguage::TokenIden > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_INT: // INT
+        value.copy< Loonguage::TokenInt > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_IF: // IF
+      case symbol_kind::S_WHILE: // WHILE
+        value.copy< Loonguage::TokenKeyWord > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_STR: // STR
+        value.copy< Loonguage::TokenString > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_PLUS: // PLUS
+      case symbol_kind::S_MINUS: // MINUS
+      case symbol_kind::S_TIME: // TIME
+      case symbol_kind::S_DIVISION: // DIVISION
+      case symbol_kind::S_AND: // AND
+      case symbol_kind::S_OR: // OR
+      case symbol_kind::S_XOR: // XOR
+      case symbol_kind::S_REV: // REV
+      case symbol_kind::S_LBRACKET: // LBRACKET
+      case symbol_kind::S_RBRACKET: // RBRACKET
+      case symbol_kind::S_LBRACE: // LBRACE
+      case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_SEMICOLON: // SEMICOLON
+      case symbol_kind::S_COMMA: // COMMA
+      case symbol_kind::S_ASSIGN: // ASSIGN
+      case symbol_kind::S_EQUAL: // EQUAL
+      case symbol_kind::S_LESS: // LESS
+        value.copy< Loonguage::TokenSymbol > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_program: // program
+      case symbol_kind::S_functions: // functions
+      case symbol_kind::S_formal: // formal
+      case symbol_kind::S_formals: // formals
+      case symbol_kind::S_function: // function
+      case symbol_kind::S_sentence: // sentence
+      case symbol_kind::S_sentences: // sentences
+      case symbol_kind::S_expr: // expr
+      case symbol_kind::S_actual: // actual
+      case symbol_kind::S_actuals: // actuals
         value.copy< int > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_IDEN: // IDEN
-      case symbol_kind::S_IF: // IF
-      case symbol_kind::S_WHILE: // WHILE
-      case symbol_kind::S_INT: // INT
       case symbol_kind::S_ERROR: // ERROR
         value.copy< std::string > (YY_MOVE (that.value));
         break;
@@ -1427,18 +1982,56 @@ switch (yykind)
     super_type::move (s);
     switch (this->kind ())
     {
-      case symbol_kind::S_SYMBOL: // SYMBOL
-        value.move< char > (YY_MOVE (s.value));
+      case symbol_kind::S_IDEN: // IDEN
+        value.move< Loonguage::TokenIden > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_INT: // INT
+        value.move< Loonguage::TokenInt > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_IF: // IF
+      case symbol_kind::S_WHILE: // WHILE
+        value.move< Loonguage::TokenKeyWord > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_STR: // STR
+        value.move< Loonguage::TokenString > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_PLUS: // PLUS
+      case symbol_kind::S_MINUS: // MINUS
+      case symbol_kind::S_TIME: // TIME
+      case symbol_kind::S_DIVISION: // DIVISION
+      case symbol_kind::S_AND: // AND
+      case symbol_kind::S_OR: // OR
+      case symbol_kind::S_XOR: // XOR
+      case symbol_kind::S_REV: // REV
+      case symbol_kind::S_LBRACKET: // LBRACKET
+      case symbol_kind::S_RBRACKET: // RBRACKET
+      case symbol_kind::S_LBRACE: // LBRACE
+      case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_SEMICOLON: // SEMICOLON
+      case symbol_kind::S_COMMA: // COMMA
+      case symbol_kind::S_ASSIGN: // ASSIGN
+      case symbol_kind::S_EQUAL: // EQUAL
+      case symbol_kind::S_LESS: // LESS
+        value.move< Loonguage::TokenSymbol > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_program: // program
+      case symbol_kind::S_functions: // functions
+      case symbol_kind::S_formal: // formal
+      case symbol_kind::S_formals: // formals
+      case symbol_kind::S_function: // function
+      case symbol_kind::S_sentence: // sentence
+      case symbol_kind::S_sentences: // sentences
+      case symbol_kind::S_expr: // expr
+      case symbol_kind::S_actual: // actual
+      case symbol_kind::S_actuals: // actuals
         value.move< int > (YY_MOVE (s.value));
         break;
 
-      case symbol_kind::S_IDEN: // IDEN
-      case symbol_kind::S_IF: // IF
-      case symbol_kind::S_WHILE: // WHILE
-      case symbol_kind::S_INT: // INT
       case symbol_kind::S_ERROR: // ERROR
         value.move< std::string > (YY_MOVE (s.value));
         break;
@@ -1510,7 +2103,7 @@ switch (yykind)
 
 #line 9 "LoonParser.y"
 } // LoonScanner
-#line 1514 "LoonParser.hpp"
+#line 2107 "LoonParser.hpp"
 
 
 

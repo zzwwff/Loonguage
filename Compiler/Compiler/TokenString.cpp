@@ -1,7 +1,6 @@
-#include "TokenIden.h"
-#include "SymbolTable.cpp"
+#include "TokenString.h"
 namespace Loonguage {
-	void TokenIden::dump(std::ostream& cout) const
+	void TokenString::dump(std::ostream& cout) const
 	{
 #ifdef REAL_NAME
 		cout << "{ \"tokenType\" : \"" << tokenType2String() << "\", \"line\" : \"" << line << "\""
@@ -12,21 +11,20 @@ namespace Loonguage {
 #endif
 	}
 
-	TokenIden::TokenIden()
+	TokenString::TokenString()
 	{
 	}
 
-	TokenIden::TokenIden(int l, std::string str, SymbolTable<std::string>& table):
-		Token(Token::TokenType::TokenIden, l), value(table.addSymbol(str))
+	TokenString::TokenString(int l, std::string str, SymbolTable<std::string>& table) :
+		Token(Token::TokenType::TokenString, l), value(table.addSymbol(str))
 	{
 	}
 
-	TokenIden::TokenIden(std::istream& cin, SymbolTable<std::string>& table)
+	TokenString::TokenString(std::istream& cin, SymbolTable<std::string>& table)
 	{
-		tokenType = TokenType::TokenInt;
+		tokenType = TokenType::TokenString;
 		std::string str;
 		cin >> line >> str;
 		value = table.addSymbol(str);
 	}
-
-};
+}

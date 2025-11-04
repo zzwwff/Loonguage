@@ -11,6 +11,8 @@ namespace Loonguage {
 			return "TokenKeyWord";
 		if (tokenType == TokenType::TokenSymbol)
 			return "TokenSymbol";
+		if (tokenType == TokenType::TokenString)
+			return "TokenString";
 		throw;
 	}
 
@@ -24,6 +26,8 @@ namespace Loonguage {
 			tokenType = TokenType::TokenKeyWord;
 		if (str == "TokenSymbol")
 			tokenType = TokenType::TokenSymbol;
+		if (str == "TokenString")
+			tokenType = TokenType::TokenString;
 		throw;
 	}
 

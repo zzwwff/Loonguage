@@ -10,6 +10,7 @@
   #include "LoonParser.hpp"  //包含由parser.y生成的头文件
   #include "LoonScanner.h"   //包含yyFlexLexer子类的头文件
   #include "location.hh" //包含位置调试信息头文件
+  #include "Tokens.h"
 
   static LoonScanner::location loc;//声明位置实例
   #define YY_USER_ACTION  loc.columns (yyleng); /* 定义了YY_USER_ACTION，该宏在每个记号的语义动作之前被调用，来根据记号的长度设置位置的信息 */
@@ -19,6 +20,8 @@
 
   using namespace LoonScanner;
   #define yyterminate() Parser::make_END(loc);
+
+  std::string strBuffer;
 %}
 %option c++
 
@@ -30,6 +33,8 @@
 
 
 %x COMMENT
+%x STRING
+%x STRING_ERROR
 %x SINGLE_COMMENT
 
 UNSIGNEDDIGIT [0-9]
@@ -63,33 +68,106 @@ EOF { yyterminate(); }
     BEGIN(INITIAL);
 }
 
+<INITIAL>\" {
+    strBuffer.clear();
+    BEGIN(STRING);
+}
+
+<STRING>\\[tn] {
+    if (yytext[1] == 'n')
+    	strBuffer.push_back('\n');
+    else if (yytext[1] == 't')
+    	strBuffer.push_back('\t');
+}
+
+<STRING>\\[^btnf] {
+    strBuffer.push_back(yytext[1]);
+}
+
+<STRING>[^\"\n] {
+    strBuffer.push_back(yytext[0]);
+  }
+
+<STRING>\" {
+    BEGIN(INITIAL);
+    return Parser::make_STR(Loonguage::TokenString(loc.begin.line, strBuffer, strTable), loc); 
+}
+
+
 <INITIAL>{NEW_LINE}  {  }
 
 <INITIAL>{BLANK} { }
 
 
 <INITIAL>{DIGIT}    {
-            return Parser::make_INT(yytext, loc); 
+            return Parser::make_INT(Loonguage::TokenInt(loc.begin.line, std::stoi(yytext)), loc); 
           }
 
 <INITIAL>if        {
-                return Parser::make_IF(yytext, loc); 
+            return Parser::make_IF(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordIf), loc); 
             }
 
 <INITIAL>while        {
-                return Parser::make_WHILE(yytext, loc); 
+            return Parser::make_WHILE(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordIf), loc); 
             }
 
 <INITIAL>{IDEN}  {
-                return Parser::make_IDEN(yytext, loc); 
+                return Parser::make_IDEN(Loonguage::TokenIden(loc.begin.line, yytext, idenTable), loc); 
             }
 
 <INITIAL>==  {
-                return Parser::make_SYMBOL('#', loc); 
+                return Parser::make_EQUAL(Loonguage::TokenSymbol(loc.begin.line, '#'), loc); 
             }
 
-<INITIAL>"+"|"-"|"*"|"/"|"{"|"}"|"("|")"|";"|"="|"&"|"|"|"^"|"<"|"~"|"," {
-                return Parser::make_SYMBOL(yytext[0], loc); 
+<INITIAL>"+" {
+                return Parser::make_PLUS(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+
+<INITIAL>"-" {
+                return Parser::make_MINUS(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>"*" {
+                return Parser::make_TIME(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>"/" {
+                return Parser::make_DIVISION(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>"{" {
+                return Parser::make_LBRACE(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>"}" {
+                return Parser::make_RBRACE(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>"(" {
+                return Parser::make_LBRACKET(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>")" {
+                return Parser::make_RBRACKET(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>"," {
+                return Parser::make_COMMA(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>"=" {
+                return Parser::make_ASSIGN(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>";" {
+                return Parser::make_SEMICOLON(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>"&" {
+                return Parser::make_AND(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>"|" {
+                return Parser::make_OR(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>"~" {
+                return Parser::make_REV(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>"^" {
+                return Parser::make_XOR(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+
+<INITIAL>"<" {
+                return Parser::make_LESS(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 
 <<EOF>>   { return yyterminate(); }

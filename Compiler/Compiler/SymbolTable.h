@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include <cstring>
+#include <string>
 #include "GeneralSetting.h"
 namespace Loonguage {
 	template<typename T> 
@@ -32,6 +33,8 @@ namespace Loonguage {
 #endif // REAL_NAME
 
 	public:
+		SymbolTable();
+
 		Symbol operator [] (const T& t) const;
 		Symbol addSymbol(const T& t);
 		bool exist(const T& t) const;
@@ -43,6 +46,7 @@ namespace Loonguage {
 
 	};
 
+	extern SymbolTable<std::string> strTable, idenTable;
 };
 
 

@@ -8,6 +8,8 @@ namespace Loonguage {
 		char symbol;								//symbol, while '#' stands for '='
 	public:
 		void dump(std::ostream&) const;				//override
+
+		TokenSymbol();
 		TokenSymbol(int l, char ch);				//constructor
 		TokenSymbol(std::istream&);					//constructor
 	};

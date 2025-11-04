@@ -8,6 +8,10 @@ namespace Loonguage {
 
 
 
+	TokenInt::TokenInt()
+	{
+	}
+
 	TokenInt::TokenInt(int l, int v) :
 		Token(Token::TokenType::TokenInt, l), value(v)
 	{

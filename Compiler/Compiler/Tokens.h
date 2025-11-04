@@ -4,6 +4,7 @@
 #include "TokenInt.h"
 #include "TokenSymbol.h"
 #include "TokenIden.h"
+#include "TokenString.h"
 #include "SymbolTable.h"
 
 #include <vector>

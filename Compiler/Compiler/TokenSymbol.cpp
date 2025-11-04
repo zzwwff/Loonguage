@@ -7,6 +7,10 @@ namespace Loonguage {
 	}
 
 
+	TokenSymbol::TokenSymbol()
+	{
+	}
+
 	TokenSymbol::TokenSymbol(int l, char ch) :
 		Token(TokenType::TokenSymbol, l), symbol(ch)
 	{

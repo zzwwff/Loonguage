@@ -35,19 +35,21 @@
 // private implementation details that can be changed or removed.
 
 // "%code top" blocks.
-#line 29 "LoonParser.y"
+#line 30 "LoonParser.y"
 
   #include <iostream>
   #include "LoonScanner.h"
   #include "LoonParser.hpp"
   #include "location.hh"
 
-  static LoonScanner::Parser::symbol_type yylex(LoonScanner::Scanner& scanner){
-    return scanner.nextToken();
+  static LoonScanner::Parser::symbol_type yylex(LoonScanner::Scanner& scanner, 
+                                                Loonguage::SymbolTable<std::string>& idenTable, 
+                                                Loonguage::SymbolTable<std::string>& strTable){
+    return scanner.nextToken(idenTable, strTable);
   }
   using namespace LoonScanner;
 
-#line 51 "LoonParser.cpp"
+#line 53 "LoonParser.cpp"
 
 
 
@@ -147,17 +149,19 @@
 
 #line 9 "LoonParser.y"
 namespace LoonScanner {
-#line 151 "LoonParser.cpp"
+#line 153 "LoonParser.cpp"
 
   /// Build a parser object.
-   Parser :: Parser  (LoonScanner::Scanner& scanner_yyarg)
+   Parser :: Parser  (LoonScanner::Scanner& scanner_yyarg, Loonguage::SymbolTable<std::string>& idenTable_yyarg, Loonguage::SymbolTable<std::string>& strTable_yyarg)
 #if YYDEBUG
     : yydebug_ (false),
       yycdebug_ (&std::cerr),
 #else
     :
 #endif
-      scanner (scanner_yyarg)
+      scanner (scanner_yyarg),
+      idenTable (idenTable_yyarg),
+      strTable (strTable_yyarg)
   {}
 
    Parser ::~ Parser  ()
@@ -215,18 +219,56 @@ namespace LoonScanner {
   {
     switch (that.kind ())
     {
-      case symbol_kind::S_SYMBOL: // SYMBOL
-        value.YY_MOVE_OR_COPY< char > (YY_MOVE (that.value));
+      case symbol_kind::S_IDEN: // IDEN
+        value.YY_MOVE_OR_COPY< Loonguage::TokenIden > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_INT: // INT
+        value.YY_MOVE_OR_COPY< Loonguage::TokenInt > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_IF: // IF
+      case symbol_kind::S_WHILE: // WHILE
+        value.YY_MOVE_OR_COPY< Loonguage::TokenKeyWord > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_STR: // STR
+        value.YY_MOVE_OR_COPY< Loonguage::TokenString > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_PLUS: // PLUS
+      case symbol_kind::S_MINUS: // MINUS
+      case symbol_kind::S_TIME: // TIME
+      case symbol_kind::S_DIVISION: // DIVISION
+      case symbol_kind::S_AND: // AND
+      case symbol_kind::S_OR: // OR
+      case symbol_kind::S_XOR: // XOR
+      case symbol_kind::S_REV: // REV
+      case symbol_kind::S_LBRACKET: // LBRACKET
+      case symbol_kind::S_RBRACKET: // RBRACKET
+      case symbol_kind::S_LBRACE: // LBRACE
+      case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_SEMICOLON: // SEMICOLON
+      case symbol_kind::S_COMMA: // COMMA
+      case symbol_kind::S_ASSIGN: // ASSIGN
+      case symbol_kind::S_EQUAL: // EQUAL
+      case symbol_kind::S_LESS: // LESS
+        value.YY_MOVE_OR_COPY< Loonguage::TokenSymbol > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_program: // program
+      case symbol_kind::S_functions: // functions
+      case symbol_kind::S_formal: // formal
+      case symbol_kind::S_formals: // formals
+      case symbol_kind::S_function: // function
+      case symbol_kind::S_sentence: // sentence
+      case symbol_kind::S_sentences: // sentences
+      case symbol_kind::S_expr: // expr
+      case symbol_kind::S_actual: // actual
+      case symbol_kind::S_actuals: // actuals
         value.YY_MOVE_OR_COPY< int > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_IDEN: // IDEN
-      case symbol_kind::S_IF: // IF
-      case symbol_kind::S_WHILE: // WHILE
-      case symbol_kind::S_INT: // INT
       case symbol_kind::S_ERROR: // ERROR
         value.YY_MOVE_OR_COPY< std::string > (YY_MOVE (that.value));
         break;
@@ -246,18 +288,56 @@ namespace LoonScanner {
   {
     switch (that.kind ())
     {
-      case symbol_kind::S_SYMBOL: // SYMBOL
-        value.move< char > (YY_MOVE (that.value));
+      case symbol_kind::S_IDEN: // IDEN
+        value.move< Loonguage::TokenIden > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_INT: // INT
+        value.move< Loonguage::TokenInt > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_IF: // IF
+      case symbol_kind::S_WHILE: // WHILE
+        value.move< Loonguage::TokenKeyWord > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_STR: // STR
+        value.move< Loonguage::TokenString > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_PLUS: // PLUS
+      case symbol_kind::S_MINUS: // MINUS
+      case symbol_kind::S_TIME: // TIME
+      case symbol_kind::S_DIVISION: // DIVISION
+      case symbol_kind::S_AND: // AND
+      case symbol_kind::S_OR: // OR
+      case symbol_kind::S_XOR: // XOR
+      case symbol_kind::S_REV: // REV
+      case symbol_kind::S_LBRACKET: // LBRACKET
+      case symbol_kind::S_RBRACKET: // RBRACKET
+      case symbol_kind::S_LBRACE: // LBRACE
+      case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_SEMICOLON: // SEMICOLON
+      case symbol_kind::S_COMMA: // COMMA
+      case symbol_kind::S_ASSIGN: // ASSIGN
+      case symbol_kind::S_EQUAL: // EQUAL
+      case symbol_kind::S_LESS: // LESS
+        value.move< Loonguage::TokenSymbol > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_program: // program
+      case symbol_kind::S_functions: // functions
+      case symbol_kind::S_formal: // formal
+      case symbol_kind::S_formals: // formals
+      case symbol_kind::S_function: // function
+      case symbol_kind::S_sentence: // sentence
+      case symbol_kind::S_sentences: // sentences
+      case symbol_kind::S_expr: // expr
+      case symbol_kind::S_actual: // actual
+      case symbol_kind::S_actuals: // actuals
         value.move< int > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_IDEN: // IDEN
-      case symbol_kind::S_IF: // IF
-      case symbol_kind::S_WHILE: // WHILE
-      case symbol_kind::S_INT: // INT
       case symbol_kind::S_ERROR: // ERROR
         value.move< std::string > (YY_MOVE (that.value));
         break;
@@ -277,18 +357,56 @@ namespace LoonScanner {
     state = that.state;
     switch (that.kind ())
     {
-      case symbol_kind::S_SYMBOL: // SYMBOL
-        value.copy< char > (that.value);
+      case symbol_kind::S_IDEN: // IDEN
+        value.copy< Loonguage::TokenIden > (that.value);
+        break;
+
+      case symbol_kind::S_INT: // INT
+        value.copy< Loonguage::TokenInt > (that.value);
+        break;
+
+      case symbol_kind::S_IF: // IF
+      case symbol_kind::S_WHILE: // WHILE
+        value.copy< Loonguage::TokenKeyWord > (that.value);
+        break;
+
+      case symbol_kind::S_STR: // STR
+        value.copy< Loonguage::TokenString > (that.value);
+        break;
+
+      case symbol_kind::S_PLUS: // PLUS
+      case symbol_kind::S_MINUS: // MINUS
+      case symbol_kind::S_TIME: // TIME
+      case symbol_kind::S_DIVISION: // DIVISION
+      case symbol_kind::S_AND: // AND
+      case symbol_kind::S_OR: // OR
+      case symbol_kind::S_XOR: // XOR
+      case symbol_kind::S_REV: // REV
+      case symbol_kind::S_LBRACKET: // LBRACKET
+      case symbol_kind::S_RBRACKET: // RBRACKET
+      case symbol_kind::S_LBRACE: // LBRACE
+      case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_SEMICOLON: // SEMICOLON
+      case symbol_kind::S_COMMA: // COMMA
+      case symbol_kind::S_ASSIGN: // ASSIGN
+      case symbol_kind::S_EQUAL: // EQUAL
+      case symbol_kind::S_LESS: // LESS
+        value.copy< Loonguage::TokenSymbol > (that.value);
         break;
 
       case symbol_kind::S_program: // program
+      case symbol_kind::S_functions: // functions
+      case symbol_kind::S_formal: // formal
+      case symbol_kind::S_formals: // formals
+      case symbol_kind::S_function: // function
+      case symbol_kind::S_sentence: // sentence
+      case symbol_kind::S_sentences: // sentences
+      case symbol_kind::S_expr: // expr
+      case symbol_kind::S_actual: // actual
+      case symbol_kind::S_actuals: // actuals
         value.copy< int > (that.value);
         break;
 
-      case symbol_kind::S_IDEN: // IDEN
-      case symbol_kind::S_IF: // IF
-      case symbol_kind::S_WHILE: // WHILE
-      case symbol_kind::S_INT: // INT
       case symbol_kind::S_ERROR: // ERROR
         value.copy< std::string > (that.value);
         break;
@@ -307,18 +425,56 @@ namespace LoonScanner {
     state = that.state;
     switch (that.kind ())
     {
-      case symbol_kind::S_SYMBOL: // SYMBOL
-        value.move< char > (that.value);
+      case symbol_kind::S_IDEN: // IDEN
+        value.move< Loonguage::TokenIden > (that.value);
+        break;
+
+      case symbol_kind::S_INT: // INT
+        value.move< Loonguage::TokenInt > (that.value);
+        break;
+
+      case symbol_kind::S_IF: // IF
+      case symbol_kind::S_WHILE: // WHILE
+        value.move< Loonguage::TokenKeyWord > (that.value);
+        break;
+
+      case symbol_kind::S_STR: // STR
+        value.move< Loonguage::TokenString > (that.value);
+        break;
+
+      case symbol_kind::S_PLUS: // PLUS
+      case symbol_kind::S_MINUS: // MINUS
+      case symbol_kind::S_TIME: // TIME
+      case symbol_kind::S_DIVISION: // DIVISION
+      case symbol_kind::S_AND: // AND
+      case symbol_kind::S_OR: // OR
+      case symbol_kind::S_XOR: // XOR
+      case symbol_kind::S_REV: // REV
+      case symbol_kind::S_LBRACKET: // LBRACKET
+      case symbol_kind::S_RBRACKET: // RBRACKET
+      case symbol_kind::S_LBRACE: // LBRACE
+      case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_SEMICOLON: // SEMICOLON
+      case symbol_kind::S_COMMA: // COMMA
+      case symbol_kind::S_ASSIGN: // ASSIGN
+      case symbol_kind::S_EQUAL: // EQUAL
+      case symbol_kind::S_LESS: // LESS
+        value.move< Loonguage::TokenSymbol > (that.value);
         break;
 
       case symbol_kind::S_program: // program
+      case symbol_kind::S_functions: // functions
+      case symbol_kind::S_formal: // formal
+      case symbol_kind::S_formals: // formals
+      case symbol_kind::S_function: // function
+      case symbol_kind::S_sentence: // sentence
+      case symbol_kind::S_sentences: // sentences
+      case symbol_kind::S_expr: // expr
+      case symbol_kind::S_actual: // actual
+      case symbol_kind::S_actuals: // actuals
         value.move< int > (that.value);
         break;
 
-      case symbol_kind::S_IDEN: // IDEN
-      case symbol_kind::S_IF: // IF
-      case symbol_kind::S_WHILE: // WHILE
-      case symbol_kind::S_INT: // INT
       case symbol_kind::S_ERROR: // ERROR
         value.move< std::string > (that.value);
         break;
@@ -508,7 +664,7 @@ namespace LoonScanner {
         try
 #endif // YY_EXCEPTIONS
           {
-            symbol_type yylookahead (yylex (scanner));
+            symbol_type yylookahead (yylex (scanner, idenTable, strTable));
             yyla.move (yylookahead);
           }
 #if YY_EXCEPTIONS
@@ -582,18 +738,56 @@ namespace LoonScanner {
          when using variants.  */
       switch (yyr1_[yyn])
     {
-      case symbol_kind::S_SYMBOL: // SYMBOL
-        yylhs.value.emplace< char > ();
+      case symbol_kind::S_IDEN: // IDEN
+        yylhs.value.emplace< Loonguage::TokenIden > ();
+        break;
+
+      case symbol_kind::S_INT: // INT
+        yylhs.value.emplace< Loonguage::TokenInt > ();
+        break;
+
+      case symbol_kind::S_IF: // IF
+      case symbol_kind::S_WHILE: // WHILE
+        yylhs.value.emplace< Loonguage::TokenKeyWord > ();
+        break;
+
+      case symbol_kind::S_STR: // STR
+        yylhs.value.emplace< Loonguage::TokenString > ();
+        break;
+
+      case symbol_kind::S_PLUS: // PLUS
+      case symbol_kind::S_MINUS: // MINUS
+      case symbol_kind::S_TIME: // TIME
+      case symbol_kind::S_DIVISION: // DIVISION
+      case symbol_kind::S_AND: // AND
+      case symbol_kind::S_OR: // OR
+      case symbol_kind::S_XOR: // XOR
+      case symbol_kind::S_REV: // REV
+      case symbol_kind::S_LBRACKET: // LBRACKET
+      case symbol_kind::S_RBRACKET: // RBRACKET
+      case symbol_kind::S_LBRACE: // LBRACE
+      case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_SEMICOLON: // SEMICOLON
+      case symbol_kind::S_COMMA: // COMMA
+      case symbol_kind::S_ASSIGN: // ASSIGN
+      case symbol_kind::S_EQUAL: // EQUAL
+      case symbol_kind::S_LESS: // LESS
+        yylhs.value.emplace< Loonguage::TokenSymbol > ();
         break;
 
       case symbol_kind::S_program: // program
+      case symbol_kind::S_functions: // functions
+      case symbol_kind::S_formal: // formal
+      case symbol_kind::S_formals: // formals
+      case symbol_kind::S_function: // function
+      case symbol_kind::S_sentence: // sentence
+      case symbol_kind::S_sentences: // sentences
+      case symbol_kind::S_expr: // expr
+      case symbol_kind::S_actual: // actual
+      case symbol_kind::S_actuals: // actuals
         yylhs.value.emplace< int > ();
         break;
 
-      case symbol_kind::S_IDEN: // IDEN
-      case symbol_kind::S_IF: // IF
-      case symbol_kind::S_WHILE: // WHILE
-      case symbol_kind::S_INT: // INT
       case symbol_kind::S_ERROR: // ERROR
         yylhs.value.emplace< std::string > ();
         break;
@@ -618,14 +812,230 @@ namespace LoonScanner {
         {
           switch (yyn)
             {
-  case 2: // program: IDEN IDEN SYMBOL INT SYMBOL
-#line 70 "LoonParser.y"
-{ std::cout << "hello  world = " << yystack_[1].value.as < std::string > () << std::endl;  yylhs.value.as < int > () = 1; }
-#line 625 "LoonParser.cpp"
+  case 2: // program: functions
+#line 90 "LoonParser.y"
+{ std::cout << "program" << std::endl;}
+#line 819 "LoonParser.cpp"
+    break;
+
+  case 3: // functions: function
+#line 93 "LoonParser.y"
+         { }
+#line 825 "LoonParser.cpp"
+    break;
+
+  case 4: // functions: function functions
+#line 94 "LoonParser.y"
+                     {std::cout << "function" << std::endl; }
+#line 831 "LoonParser.cpp"
+    break;
+
+  case 5: // formal: IDEN IDEN
+#line 97 "LoonParser.y"
+          {}
+#line 837 "LoonParser.cpp"
+    break;
+
+  case 6: // formals: formal COMMA formals
+#line 100 "LoonParser.y"
+                     { }
+#line 843 "LoonParser.cpp"
+    break;
+
+  case 7: // formals: formal
+#line 101 "LoonParser.y"
+         { }
+#line 849 "LoonParser.cpp"
+    break;
+
+  case 8: // function: IDEN IDEN LBRACKET RBRACKET sentence
+#line 104 "LoonParser.y"
+                                     { }
+#line 855 "LoonParser.cpp"
+    break;
+
+  case 9: // function: IDEN IDEN LBRACKET formals RBRACKET sentence
+#line 105 "LoonParser.y"
+                                               { }
+#line 861 "LoonParser.cpp"
+    break;
+
+  case 10: // sentence: expr SEMICOLON
+#line 108 "LoonParser.y"
+               { }
+#line 867 "LoonParser.cpp"
+    break;
+
+  case 11: // sentence: IF LBRACKET expr RBRACKET sentence
+#line 109 "LoonParser.y"
+                                     { }
+#line 873 "LoonParser.cpp"
+    break;
+
+  case 12: // sentence: WHILE LBRACKET expr RBRACKET sentence
+#line 110 "LoonParser.y"
+                                        { }
+#line 879 "LoonParser.cpp"
+    break;
+
+  case 13: // sentence: LBRACE sentences RBRACE
+#line 111 "LoonParser.y"
+                          { }
+#line 885 "LoonParser.cpp"
+    break;
+
+  case 14: // sentence: LBRACE RBRACE
+#line 112 "LoonParser.y"
+                { }
+#line 891 "LoonParser.cpp"
+    break;
+
+  case 15: // sentence: IDEN IDEN SEMICOLON
+#line 113 "LoonParser.y"
+                      { }
+#line 897 "LoonParser.cpp"
+    break;
+
+  case 16: // sentences: sentence
+#line 116 "LoonParser.y"
+         { }
+#line 903 "LoonParser.cpp"
+    break;
+
+  case 17: // sentences: sentence sentences
+#line 117 "LoonParser.y"
+                     { }
+#line 909 "LoonParser.cpp"
+    break;
+
+  case 19: // expr: IDEN
+#line 120 "LoonParser.y"
+       { }
+#line 915 "LoonParser.cpp"
+    break;
+
+  case 20: // expr: LBRACKET expr RBRACKET
+#line 121 "LoonParser.y"
+                         { }
+#line 921 "LoonParser.cpp"
+    break;
+
+  case 21: // expr: IDEN LBRACKET actuals RBRACKET
+#line 122 "LoonParser.y"
+                                 { }
+#line 927 "LoonParser.cpp"
+    break;
+
+  case 22: // expr: IDEN LBRACKET RBRACKET
+#line 123 "LoonParser.y"
+                         { }
+#line 933 "LoonParser.cpp"
+    break;
+
+  case 23: // expr: IDEN
+#line 124 "LoonParser.y"
+       { }
+#line 939 "LoonParser.cpp"
+    break;
+
+  case 24: // expr: expr PLUS expr
+#line 125 "LoonParser.y"
+                 { }
+#line 945 "LoonParser.cpp"
+    break;
+
+  case 25: // expr: expr MINUS expr
+#line 126 "LoonParser.y"
+                  { }
+#line 951 "LoonParser.cpp"
+    break;
+
+  case 26: // expr: expr TIME expr
+#line 127 "LoonParser.y"
+                 { }
+#line 957 "LoonParser.cpp"
+    break;
+
+  case 27: // expr: expr DIVISION expr
+#line 128 "LoonParser.y"
+                     { }
+#line 963 "LoonParser.cpp"
+    break;
+
+  case 28: // expr: expr AND expr
+#line 129 "LoonParser.y"
+                { }
+#line 969 "LoonParser.cpp"
+    break;
+
+  case 29: // expr: expr OR expr
+#line 130 "LoonParser.y"
+               { }
+#line 975 "LoonParser.cpp"
+    break;
+
+  case 30: // expr: expr XOR expr
+#line 131 "LoonParser.y"
+                { }
+#line 981 "LoonParser.cpp"
+    break;
+
+  case 31: // expr: expr EQUAL expr
+#line 132 "LoonParser.y"
+                  { }
+#line 987 "LoonParser.cpp"
+    break;
+
+  case 32: // expr: expr LESS expr
+#line 133 "LoonParser.y"
+                 { }
+#line 993 "LoonParser.cpp"
+    break;
+
+  case 33: // expr: REV expr
+#line 134 "LoonParser.y"
+           { }
+#line 999 "LoonParser.cpp"
+    break;
+
+  case 34: // expr: IDEN ASSIGN expr
+#line 135 "LoonParser.y"
+                   { }
+#line 1005 "LoonParser.cpp"
+    break;
+
+  case 35: // expr: INT
+#line 136 "LoonParser.y"
+      { }
+#line 1011 "LoonParser.cpp"
+    break;
+
+  case 36: // expr: STR
+#line 137 "LoonParser.y"
+      { }
+#line 1017 "LoonParser.cpp"
+    break;
+
+  case 37: // actual: expr
+#line 140 "LoonParser.y"
+     { }
+#line 1023 "LoonParser.cpp"
+    break;
+
+  case 38: // actuals: actual
+#line 143 "LoonParser.y"
+       { }
+#line 1029 "LoonParser.cpp"
+    break;
+
+  case 39: // actuals: actual actuals
+#line 144 "LoonParser.y"
+                 { }
+#line 1035 "LoonParser.cpp"
     break;
 
 
-#line 629 "LoonParser.cpp"
+#line 1039 "LoonParser.cpp"
 
             default:
               break;
@@ -977,62 +1387,121 @@ namespace LoonScanner {
   }
 
 
-  const signed char  Parser ::yypact_ninf_ = -6;
+  const signed char  Parser ::yypact_ninf_ = -19;
 
-  const signed char  Parser ::yytable_ninf_ = -1;
+  const signed char  Parser ::yytable_ninf_ = -17;
 
-  const signed char
+  const short
    Parser ::yypact_[] =
   {
-      -3,    -2,     2,    -5,    -6,    -1,    -4,    -6
+       0,     3,    17,   -19,     0,     2,   -19,   -19,    -1,    19,
+     128,    16,    22,   -19,    24,    26,   -19,   -19,   129,    -2,
+      -2,    87,   -19,    21,    31,   128,    -2,    -2,    23,   132,
+      -2,    54,    99,    38,   -19,   111,    34,    -2,    -2,    -2,
+      -2,    -2,    -2,    -2,   -19,    -2,    -2,   -19,   -19,    55,
+      72,   -19,   -19,    99,    -2,    37,    99,   -19,   -19,   -19,
+      99,    99,    99,    99,    99,    99,    99,    99,    99,   128,
+     128,   -19,   -19,   -19,   -19
   };
 
   const signed char
    Parser ::yydefact_[] =
   {
-       0,     0,     0,     0,     1,     0,     0,     2
+       0,     0,     0,     2,     3,     0,     1,     4,     0,     0,
+      18,     7,     0,     5,     0,     0,    35,    36,    19,    18,
+      18,    18,     8,     0,     0,    18,    18,    18,     0,    18,
+      18,    19,    33,     0,    14,    18,     0,    18,    18,    18,
+      18,    18,    18,    18,    10,    18,    18,     6,     9,     0,
+       0,    15,    22,    37,    18,     0,    34,    20,    17,    13,
+      24,    25,    26,    27,    28,    29,    30,    31,    32,    18,
+      18,    39,    21,    11,    12
   };
 
   const signed char
    Parser ::yypgoto_[] =
   {
-      -6,    -6
+     -19,   -19,    52,   -19,    33,   -19,   -10,    36,   -18,   -19,
+       4
   };
 
   const signed char
    Parser ::yydefgoto_[] =
   {
-       0,     2
+       0,     2,     3,    11,    12,     4,    35,    36,    23,    54,
+      55
   };
 
   const signed char
    Parser ::yytable_[] =
   {
-       1,     3,     4,     5,     7,     6
+      22,    32,    33,    16,    17,    31,     9,     1,    49,    50,
+       5,    53,    56,    19,    20,    48,    10,     6,     8,    60,
+      61,    62,    63,    64,    65,    66,    13,    67,    68,    37,
+      38,    39,    40,    41,    42,    43,    53,    24,     9,    25,
+      26,    44,    27,    51,    45,    46,    37,    38,    39,    40,
+      41,    42,    43,    59,    72,    57,     7,    47,    71,    73,
+      74,    45,    46,    37,    38,    39,    40,    41,    42,    43,
+      29,    58,    69,     0,     0,     0,    30,     0,    45,    46,
+      37,    38,    39,    40,    41,    42,    43,     0,     0,    70,
+      14,    15,    16,    17,    18,    45,    46,     0,     0,     0,
+       0,     0,    19,    20,     0,    21,    34,    37,    38,    39,
+      40,    41,    42,    43,    14,    15,    16,    17,    18,     0,
+       0,     0,    45,    46,     0,     0,    19,    20,     0,    21,
+     -16,    14,    15,    16,    17,    18,    28,    16,    17,    31,
+       0,     0,     0,    19,    20,    29,    21,    19,    20,    52,
+       0,    30
   };
 
   const signed char
    Parser ::yycheck_[] =
   {
-       3,     3,     0,     8,     8,     6
+      10,    19,    20,     5,     6,     7,     7,     7,    26,    27,
+       7,    29,    30,    15,    16,    25,    17,     0,    16,    37,
+      38,    39,    40,    41,    42,    43,     7,    45,    46,     8,
+       9,    10,    11,    12,    13,    14,    54,    21,     7,    17,
+      16,    20,    16,    20,    23,    24,     8,     9,    10,    11,
+      12,    13,    14,    19,    17,    17,     4,    24,    54,    69,
+      70,    23,    24,     8,     9,    10,    11,    12,    13,    14,
+      16,    35,    17,    -1,    -1,    -1,    22,    -1,    23,    24,
+       8,     9,    10,    11,    12,    13,    14,    -1,    -1,    17,
+       3,     4,     5,     6,     7,    23,    24,    -1,    -1,    -1,
+      -1,    -1,    15,    16,    -1,    18,    19,     8,     9,    10,
+      11,    12,    13,    14,     3,     4,     5,     6,     7,    -1,
+      -1,    -1,    23,    24,    -1,    -1,    15,    16,    -1,    18,
+      19,     3,     4,     5,     6,     7,     7,     5,     6,     7,
+      -1,    -1,    -1,    15,    16,    16,    18,    15,    16,    17,
+      -1,    22
   };
 
   const signed char
    Parser ::yystos_[] =
   {
-       0,     3,    10,     3,     0,     8,     6,     8
+       0,     7,    27,    28,    31,     7,     0,    28,    16,     7,
+      17,    29,    30,     7,     3,     4,     5,     6,     7,    15,
+      16,    18,    32,    34,    21,    17,    16,    16,     7,    16,
+      22,     7,    34,    34,    19,    32,    33,     8,     9,    10,
+      11,    12,    13,    14,    20,    23,    24,    30,    32,    34,
+      34,    20,    17,    34,    35,    36,    34,    17,    33,    19,
+      34,    34,    34,    34,    34,    34,    34,    34,    34,    17,
+      17,    36,    17,    32,    32
   };
 
   const signed char
    Parser ::yyr1_[] =
   {
-       0,     9,    10
+       0,    26,    27,    28,    28,    29,    30,    30,    31,    31,
+      32,    32,    32,    32,    32,    32,    33,    33,    34,    34,
+      34,    34,    34,    34,    34,    34,    34,    34,    34,    34,
+      34,    34,    34,    34,    34,    34,    34,    35,    36,    36
   };
 
   const signed char
    Parser ::yyr2_[] =
   {
-       0,     2,     5
+       0,     2,     1,     1,     2,     2,     3,     1,     5,     6,
+       2,     5,     5,     3,     2,     3,     1,     2,     0,     1,
+       3,     4,     3,     1,     3,     3,     3,     3,     3,     3,
+       3,     3,     3,     2,     3,     1,     1,     1,     1,     2
   };
 
 
@@ -1042,17 +1511,24 @@ namespace LoonScanner {
   const char*
   const  Parser ::yytname_[] =
   {
-  "END", "error", "\"invalid token\"", "IDEN", "IF", "WHILE", "INT",
-  "ERROR", "SYMBOL", "$accept", "program", YY_NULLPTR
+  "END", "error", "\"invalid token\"", "IF", "WHILE", "INT", "STR",
+  "IDEN", "PLUS", "MINUS", "TIME", "DIVISION", "AND", "OR", "XOR", "REV",
+  "LBRACKET", "RBRACKET", "LBRACE", "RBRACE", "SEMICOLON", "COMMA",
+  "ASSIGN", "EQUAL", "LESS", "ERROR", "$accept", "program", "functions",
+  "formal", "formals", "function", "sentence", "sentences", "expr",
+  "actual", "actuals", YY_NULLPTR
   };
 #endif
 
 
 #if YYDEBUG
-  const signed char
+  const unsigned char
    Parser ::yyrline_[] =
   {
-       0,    69,    69
+       0,    89,    89,    93,    94,    97,   100,   101,   104,   105,
+     108,   109,   110,   111,   112,   113,   116,   117,   119,   120,
+     121,   122,   123,   124,   125,   126,   127,   128,   129,   130,
+     131,   132,   133,   134,   135,   136,   137,   140,   143,   144
   };
 
   void
@@ -1085,9 +1561,9 @@ namespace LoonScanner {
 
 #line 9 "LoonParser.y"
 } // LoonScanner
-#line 1089 "LoonParser.cpp"
+#line 1565 "LoonParser.cpp"
 
-#line 73 "LoonParser.y"
+#line 146 "LoonParser.y"
 
 /*Parser实现错误处理接口*/
 void LoonScanner::Parser::error(const LoonScanner::location& location,const std::string& message){

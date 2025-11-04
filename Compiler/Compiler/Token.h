@@ -13,6 +13,7 @@ namespace Loonguage {
 			TokenInt,
 			TokenIden,
 			TokenSymbol,
+			TokenString,
 			TokenNoType
 		};
 
