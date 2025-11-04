@@ -33,7 +33,7 @@ namespace Loonguage {
 #endif // REAL_NAME
 
 	public:
-		SymbolTable();
+		SymbolTable() = default;
 
 		Symbol operator [] (const T& t) const;
 		Symbol addSymbol(const T& t);

@@ -20,6 +20,12 @@
   #include <stdint.h>
   #include <cmath>
   #include "Tokens.h"
+  #include "NodeActual.h"
+  #include "NodeExpr.h"
+  #include "NodeFormal.h"
+  #include "NodeFunction.h"
+  #include "NodeProgram.h"
+  #include "NodeSentence.h"
 
   namespace LoonScanner { 
     class Scanner;
@@ -69,16 +75,16 @@
 %token END 0
 
 
-%type <int> program
-%type <int> functions
-%type <int> function
-%type <int> formal
-%type <int> formals
-%type <int> sentence
-%type <int> sentences
-%type <int> expr
-%type <int> actual
-%type <int> actuals
+%type <Loonguage::NodeProgram*> program
+%type <Loonguage::NodeFunctions*> functions
+%type <Loonguage::NodeFunction*> function
+%type <Loonguage::NodeFormal*> formal
+%type <Loonguage::NodeFormals*> formals
+%type <Loonguage::NodeSentence*> sentence
+%type <Loonguage::NodeSentences*> sentences
+%type <Loonguage::NodeExpr*> expr
+%type <Loonguage::NodeActual*> actual
+%type <Loonguage::NodeActuals*> actuals
 
 
 %start program
@@ -87,61 +93,67 @@
 %%
  program:
 functions
-{ std::cout << "program" << std::endl;}
+{ $$ = new Loonguage::NodeProgram($1); 
+  $$->dump(std::cout, 0);
+  }
 
 functions:
-function { }
-| function functions {std::cout << "function" << std::endl; }
+function { $$ = new Loonguage::NodeFunctions($1); }
+| function functions {$$ = $2;
+                      $$->push_back($1);}
 
 formal:
-IDEN IDEN {}
+IDEN IDEN { $$ = new Loonguage::NodeFormal($1, $2); }
 
 formals:
-formal COMMA formals { }
-| formal { }
+formal COMMA formals { $$ = $3;
+                      $$->push_back($1);  }
+| formal { $$ = new Loonguage::NodeFormals($1); }
 
 function:
-IDEN IDEN LBRACKET RBRACKET sentence { }
-| IDEN IDEN LBRACKET formals RBRACKET sentence { }
+IDEN IDEN LBRACKET RBRACKET sentence { $$ = new Loonguage::NodeFunction($1, $2, new Loonguage::NodeFormals(), $5); }
+| IDEN IDEN LBRACKET formals RBRACKET sentence {
+    $$ = new Loonguage::NodeFunction($1, $2, $4, $6); }
 
 sentence:
-expr SEMICOLON { }
-| IF LBRACKET expr RBRACKET sentence { }
-| WHILE LBRACKET expr RBRACKET sentence { }
-| LBRACE sentences RBRACE { }
-| LBRACE RBRACE { }
-| IDEN IDEN SEMICOLON { }
+expr SEMICOLON { $$ = new Loonguage::NodeSExpr($1); }
+| IF LBRACKET expr RBRACKET sentence { $$ = new Loonguage::NodeSIf($3, $5); }
+| WHILE LBRACKET expr RBRACKET sentence { $$ = new Loonguage::NodeSWhile($3, $5); }
+| LBRACE sentences RBRACE { $$ = new Loonguage::NodeSBlock($2); }
+| LBRACE RBRACE { $$ = new Loonguage::NodeSBlock(new Loonguage::NodeSentences()); }
+| IDEN IDEN SEMICOLON { $$ = new Loonguage::NodeSDecl($1, $2);}
 
 sentences:
-sentence { }
-| sentence sentences { }
+sentence { $$ = new Loonguage::NodeFunctions($1); }
+| sentence sentences { $$ = $2;
+                      $$->push_back($1); }
 
 expr:
-| IDEN { }
-| LBRACKET expr RBRACKET { }
-| IDEN LBRACKET actuals RBRACKET { }
-| IDEN LBRACKET RBRACKET { }
-| IDEN { }
-| expr PLUS expr { }
-| expr MINUS expr { }
-| expr TIME expr { }
-| expr DIVISION expr { }
-| expr AND expr { }
-| expr OR expr { }
-| expr XOR expr { }
-| expr EQUAL expr { }
-| expr LESS expr { }
-| REV expr { }
-| IDEN ASSIGN expr { }
-| INT { }
-| STR { }
+| IDEN { $$ = new Loonguage::NodeEIden($1); }
+| LBRACKET expr RBRACKET {  $$ = new Loonguage::NodeEBracket($2); }
+| IDEN LBRACKET actuals RBRACKET {  $$ = new Loonguage::NodeEDispatch($1, $3); }
+| IDEN LBRACKET RBRACKET {  $$ = new Loonguage::NodeEDispatch($1, Loonguage::NodeActuals()); }
+| expr PLUS expr {  $$ = new Loonguage::NodeECalc($1, '+', $3); }
+| expr MINUS expr {  $$ = new Loonguage::NodeECalc($1, '-', $3); }
+| expr TIME expr {  $$ = new Loonguage::NodeECalc($1, '*', $3); }
+| expr DIVISION expr {  $$ = new Loonguage::NodeECalc($1, '/', $3); }
+| expr AND expr {  $$ = new Loonguage::NodeECalc($1, '&', $3); }
+| expr OR expr {  $$ = new Loonguage::NodeECalc($1, '|', $3); }
+| expr XOR expr {  $$ = new Loonguage::NodeECalc($1, '^', $3); }
+| expr EQUAL expr {  $$ = new Loonguage::NodeEEqua($1, $3); }
+| expr LESS expr {  $$ = new Loonguage::NodeELess($1, $3); }
+| REV expr {  $$ = new Loonguage::NodeERev($2); }
+| IDEN ASSIGN expr {  $$ = new Loonguage::NodeEAssign($1, $3); }
+| INT {  $$ = new Loonguage::NodeEInt($1); }
+| STR {  $$ = new Loonguage::NodeEStr($1); }
 
 actual:
-expr { }
+expr { $$ = new Loonguage::NodeActual($1); }
 
 actuals:
-actual { }
-| actual actuals { }
+actual { $$ = new Loonguage::NodeActuals($1); }
+| actual actuals {  $$ = $2;
+                      $$->push_back($1); }
 
 %%
 /*Parser实现错误处理接口*/

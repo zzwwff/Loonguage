@@ -35,7 +35,7 @@
 // private implementation details that can be changed or removed.
 
 // "%code top" blocks.
-#line 30 "LoonParser.y"
+#line 36 "LoonParser.y"
 
   #include <iostream>
   #include "LoonScanner.h"
@@ -219,6 +219,46 @@ namespace LoonScanner {
   {
     switch (that.kind ())
     {
+      case symbol_kind::S_actual: // actual
+        value.YY_MOVE_OR_COPY< Loonguage::NodeActual* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_actuals: // actuals
+        value.YY_MOVE_OR_COPY< Loonguage::NodeActuals* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_expr: // expr
+        value.YY_MOVE_OR_COPY< Loonguage::NodeExpr* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_formal: // formal
+        value.YY_MOVE_OR_COPY< Loonguage::NodeFormal* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_formals: // formals
+        value.YY_MOVE_OR_COPY< Loonguage::NodeFormals* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_function: // function
+        value.YY_MOVE_OR_COPY< Loonguage::NodeFunction* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_functions: // functions
+        value.YY_MOVE_OR_COPY< Loonguage::NodeFunctions* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_program: // program
+        value.YY_MOVE_OR_COPY< Loonguage::NodeProgram* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_sentence: // sentence
+        value.YY_MOVE_OR_COPY< Loonguage::NodeSentence* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_sentences: // sentences
+        value.YY_MOVE_OR_COPY< Loonguage::NodeSentences* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_IDEN: // IDEN
         value.YY_MOVE_OR_COPY< Loonguage::TokenIden > (YY_MOVE (that.value));
         break;
@@ -256,19 +296,6 @@ namespace LoonScanner {
         value.YY_MOVE_OR_COPY< Loonguage::TokenSymbol > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_program: // program
-      case symbol_kind::S_functions: // functions
-      case symbol_kind::S_formal: // formal
-      case symbol_kind::S_formals: // formals
-      case symbol_kind::S_function: // function
-      case symbol_kind::S_sentence: // sentence
-      case symbol_kind::S_sentences: // sentences
-      case symbol_kind::S_expr: // expr
-      case symbol_kind::S_actual: // actual
-      case symbol_kind::S_actuals: // actuals
-        value.YY_MOVE_OR_COPY< int > (YY_MOVE (that.value));
-        break;
-
       case symbol_kind::S_ERROR: // ERROR
         value.YY_MOVE_OR_COPY< std::string > (YY_MOVE (that.value));
         break;
@@ -288,6 +315,46 @@ namespace LoonScanner {
   {
     switch (that.kind ())
     {
+      case symbol_kind::S_actual: // actual
+        value.move< Loonguage::NodeActual* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_actuals: // actuals
+        value.move< Loonguage::NodeActuals* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_expr: // expr
+        value.move< Loonguage::NodeExpr* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_formal: // formal
+        value.move< Loonguage::NodeFormal* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_formals: // formals
+        value.move< Loonguage::NodeFormals* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_function: // function
+        value.move< Loonguage::NodeFunction* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_functions: // functions
+        value.move< Loonguage::NodeFunctions* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_program: // program
+        value.move< Loonguage::NodeProgram* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_sentence: // sentence
+        value.move< Loonguage::NodeSentence* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_sentences: // sentences
+        value.move< Loonguage::NodeSentences* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_IDEN: // IDEN
         value.move< Loonguage::TokenIden > (YY_MOVE (that.value));
         break;
@@ -325,19 +392,6 @@ namespace LoonScanner {
         value.move< Loonguage::TokenSymbol > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_program: // program
-      case symbol_kind::S_functions: // functions
-      case symbol_kind::S_formal: // formal
-      case symbol_kind::S_formals: // formals
-      case symbol_kind::S_function: // function
-      case symbol_kind::S_sentence: // sentence
-      case symbol_kind::S_sentences: // sentences
-      case symbol_kind::S_expr: // expr
-      case symbol_kind::S_actual: // actual
-      case symbol_kind::S_actuals: // actuals
-        value.move< int > (YY_MOVE (that.value));
-        break;
-
       case symbol_kind::S_ERROR: // ERROR
         value.move< std::string > (YY_MOVE (that.value));
         break;
@@ -357,6 +411,46 @@ namespace LoonScanner {
     state = that.state;
     switch (that.kind ())
     {
+      case symbol_kind::S_actual: // actual
+        value.copy< Loonguage::NodeActual* > (that.value);
+        break;
+
+      case symbol_kind::S_actuals: // actuals
+        value.copy< Loonguage::NodeActuals* > (that.value);
+        break;
+
+      case symbol_kind::S_expr: // expr
+        value.copy< Loonguage::NodeExpr* > (that.value);
+        break;
+
+      case symbol_kind::S_formal: // formal
+        value.copy< Loonguage::NodeFormal* > (that.value);
+        break;
+
+      case symbol_kind::S_formals: // formals
+        value.copy< Loonguage::NodeFormals* > (that.value);
+        break;
+
+      case symbol_kind::S_function: // function
+        value.copy< Loonguage::NodeFunction* > (that.value);
+        break;
+
+      case symbol_kind::S_functions: // functions
+        value.copy< Loonguage::NodeFunctions* > (that.value);
+        break;
+
+      case symbol_kind::S_program: // program
+        value.copy< Loonguage::NodeProgram* > (that.value);
+        break;
+
+      case symbol_kind::S_sentence: // sentence
+        value.copy< Loonguage::NodeSentence* > (that.value);
+        break;
+
+      case symbol_kind::S_sentences: // sentences
+        value.copy< Loonguage::NodeSentences* > (that.value);
+        break;
+
       case symbol_kind::S_IDEN: // IDEN
         value.copy< Loonguage::TokenIden > (that.value);
         break;
@@ -394,19 +488,6 @@ namespace LoonScanner {
         value.copy< Loonguage::TokenSymbol > (that.value);
         break;
 
-      case symbol_kind::S_program: // program
-      case symbol_kind::S_functions: // functions
-      case symbol_kind::S_formal: // formal
-      case symbol_kind::S_formals: // formals
-      case symbol_kind::S_function: // function
-      case symbol_kind::S_sentence: // sentence
-      case symbol_kind::S_sentences: // sentences
-      case symbol_kind::S_expr: // expr
-      case symbol_kind::S_actual: // actual
-      case symbol_kind::S_actuals: // actuals
-        value.copy< int > (that.value);
-        break;
-
       case symbol_kind::S_ERROR: // ERROR
         value.copy< std::string > (that.value);
         break;
@@ -425,6 +506,46 @@ namespace LoonScanner {
     state = that.state;
     switch (that.kind ())
     {
+      case symbol_kind::S_actual: // actual
+        value.move< Loonguage::NodeActual* > (that.value);
+        break;
+
+      case symbol_kind::S_actuals: // actuals
+        value.move< Loonguage::NodeActuals* > (that.value);
+        break;
+
+      case symbol_kind::S_expr: // expr
+        value.move< Loonguage::NodeExpr* > (that.value);
+        break;
+
+      case symbol_kind::S_formal: // formal
+        value.move< Loonguage::NodeFormal* > (that.value);
+        break;
+
+      case symbol_kind::S_formals: // formals
+        value.move< Loonguage::NodeFormals* > (that.value);
+        break;
+
+      case symbol_kind::S_function: // function
+        value.move< Loonguage::NodeFunction* > (that.value);
+        break;
+
+      case symbol_kind::S_functions: // functions
+        value.move< Loonguage::NodeFunctions* > (that.value);
+        break;
+
+      case symbol_kind::S_program: // program
+        value.move< Loonguage::NodeProgram* > (that.value);
+        break;
+
+      case symbol_kind::S_sentence: // sentence
+        value.move< Loonguage::NodeSentence* > (that.value);
+        break;
+
+      case symbol_kind::S_sentences: // sentences
+        value.move< Loonguage::NodeSentences* > (that.value);
+        break;
+
       case symbol_kind::S_IDEN: // IDEN
         value.move< Loonguage::TokenIden > (that.value);
         break;
@@ -460,19 +581,6 @@ namespace LoonScanner {
       case symbol_kind::S_EQUAL: // EQUAL
       case symbol_kind::S_LESS: // LESS
         value.move< Loonguage::TokenSymbol > (that.value);
-        break;
-
-      case symbol_kind::S_program: // program
-      case symbol_kind::S_functions: // functions
-      case symbol_kind::S_formal: // formal
-      case symbol_kind::S_formals: // formals
-      case symbol_kind::S_function: // function
-      case symbol_kind::S_sentence: // sentence
-      case symbol_kind::S_sentences: // sentences
-      case symbol_kind::S_expr: // expr
-      case symbol_kind::S_actual: // actual
-      case symbol_kind::S_actuals: // actuals
-        value.move< int > (that.value);
         break;
 
       case symbol_kind::S_ERROR: // ERROR
@@ -738,6 +846,46 @@ namespace LoonScanner {
          when using variants.  */
       switch (yyr1_[yyn])
     {
+      case symbol_kind::S_actual: // actual
+        yylhs.value.emplace< Loonguage::NodeActual* > ();
+        break;
+
+      case symbol_kind::S_actuals: // actuals
+        yylhs.value.emplace< Loonguage::NodeActuals* > ();
+        break;
+
+      case symbol_kind::S_expr: // expr
+        yylhs.value.emplace< Loonguage::NodeExpr* > ();
+        break;
+
+      case symbol_kind::S_formal: // formal
+        yylhs.value.emplace< Loonguage::NodeFormal* > ();
+        break;
+
+      case symbol_kind::S_formals: // formals
+        yylhs.value.emplace< Loonguage::NodeFormals* > ();
+        break;
+
+      case symbol_kind::S_function: // function
+        yylhs.value.emplace< Loonguage::NodeFunction* > ();
+        break;
+
+      case symbol_kind::S_functions: // functions
+        yylhs.value.emplace< Loonguage::NodeFunctions* > ();
+        break;
+
+      case symbol_kind::S_program: // program
+        yylhs.value.emplace< Loonguage::NodeProgram* > ();
+        break;
+
+      case symbol_kind::S_sentence: // sentence
+        yylhs.value.emplace< Loonguage::NodeSentence* > ();
+        break;
+
+      case symbol_kind::S_sentences: // sentences
+        yylhs.value.emplace< Loonguage::NodeSentences* > ();
+        break;
+
       case symbol_kind::S_IDEN: // IDEN
         yylhs.value.emplace< Loonguage::TokenIden > ();
         break;
@@ -775,19 +923,6 @@ namespace LoonScanner {
         yylhs.value.emplace< Loonguage::TokenSymbol > ();
         break;
 
-      case symbol_kind::S_program: // program
-      case symbol_kind::S_functions: // functions
-      case symbol_kind::S_formal: // formal
-      case symbol_kind::S_formals: // formals
-      case symbol_kind::S_function: // function
-      case symbol_kind::S_sentence: // sentence
-      case symbol_kind::S_sentences: // sentences
-      case symbol_kind::S_expr: // expr
-      case symbol_kind::S_actual: // actual
-      case symbol_kind::S_actuals: // actuals
-        yylhs.value.emplace< int > ();
-        break;
-
       case symbol_kind::S_ERROR: // ERROR
         yylhs.value.emplace< std::string > ();
         break;
@@ -813,229 +948,230 @@ namespace LoonScanner {
           switch (yyn)
             {
   case 2: // program: functions
-#line 90 "LoonParser.y"
-{ std::cout << "program" << std::endl;}
-#line 819 "LoonParser.cpp"
+#line 96 "LoonParser.y"
+{ yylhs.value.as < Loonguage::NodeProgram* > () = new Loonguage::NodeProgram(yystack_[0].value.as < Loonguage::NodeFunctions* > ()); 
+  yylhs.value.as < Loonguage::NodeProgram* > ()->dump(std::cout, 0);
+  }
+#line 956 "LoonParser.cpp"
     break;
 
   case 3: // functions: function
-#line 93 "LoonParser.y"
-         { }
-#line 825 "LoonParser.cpp"
+#line 101 "LoonParser.y"
+         { yylhs.value.as < Loonguage::NodeFunctions* > () = new Loonguage::NodeFunctions(yystack_[0].value.as < Loonguage::NodeFunction* > ()); }
+#line 962 "LoonParser.cpp"
     break;
 
   case 4: // functions: function functions
-#line 94 "LoonParser.y"
-                     {std::cout << "function" << std::endl; }
-#line 831 "LoonParser.cpp"
-    break;
-
-  case 5: // formal: IDEN IDEN
-#line 97 "LoonParser.y"
-          {}
-#line 837 "LoonParser.cpp"
-    break;
-
-  case 6: // formals: formal COMMA formals
-#line 100 "LoonParser.y"
-                     { }
-#line 843 "LoonParser.cpp"
-    break;
-
-  case 7: // formals: formal
-#line 101 "LoonParser.y"
-         { }
-#line 849 "LoonParser.cpp"
-    break;
-
-  case 8: // function: IDEN IDEN LBRACKET RBRACKET sentence
-#line 104 "LoonParser.y"
-                                     { }
-#line 855 "LoonParser.cpp"
-    break;
-
-  case 9: // function: IDEN IDEN LBRACKET formals RBRACKET sentence
-#line 105 "LoonParser.y"
-                                               { }
-#line 861 "LoonParser.cpp"
-    break;
-
-  case 10: // sentence: expr SEMICOLON
-#line 108 "LoonParser.y"
-               { }
-#line 867 "LoonParser.cpp"
-    break;
-
-  case 11: // sentence: IF LBRACKET expr RBRACKET sentence
-#line 109 "LoonParser.y"
-                                     { }
-#line 873 "LoonParser.cpp"
-    break;
-
-  case 12: // sentence: WHILE LBRACKET expr RBRACKET sentence
-#line 110 "LoonParser.y"
-                                        { }
-#line 879 "LoonParser.cpp"
-    break;
-
-  case 13: // sentence: LBRACE sentences RBRACE
-#line 111 "LoonParser.y"
-                          { }
-#line 885 "LoonParser.cpp"
-    break;
-
-  case 14: // sentence: LBRACE RBRACE
-#line 112 "LoonParser.y"
-                { }
-#line 891 "LoonParser.cpp"
-    break;
-
-  case 15: // sentence: IDEN IDEN SEMICOLON
-#line 113 "LoonParser.y"
-                      { }
-#line 897 "LoonParser.cpp"
-    break;
-
-  case 16: // sentences: sentence
-#line 116 "LoonParser.y"
-         { }
-#line 903 "LoonParser.cpp"
-    break;
-
-  case 17: // sentences: sentence sentences
-#line 117 "LoonParser.y"
-                     { }
-#line 909 "LoonParser.cpp"
-    break;
-
-  case 19: // expr: IDEN
-#line 120 "LoonParser.y"
-       { }
-#line 915 "LoonParser.cpp"
-    break;
-
-  case 20: // expr: LBRACKET expr RBRACKET
-#line 121 "LoonParser.y"
-                         { }
-#line 921 "LoonParser.cpp"
-    break;
-
-  case 21: // expr: IDEN LBRACKET actuals RBRACKET
-#line 122 "LoonParser.y"
-                                 { }
-#line 927 "LoonParser.cpp"
-    break;
-
-  case 22: // expr: IDEN LBRACKET RBRACKET
-#line 123 "LoonParser.y"
-                         { }
-#line 933 "LoonParser.cpp"
-    break;
-
-  case 23: // expr: IDEN
-#line 124 "LoonParser.y"
-       { }
-#line 939 "LoonParser.cpp"
-    break;
-
-  case 24: // expr: expr PLUS expr
-#line 125 "LoonParser.y"
-                 { }
-#line 945 "LoonParser.cpp"
-    break;
-
-  case 25: // expr: expr MINUS expr
-#line 126 "LoonParser.y"
-                  { }
-#line 951 "LoonParser.cpp"
-    break;
-
-  case 26: // expr: expr TIME expr
-#line 127 "LoonParser.y"
-                 { }
-#line 957 "LoonParser.cpp"
-    break;
-
-  case 27: // expr: expr DIVISION expr
-#line 128 "LoonParser.y"
-                     { }
-#line 963 "LoonParser.cpp"
-    break;
-
-  case 28: // expr: expr AND expr
-#line 129 "LoonParser.y"
-                { }
+#line 102 "LoonParser.y"
+                     {yylhs.value.as < Loonguage::NodeFunctions* > () = yystack_[0].value.as < Loonguage::NodeFunctions* > ();
+                      yylhs.value.as < Loonguage::NodeFunctions* > ()->push_back(yystack_[1].value.as < Loonguage::NodeFunction* > ());}
 #line 969 "LoonParser.cpp"
     break;
 
-  case 29: // expr: expr OR expr
-#line 130 "LoonParser.y"
-               { }
+  case 5: // formal: IDEN IDEN
+#line 106 "LoonParser.y"
+          { yylhs.value.as < Loonguage::NodeFormal* > () = new Loonguage::NodeFormal(yystack_[1].value.as < Loonguage::TokenIden > (), yystack_[0].value.as < Loonguage::TokenIden > ()); }
 #line 975 "LoonParser.cpp"
     break;
 
-  case 30: // expr: expr XOR expr
-#line 131 "LoonParser.y"
-                { }
-#line 981 "LoonParser.cpp"
+  case 6: // formals: formal COMMA formals
+#line 109 "LoonParser.y"
+                     { yylhs.value.as < Loonguage::NodeFormals* > () = yystack_[0].value.as < Loonguage::NodeFormals* > ();
+                      yylhs.value.as < Loonguage::NodeFormals* > ()->push_back(yystack_[2].value.as < Loonguage::NodeFormal* > ());  }
+#line 982 "LoonParser.cpp"
     break;
 
-  case 31: // expr: expr EQUAL expr
+  case 7: // formals: formal
+#line 111 "LoonParser.y"
+         { yylhs.value.as < Loonguage::NodeFormals* > () = new Loonguage::NodeFormals(yystack_[0].value.as < Loonguage::NodeFormal* > ()); }
+#line 988 "LoonParser.cpp"
+    break;
+
+  case 8: // function: IDEN IDEN LBRACKET RBRACKET sentence
+#line 114 "LoonParser.y"
+                                     { yylhs.value.as < Loonguage::NodeFunction* > () = new Loonguage::NodeFunction(yystack_[4].value.as < Loonguage::TokenIden > (), yystack_[3].value.as < Loonguage::TokenIden > (), new Loonguage::NodeFormals(), yystack_[0].value.as < Loonguage::NodeSentence* > ()); }
+#line 994 "LoonParser.cpp"
+    break;
+
+  case 9: // function: IDEN IDEN LBRACKET formals RBRACKET sentence
+#line 115 "LoonParser.y"
+                                               {
+    yylhs.value.as < Loonguage::NodeFunction* > () = new Loonguage::NodeFunction(yystack_[5].value.as < Loonguage::TokenIden > (), yystack_[4].value.as < Loonguage::TokenIden > (), yystack_[2].value.as < Loonguage::NodeFormals* > (), yystack_[0].value.as < Loonguage::NodeSentence* > ()); }
+#line 1001 "LoonParser.cpp"
+    break;
+
+  case 10: // sentence: expr SEMICOLON
+#line 119 "LoonParser.y"
+               { yylhs.value.as < Loonguage::NodeSentence* > () = new Loonguage::NodeSExpr(yystack_[1].value.as < Loonguage::NodeExpr* > ()); }
+#line 1007 "LoonParser.cpp"
+    break;
+
+  case 11: // sentence: IF LBRACKET expr RBRACKET sentence
+#line 120 "LoonParser.y"
+                                     { yylhs.value.as < Loonguage::NodeSentence* > () = new Loonguage::NodeSIf(yystack_[2].value.as < Loonguage::NodeExpr* > (), yystack_[0].value.as < Loonguage::NodeSentence* > ()); }
+#line 1013 "LoonParser.cpp"
+    break;
+
+  case 12: // sentence: WHILE LBRACKET expr RBRACKET sentence
+#line 121 "LoonParser.y"
+                                        { yylhs.value.as < Loonguage::NodeSentence* > () = new Loonguage::NodeSWhile(yystack_[2].value.as < Loonguage::NodeExpr* > (), yystack_[0].value.as < Loonguage::NodeSentence* > ()); }
+#line 1019 "LoonParser.cpp"
+    break;
+
+  case 13: // sentence: LBRACE sentences RBRACE
+#line 122 "LoonParser.y"
+                          { yylhs.value.as < Loonguage::NodeSentence* > () = new Loonguage::NodeSBlock(yystack_[1].value.as < Loonguage::NodeSentences* > ()); }
+#line 1025 "LoonParser.cpp"
+    break;
+
+  case 14: // sentence: LBRACE RBRACE
+#line 123 "LoonParser.y"
+                { yylhs.value.as < Loonguage::NodeSentence* > () = new Loonguage::NodeSBlock(new Loonguage::NodeSentences()); }
+#line 1031 "LoonParser.cpp"
+    break;
+
+  case 15: // sentence: IDEN IDEN SEMICOLON
+#line 124 "LoonParser.y"
+                      { yylhs.value.as < Loonguage::NodeSentence* > () = new Loonguage::NodeSDecl(yystack_[2].value.as < Loonguage::TokenIden > (), yystack_[1].value.as < Loonguage::TokenIden > ());}
+#line 1037 "LoonParser.cpp"
+    break;
+
+  case 16: // sentences: sentence
+#line 127 "LoonParser.y"
+         { yylhs.value.as < Loonguage::NodeSentences* > () = new Loonguage::NodeFunctions(yystack_[0].value.as < Loonguage::NodeSentence* > ()); }
+#line 1043 "LoonParser.cpp"
+    break;
+
+  case 17: // sentences: sentence sentences
+#line 128 "LoonParser.y"
+                     { yylhs.value.as < Loonguage::NodeSentences* > () = yystack_[0].value.as < Loonguage::NodeSentences* > ();
+                      yylhs.value.as < Loonguage::NodeSentences* > ()->push_back(yystack_[1].value.as < Loonguage::NodeSentence* > ()); }
+#line 1050 "LoonParser.cpp"
+    break;
+
+  case 19: // expr: IDEN
 #line 132 "LoonParser.y"
-                  { }
-#line 987 "LoonParser.cpp"
+       { yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeEIden(yystack_[0].value.as < Loonguage::TokenIden > ()); }
+#line 1056 "LoonParser.cpp"
     break;
 
-  case 32: // expr: expr LESS expr
+  case 20: // expr: LBRACKET expr RBRACKET
 #line 133 "LoonParser.y"
-                 { }
-#line 993 "LoonParser.cpp"
+                         {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeEBracket(yystack_[1].value.as < Loonguage::NodeExpr* > ()); }
+#line 1062 "LoonParser.cpp"
     break;
 
-  case 33: // expr: REV expr
+  case 21: // expr: IDEN LBRACKET actuals RBRACKET
 #line 134 "LoonParser.y"
-           { }
-#line 999 "LoonParser.cpp"
+                                 {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeEDispatch(yystack_[3].value.as < Loonguage::TokenIden > (), yystack_[1].value.as < Loonguage::NodeActuals* > ()); }
+#line 1068 "LoonParser.cpp"
     break;
 
-  case 34: // expr: IDEN ASSIGN expr
+  case 22: // expr: IDEN LBRACKET RBRACKET
 #line 135 "LoonParser.y"
-                   { }
-#line 1005 "LoonParser.cpp"
+                         {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeEDispatch(yystack_[2].value.as < Loonguage::TokenIden > (), Loonguage::NodeActuals()); }
+#line 1074 "LoonParser.cpp"
     break;
 
-  case 35: // expr: INT
+  case 23: // expr: expr PLUS expr
 #line 136 "LoonParser.y"
-      { }
-#line 1011 "LoonParser.cpp"
+                 {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeECalc(yystack_[2].value.as < Loonguage::NodeExpr* > (), '+', yystack_[0].value.as < Loonguage::NodeExpr* > ()); }
+#line 1080 "LoonParser.cpp"
     break;
 
-  case 36: // expr: STR
+  case 24: // expr: expr MINUS expr
 #line 137 "LoonParser.y"
-      { }
-#line 1017 "LoonParser.cpp"
+                  {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeECalc(yystack_[2].value.as < Loonguage::NodeExpr* > (), '-', yystack_[0].value.as < Loonguage::NodeExpr* > ()); }
+#line 1086 "LoonParser.cpp"
     break;
 
-  case 37: // actual: expr
+  case 25: // expr: expr TIME expr
+#line 138 "LoonParser.y"
+                 {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeECalc(yystack_[2].value.as < Loonguage::NodeExpr* > (), '*', yystack_[0].value.as < Loonguage::NodeExpr* > ()); }
+#line 1092 "LoonParser.cpp"
+    break;
+
+  case 26: // expr: expr DIVISION expr
+#line 139 "LoonParser.y"
+                     {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeECalc(yystack_[2].value.as < Loonguage::NodeExpr* > (), '/', yystack_[0].value.as < Loonguage::NodeExpr* > ()); }
+#line 1098 "LoonParser.cpp"
+    break;
+
+  case 27: // expr: expr AND expr
 #line 140 "LoonParser.y"
-     { }
-#line 1023 "LoonParser.cpp"
+                {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeECalc(yystack_[2].value.as < Loonguage::NodeExpr* > (), '&', yystack_[0].value.as < Loonguage::NodeExpr* > ()); }
+#line 1104 "LoonParser.cpp"
     break;
 
-  case 38: // actuals: actual
+  case 28: // expr: expr OR expr
+#line 141 "LoonParser.y"
+               {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeECalc(yystack_[2].value.as < Loonguage::NodeExpr* > (), '|', yystack_[0].value.as < Loonguage::NodeExpr* > ()); }
+#line 1110 "LoonParser.cpp"
+    break;
+
+  case 29: // expr: expr XOR expr
+#line 142 "LoonParser.y"
+                {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeECalc(yystack_[2].value.as < Loonguage::NodeExpr* > (), '^', yystack_[0].value.as < Loonguage::NodeExpr* > ()); }
+#line 1116 "LoonParser.cpp"
+    break;
+
+  case 30: // expr: expr EQUAL expr
 #line 143 "LoonParser.y"
-       { }
-#line 1029 "LoonParser.cpp"
+                  {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeEEqua(yystack_[2].value.as < Loonguage::NodeExpr* > (), yystack_[0].value.as < Loonguage::NodeExpr* > ()); }
+#line 1122 "LoonParser.cpp"
     break;
 
-  case 39: // actuals: actual actuals
+  case 31: // expr: expr LESS expr
 #line 144 "LoonParser.y"
-                 { }
-#line 1035 "LoonParser.cpp"
+                 {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeELess(yystack_[2].value.as < Loonguage::NodeExpr* > (), yystack_[0].value.as < Loonguage::NodeExpr* > ()); }
+#line 1128 "LoonParser.cpp"
+    break;
+
+  case 32: // expr: REV expr
+#line 145 "LoonParser.y"
+           {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeERev(yystack_[0].value.as < Loonguage::NodeExpr* > ()); }
+#line 1134 "LoonParser.cpp"
+    break;
+
+  case 33: // expr: IDEN ASSIGN expr
+#line 146 "LoonParser.y"
+                   {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeEAssign(yystack_[2].value.as < Loonguage::TokenIden > (), yystack_[0].value.as < Loonguage::NodeExpr* > ()); }
+#line 1140 "LoonParser.cpp"
+    break;
+
+  case 34: // expr: INT
+#line 147 "LoonParser.y"
+      {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeEInt(yystack_[0].value.as < Loonguage::TokenInt > ()); }
+#line 1146 "LoonParser.cpp"
+    break;
+
+  case 35: // expr: STR
+#line 148 "LoonParser.y"
+      {  yylhs.value.as < Loonguage::NodeExpr* > () = new Loonguage::NodeEStr(yystack_[0].value.as < Loonguage::TokenString > ()); }
+#line 1152 "LoonParser.cpp"
+    break;
+
+  case 36: // actual: expr
+#line 151 "LoonParser.y"
+     { yylhs.value.as < Loonguage::NodeActual* > () = new Loonguage::NodeActual(yystack_[0].value.as < Loonguage::NodeExpr* > ()); }
+#line 1158 "LoonParser.cpp"
+    break;
+
+  case 37: // actuals: actual
+#line 154 "LoonParser.y"
+       { yylhs.value.as < Loonguage::NodeActuals* > () = new Loonguage::NodeActuals(yystack_[0].value.as < Loonguage::NodeActual* > ()); }
+#line 1164 "LoonParser.cpp"
+    break;
+
+  case 38: // actuals: actual actuals
+#line 155 "LoonParser.y"
+                 {  yylhs.value.as < Loonguage::NodeActuals* > () = yystack_[0].value.as < Loonguage::NodeActuals* > ();
+                      yylhs.value.as < Loonguage::NodeActuals* > ()->push_back(yystack_[1].value.as < Loonguage::NodeActual* > ()); }
+#line 1171 "LoonParser.cpp"
     break;
 
 
-#line 1039 "LoonParser.cpp"
+#line 1175 "LoonParser.cpp"
 
             default:
               break;
@@ -1408,13 +1544,13 @@ namespace LoonScanner {
    Parser ::yydefact_[] =
   {
        0,     0,     0,     2,     3,     0,     1,     4,     0,     0,
-      18,     7,     0,     5,     0,     0,    35,    36,    19,    18,
+      18,     7,     0,     5,     0,     0,    34,    35,    19,    18,
       18,    18,     8,     0,     0,    18,    18,    18,     0,    18,
-      18,    19,    33,     0,    14,    18,     0,    18,    18,    18,
+      18,    19,    32,     0,    14,    18,     0,    18,    18,    18,
       18,    18,    18,    18,    10,    18,    18,     6,     9,     0,
-       0,    15,    22,    37,    18,     0,    34,    20,    17,    13,
-      24,    25,    26,    27,    28,    29,    30,    31,    32,    18,
-      18,    39,    21,    11,    12
+       0,    15,    22,    36,    18,     0,    33,    20,    17,    13,
+      23,    24,    25,    26,    27,    28,    29,    30,    31,    18,
+      18,    38,    21,    11,    12
   };
 
   const signed char
@@ -1492,7 +1628,7 @@ namespace LoonScanner {
        0,    26,    27,    28,    28,    29,    30,    30,    31,    31,
       32,    32,    32,    32,    32,    32,    33,    33,    34,    34,
       34,    34,    34,    34,    34,    34,    34,    34,    34,    34,
-      34,    34,    34,    34,    34,    34,    34,    35,    36,    36
+      34,    34,    34,    34,    34,    34,    35,    36,    36
   };
 
   const signed char
@@ -1500,8 +1636,8 @@ namespace LoonScanner {
   {
        0,     2,     1,     1,     2,     2,     3,     1,     5,     6,
        2,     5,     5,     3,     2,     3,     1,     2,     0,     1,
-       3,     4,     3,     1,     3,     3,     3,     3,     3,     3,
-       3,     3,     3,     2,     3,     1,     1,     1,     1,     2
+       3,     4,     3,     3,     3,     3,     3,     3,     3,     3,
+       3,     3,     2,     3,     1,     1,     1,     1,     2
   };
 
 
@@ -1525,10 +1661,10 @@ namespace LoonScanner {
   const unsigned char
    Parser ::yyrline_[] =
   {
-       0,    89,    89,    93,    94,    97,   100,   101,   104,   105,
-     108,   109,   110,   111,   112,   113,   116,   117,   119,   120,
-     121,   122,   123,   124,   125,   126,   127,   128,   129,   130,
-     131,   132,   133,   134,   135,   136,   137,   140,   143,   144
+       0,    95,    95,   101,   102,   106,   109,   111,   114,   115,
+     119,   120,   121,   122,   123,   124,   127,   128,   131,   132,
+     133,   134,   135,   136,   137,   138,   139,   140,   141,   142,
+     143,   144,   145,   146,   147,   148,   151,   154,   155
   };
 
   void
@@ -1561,9 +1697,9 @@ namespace LoonScanner {
 
 #line 9 "LoonParser.y"
 } // LoonScanner
-#line 1565 "LoonParser.cpp"
+#line 1701 "LoonParser.cpp"
 
-#line 146 "LoonParser.y"
+#line 158 "LoonParser.y"
 
 /*Parser实现错误处理接口*/
 void LoonScanner::Parser::error(const LoonScanner::location& location,const std::string& message){

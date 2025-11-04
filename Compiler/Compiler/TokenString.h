@@ -10,7 +10,7 @@ namespace Loonguage {
 		//override
 		void dump(std::ostream&) const;
 		//constructor
-
+		std::string getValue() const;
 		TokenString();
 		TokenString(int, std::string, SymbolTable<std::string>&);
 		TokenString(std::istream&, SymbolTable<std::string>&);

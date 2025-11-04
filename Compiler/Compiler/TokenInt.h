@@ -9,6 +9,7 @@ namespace Loonguage {
 	public:
 		//override
 		void dump(std::ostream&) const;
+		int getValue() const;
 		//constructor
 		TokenInt();
 		TokenInt(int, int);

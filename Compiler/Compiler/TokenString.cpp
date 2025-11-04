@@ -11,6 +11,15 @@ namespace Loonguage {
 #endif
 	}
 
+	std::string TokenString::getValue() const
+	{
+#ifdef REAL_NAME
+		return value.getString();
+#else // REAL_NAME
+		return value.getId();
+#endif	
+	}
+
 	TokenString::TokenString()
 	{
 	}

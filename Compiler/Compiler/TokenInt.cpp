@@ -6,6 +6,11 @@ namespace Loonguage {
 			<< ", \"value\" : \"" << value << "\" }";
 	}
 
+	int TokenInt::getValue() const
+	{
+		return value;
+	}
+
 
 
 	TokenInt::TokenInt()

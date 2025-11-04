@@ -1,10 +1,6 @@
 #include "SymbolTable.h"
 #include <iostream>
 namespace Loonguage{
-	template<typename T>
-	SymbolTable<T>::SymbolTable()
-	{
-	}
 
 
 	template<typename T>

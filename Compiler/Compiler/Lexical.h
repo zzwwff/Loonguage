@@ -3,6 +3,7 @@
 #include "Tokens.h"
 #include "LoonParser.hpp"
 #include "LoonScanner.h"
+#include "SymbolTable.h"
 
 namespace Loonguage {
 

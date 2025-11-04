@@ -1,6 +1,14 @@
 #include "TokenIden.h"
 #include "SymbolTable.cpp"
 namespace Loonguage {
+	std::string TokenIden::getString() const
+	{
+#ifdef REAL_NAME
+		return value.getString();
+#else // REAL_NAME
+		return value.getId();
+#endif
+	}
 	void TokenIden::dump(std::ostream& cout) const
 	{
 #ifdef REAL_NAME

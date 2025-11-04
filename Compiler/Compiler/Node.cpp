@@ -7,13 +7,18 @@ namespace Loonguage {
 			cout << ' ';
 	}
 
+	int Node::getLine()
+	{
+		return line;
+	}
+
 	Node::Node(int l, NodeType nt):
 		line(l), type(nt)
 	{
 	}
 
 	Node::Node():
-		line(0), type(NodeNoType)
+		line(0), type(NdNoType)
 	{
 	}
 

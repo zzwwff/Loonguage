@@ -7,6 +7,7 @@ namespace Loonguage {
 	{
 		SymbolTable<std::string>::Symbol value;									//value of int literal
 	public:
+		std::string getString() const;
 		//override
 		void dump(std::ostream&) const;
 		//constructor
