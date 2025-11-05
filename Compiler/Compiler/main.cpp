@@ -1,9 +1,9 @@
 #include <iostream>
-#include "Lexical.h"
+#include "Compiler.h"
 
 signed main()
 {
-	Loonguage::Lexical lexical;
+	Loonguage::Compiler lexical(std::cin, std::cout, std::cout, std::cout, std::cout);
 
 	lexical.parse();
 	return 0;

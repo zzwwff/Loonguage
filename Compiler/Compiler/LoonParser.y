@@ -192,5 +192,5 @@ actual { $$ = new Loonguage::NodeActuals($1); }
 %%
 /*Parser实现错误处理接口*/
 void LoonScanner::Parser::error(const LoonScanner::location& location,const std::string& message){
-    errs.push_back(Loonguage::Error( std::string("Semantic Analysis"), location.begin.line, message ));
+    errs.push_back(Loonguage::Error( std::string("Syntax Analysis"), location.begin.line, message ));
 }

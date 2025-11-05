@@ -1,6 +1,7 @@
 E:\source\repos\Loonguage\Compiler\Compiler\Error.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\Error.obj
+E:\source\repos\Loonguage\Compiler\Compiler\FunctionDeco.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\FunctionDeco.obj
 E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\lex.Loon_.obj
-E:\source\repos\Loonguage\Compiler\Compiler\Lexical.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\Lexical.obj
+E:\source\repos\Loonguage\Compiler\Compiler\Compiler.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\Compiler.obj
 E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\LoonParser.obj
 E:\source\repos\Loonguage\Compiler\Compiler\main.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\main.obj
 E:\source\repos\Loonguage\Compiler\Compiler\Node.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\Node.obj

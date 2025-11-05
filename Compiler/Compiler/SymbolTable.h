@@ -13,12 +13,11 @@ namespace Loonguage {
 		int id;
 		SymbolTable<T>* pointer;
 	public:
+		bool operator < (const Symbol_& s) const;
 		int getId() const;
 		Symbol_(int, SymbolTable<T>*);
 		Symbol_() : id(0), pointer(NULL) {};
-#ifdef REAL_NAME
 		T getString() const;
-#endif // REAL_NAME
 	};
 
 	template<typename T>

@@ -5,8 +5,8 @@ namespace Loonguage {
 	class TokenIden :
 		public Token
 	{
-		SymbolTable<std::string>::Symbol value;									//value of int literal
 	public:
+		SymbolTable<std::string>::Symbol value;									//value of int literal
 		std::string getString() const;
 		//override
 		void dump(std::ostream&) const;

@@ -12,6 +12,16 @@ namespace Loonguage {
 		formals->dump(cout, indent + 2);
 		sentence->dump(cout, indent + 2);
 	}
+
+	std::vector<SymbolTable<std::string>::Symbol> NodeFunction::getSignature() const
+	{
+		std::vector<SymbolTable<std::string>::Symbol> vec;
+		vec.push_back(returnType.value);
+		for (auto formal : *formals)
+			vec.push_back(formal->name.value);
+		return vec;
+	}
+
 	void NodeFunctions::dump(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);

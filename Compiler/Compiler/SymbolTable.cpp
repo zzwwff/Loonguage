@@ -30,6 +30,12 @@ namespace Loonguage{
 	}
 
 	template<typename T>
+	bool Symbol_<T>::operator<(const Symbol_& s) const
+	{
+		return id < s.id;
+	}
+
+	template<typename T>
 	inline int Symbol_<T>::getId() const
 	{
 		return id;
@@ -57,7 +63,15 @@ namespace Loonguage{
 		return pointer->getString(id);
 	}
 
-#endif // REAL_NAME
+#else // REAL_NAME
+
+	template<typename T>
+	inline T Symbol_<T>::getString() const
+	{
+		return std::to_string(id);
+	}
+
+#endif
 
 
 }

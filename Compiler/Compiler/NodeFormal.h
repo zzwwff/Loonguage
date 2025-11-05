@@ -6,9 +6,9 @@ namespace Loonguage {
 	class NodeFormal :
 		public Node
 	{
+	public:
 		TokenIden type;
 		TokenIden name;
-	public:
 		NodeFormal(TokenIden, TokenIden);
 		void dump(std::ostream&, int) const;
 	};

@@ -5,8 +5,8 @@ namespace Loonguage {
 	class NodeProgram:
 		public Node
 	{
-		NodeFunctions* functions;
 	public:
+		NodeFunctions* functions;
 		NodeProgram();
 		NodeProgram(NodeFunctions*);
 		void dump(std::ostream&, int) const;
