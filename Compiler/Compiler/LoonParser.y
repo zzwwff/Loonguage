@@ -7,7 +7,7 @@
 %require "3.0.4"
 
 %define api.namespace {LoonScanner} 
-%define parser_class_name { Parser }
+%define api.parser.class { Parser }
 %define api.token.constructor
 %define api.value.type variant 
 %define parse.assert  
@@ -26,6 +26,7 @@
   #include "NodeFunction.h"
   #include "NodeProgram.h"
   #include "NodeSentence.h"
+    #include "Error.h"
 
   namespace LoonScanner { 
     class Scanner;
@@ -38,11 +39,15 @@
   #include "LoonScanner.h"
   #include "LoonParser.hpp"
   #include "location.hh"
-
+  #include "NodeProgram.h"
+  
+  class NodeProgram;
   static LoonScanner::Parser::symbol_type yylex(LoonScanner::Scanner& scanner, 
                                                 Loonguage::SymbolTable<std::string>& idenTable, 
-                                                Loonguage::SymbolTable<std::string>& strTable){
-    return scanner.nextToken(idenTable, strTable);
+                                                Loonguage::SymbolTable<std::string>& strTable,
+                                                Loonguage::NodeProgram** program,
+                                                Loonguage::Errors& errs){
+    return scanner.nextToken(idenTable, strTable, program, errs);
   }
   using namespace LoonScanner;
 }
@@ -51,11 +56,16 @@
 %lex-param { LoonScanner::Scanner& scanner }
 %lex-param { Loonguage::SymbolTable<std::string>& idenTable }
 %lex-param { Loonguage::SymbolTable<std::string>& strTable }
+%lex-param { Loonguage::NodeProgram** program }
+%lex-param { Loonguage::Errors& errs }
+
 
 /*定义driver传给parser的参数*/
 %parse-param { LoonScanner::Scanner& scanner }
 %parse-param { Loonguage::SymbolTable<std::string>& idenTable }
 %parse-param { Loonguage::SymbolTable<std::string>& strTable }
+%parse-param { Loonguage::NodeProgram** program }
+%parse-param { Loonguage::Errors& errs }
 
 %locations
 //%define parse-trace
@@ -66,7 +76,7 @@
 /*通过LoonScanner::Parser::make_XXX(loc)给token添加前缀*/
 %define api.token.prefix {TOKEN_}
 
-%token <Loonguage::TokenKeyWord> IF WHILE
+%token <Loonguage::TokenKeyWord> IF WHILE CONTINUE BREAK RETURN
 %token <Loonguage::TokenInt> INT
 %token <Loonguage::TokenString> STR
 %token <Loonguage::TokenIden> IDEN
@@ -74,6 +84,13 @@
 %token <std::string> ERROR
 %token END 0
 
+%right ASSIGN
+%nonassoc EQUAL LESS
+%left OR
+%left AND XOR
+%left PLUS MINUS
+%left TIME DIVISION
+%right REV
 
 %type <Loonguage::NodeProgram*> program
 %type <Loonguage::NodeFunctions*> functions
@@ -94,45 +111,59 @@
  program:
 functions
 { $$ = new Loonguage::NodeProgram($1); 
-  $$->dump(std::cout, 0);
+  *program = $$;
   }
 
 functions:
 function { $$ = new Loonguage::NodeFunctions($1); }
-| function functions {$$ = $2;
-                      $$->push_back($1);}
+| functions function {$$ = $1;
+                      $$->push_back($2);}
+| functions error {
+                //$$ = new Loonguage::NodeFunctions($1);
+                $$ = $1;
+}
 
 formal:
 IDEN IDEN { $$ = new Loonguage::NodeFormal($1, $2); }
 
 formals:
-formal COMMA formals { $$ = $3;
-                      $$->push_back($1);  }
+formals COMMA formal { $$ = $1;
+                      $$->push_back($3);  }
 | formal { $$ = new Loonguage::NodeFormals($1); }
+| error COMMA formal {
+    $$ = new Loonguage::NodeFormals($3);
+}
 
 function:
-IDEN IDEN LBRACKET RBRACKET sentence { $$ = new Loonguage::NodeFunction($1, $2, new Loonguage::NodeFormals(), $5); }
+IDEN IDEN LBRACKET RBRACKET sentence { $$ = new Loonguage::NodeFunction($1, $2, new Loonguage::NodeFormals($1.line), $5); }
 | IDEN IDEN LBRACKET formals RBRACKET sentence {
     $$ = new Loonguage::NodeFunction($1, $2, $4, $6); }
+| IDEN IDEN LBRACKET error RBRACKET sentence {$$ = new Loonguage::NodeFunction($1, $2, new Loonguage::NodeFormals($1.line), $6);
+    }
 
 sentence:
 expr SEMICOLON { $$ = new Loonguage::NodeSExpr($1); }
 | IF LBRACKET expr RBRACKET sentence { $$ = new Loonguage::NodeSIf($3, $5); }
 | WHILE LBRACKET expr RBRACKET sentence { $$ = new Loonguage::NodeSWhile($3, $5); }
 | LBRACE sentences RBRACE { $$ = new Loonguage::NodeSBlock($2); }
-| LBRACE RBRACE { $$ = new Loonguage::NodeSBlock(new Loonguage::NodeSentences()); }
+| LBRACE RBRACE { $$ = new Loonguage::NodeSBlock(new Loonguage::NodeSentences($1.line)); }
 | IDEN IDEN SEMICOLON { $$ = new Loonguage::NodeSDecl($1, $2);}
+| BREAK SEMICOLON { $$ = new Loonguage::NodeSBreak($2.line);}
+| CONTINUE SEMICOLON { $$ = new Loonguage::NodeSContinue($2.line);}
+| RETURN expr SEMICOLON { $$ = new Loonguage::NodeSReturn($2);}
+| error SEMICOLON { $$ = new Loonguage::NodeSentence($2.line);}
+| LBRACE error RBRACE { $$ = new Loonguage::NodeSentence($1.line); }
 
 sentences:
-sentence { $$ = new Loonguage::NodeFunctions($1); }
-| sentence sentences { $$ = $2;
-                      $$->push_back($1); }
+sentence { $$ = new Loonguage::NodeSentences($1); }
+| sentences sentence { $$ = $1;
+                      $$->push_back($2); }
 
 expr:
-| IDEN { $$ = new Loonguage::NodeEIden($1); }
+IDEN { $$ = new Loonguage::NodeEIden($1); }
 | LBRACKET expr RBRACKET {  $$ = new Loonguage::NodeEBracket($2); }
 | IDEN LBRACKET actuals RBRACKET {  $$ = new Loonguage::NodeEDispatch($1, $3); }
-| IDEN LBRACKET RBRACKET {  $$ = new Loonguage::NodeEDispatch($1, Loonguage::NodeActuals()); }
+| IDEN LBRACKET RBRACKET {  $$ = new Loonguage::NodeEDispatch($1, new Loonguage::NodeActuals($1.line)); }
 | expr PLUS expr {  $$ = new Loonguage::NodeECalc($1, '+', $3); }
 | expr MINUS expr {  $$ = new Loonguage::NodeECalc($1, '-', $3); }
 | expr TIME expr {  $$ = new Loonguage::NodeECalc($1, '*', $3); }
@@ -152,12 +183,14 @@ expr { $$ = new Loonguage::NodeActual($1); }
 
 actuals:
 actual { $$ = new Loonguage::NodeActuals($1); }
-| actual actuals {  $$ = $2;
-                      $$->push_back($1); }
+| actuals COMMA actual {  $$ = $1;
+                      $$->push_back($3); }
+| error COMMA actual{
+    $$ = new Loonguage::NodeActuals($3);
+}
 
 %%
 /*Parser实现错误处理接口*/
 void LoonScanner::Parser::error(const LoonScanner::location& location,const std::string& message){
-  std::cout<<"msg:"<<message
-           <<", error happened at: "<<location<<std::endl;
+    errs.push_back(Loonguage::Error( std::string("Semantic Analysis"), location.begin.line, message ));
 }

@@ -30,6 +30,8 @@ namespace Loonguage {
 		void dump(std::ostream&, int) const;
 	};
 
+	class NodeActuals;
+
 	class NodeEDispatch :
 		public NodeExpr
 	{

@@ -1,7 +1,7 @@
 #pragma once
 #include "Node.h"
 #include "TokenIden.h"
-#include "NodeActual.h"
+#include "NodeFormal.h"
 #include "NodeSentence.h"
 #include <vector>
 namespace Loonguage {
@@ -10,10 +10,10 @@ namespace Loonguage {
 	{
 		TokenIden returnType;
 		TokenIden name;
-		NodeActuals* actuals;
+		NodeFormals* formals;
 		NodeSentence* sentence;
 	public:
-		NodeFunction(TokenIden, TokenIden, NodeActuals*, NodeSentence*);
+		NodeFunction(TokenIden, TokenIden, NodeFormals*, NodeSentence*);
 		void dump(std::ostream&, int) const;
 	};
 
@@ -24,5 +24,6 @@ namespace Loonguage {
 	public:
 		void dump(std::ostream&, int) const;
 		NodeFunctions(NodeFunction*);
+		NodeFunctions(int);
 	};
 }

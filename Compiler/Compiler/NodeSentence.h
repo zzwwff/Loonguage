@@ -8,6 +8,7 @@ namespace Loonguage {
 		public Node
 	{
 	public:
+		NodeSentence(int);
 		NodeSentence(int, Node::NodeType);
 	};
 
@@ -18,6 +19,7 @@ namespace Loonguage {
 	public:
 		void dump(std::ostream&, int) const;
 		NodeSentences(NodeSentence*);
+		NodeSentences(int);
 	};
 
 	class NodeSExpr :
@@ -66,5 +68,32 @@ namespace Loonguage {
 	public:
 		NodeSDecl(TokenIden, TokenIden);
 		void dump(std::ostream&, int) const;
+	};
+
+	class NodeSReturn :
+		public NodeSentence
+	{
+		NodeExpr* expr;
+	public:
+		NodeSReturn(NodeExpr*);
+		void dump(std::ostream&, int) const;
+	};
+
+	class NodeSContinue :
+		public NodeSentence
+	{
+	public:
+		NodeSContinue(int);
+		void dump(std::ostream&, int) const;
+
+	};
+
+	class NodeSBreak :
+		public NodeSentence
+	{
+	public:
+		NodeSBreak(int);
+		void dump(std::ostream&, int) const;
+
 	};
 }

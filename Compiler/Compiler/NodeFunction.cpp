@@ -1,7 +1,7 @@
 #include "NodeFunction.h"
 namespace Loonguage {
-	NodeFunction::NodeFunction(TokenIden rt, TokenIden n, NodeActuals* a, NodeSentence* s) :
-		Node(rt.line, Node::NdFunction), returnType(rt), name(n), actuals(a), sentence(s)
+	NodeFunction::NodeFunction(TokenIden rt, TokenIden n, NodeFormals* a, NodeSentence* s) :
+		Node(rt.line, Node::NdFunction), returnType(rt), name(n), formals(a), sentence(s)
 	{
 	}
 	void NodeFunction::dump(std::ostream& cout, int indent) const
@@ -9,7 +9,7 @@ namespace Loonguage {
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeFunction (Return Type: " << returnType.getString()
 			<< ", Name: " << name.getString() << ")" << std::endl;
-		actuals->dump(cout, indent + 2);
+		formals->dump(cout, indent + 2);
 		sentence->dump(cout, indent + 2);
 	}
 	void NodeFunctions::dump(std::ostream& cout, int indent) const
@@ -24,5 +24,10 @@ namespace Loonguage {
 		Node(f->getLine(), Node::NdFormals)
 	{
 		push_back(f);
+	}
+
+	NodeFunctions::NodeFunctions(int l):
+		Node(l, Node::NdFormals)
+	{
 	}
 }

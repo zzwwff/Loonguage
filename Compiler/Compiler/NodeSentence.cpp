@@ -1,6 +1,10 @@
 #include "NodeSentence.h"
 namespace Loonguage
 {
+	NodeSentence::NodeSentence(int i):
+		Node(i, Node::NdSentence)
+	{
+	}
 	NodeSentence::NodeSentence(int i, Node::NodeType t):
 		Node(i, t)
 	{
@@ -68,6 +72,11 @@ namespace Loonguage
 		push_back(s);
 	}
 
+	NodeSentences::NodeSentences(int l):
+		Node(l, Node::NdSentences)
+	{
+	}
+
 	NodeSExpr::NodeSExpr(NodeExpr* e) :
 		NodeSentence(e->getLine(), Node::NdSExpr), expr(e)
 	{
@@ -78,6 +87,40 @@ namespace Loonguage
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeSExpr" << std::endl;
 		expr->dump(cout, indent + 2);
+	}
+
+	NodeSReturn::NodeSReturn(NodeExpr* e) :
+		NodeSentence(e->getLine(), Node::NdSReturn), expr(e)
+	{
+	}
+
+	void NodeSReturn::dump(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSReturn" << std::endl;
+		expr->dump(cout, indent + 2);
+	}
+
+	NodeSContinue::NodeSContinue(int l) :
+		NodeSentence(l, Node::NdSContinue)
+	{
+	}
+
+	void NodeSContinue::dump(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSContinue" << std::endl;
+	}
+
+	NodeSBreak::NodeSBreak(int l) :
+		NodeSentence(l, Node::NdSBreak)
+	{
+	}
+
+	void NodeSBreak::dump(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSBreak" << std::endl;
 	}
 }
 

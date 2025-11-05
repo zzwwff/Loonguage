@@ -411,8 +411,8 @@ int yyFlexLexer::yylex()
 /* %% [3.0] code to copy yytext_ptr to yytext[] goes here, if %array \ */\
 	(yy_c_buf_p) = yy_cp;
 /* %% [4.0] data tables for the DFA and the user's section 1 definitions go here */
-#define YY_NUM_RULES 39
-#define YY_END_OF_BUFFER 40
+#define YY_NUM_RULES 43
+#define YY_END_OF_BUFFER 44
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -420,15 +420,17 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[66] =
+static const flex_int16_t yy_accept[87] =
     {   0,
         0,    0,    5,    5,    0,    0,    0,    0,    0,    0,
-       40,   38,   16,   15,   10,   33,   28,   29,   24,   22,
-       30,   23,   25,   17,   32,   37,   31,   20,   20,   36,
-       20,   20,   26,   34,   27,   35,    5,    4,    6,   13,
-       39,   14,   13,    8,    9,   16,    2,    3,   17,   21,
-       20,   20,   18,   20,    5,    6,    6,    7,   12,   11,
-        1,   20,   20,   19,    0
+       44,   42,   17,   16,   10,   37,   32,   33,   28,   26,
+       34,   27,   29,   18,   36,   41,   35,   42,   24,   40,
+       24,   24,   24,   24,   24,   30,   38,   31,   39,    5,
+        4,    6,   13,   14,   15,   13,   43,    8,    9,   17,
+        2,    3,   18,   25,    0,   24,   24,   24,   19,   24,
+       24,    5,    6,    6,    7,   12,   11,    0,   24,   24,
+       24,   24,    1,   24,   24,   24,   24,   22,   24,   24,
+       20,   24,   23,   24,   21,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -439,14 +441,14 @@ static const YY_CHAR yy_ec[256] =
         1,    2,    1,    4,    1,    1,    1,    5,    1,    6,
         7,    8,    9,   10,   11,    1,   12,   13,   13,   13,
        13,   13,   13,   13,   13,   13,   13,    1,   14,   15,
-       16,    1,    1,    1,   17,   17,   17,   17,   18,   19,
-       17,   17,   17,   17,   17,   17,   17,   17,   20,   17,
-       17,   17,   17,   17,   17,   17,   17,   17,   17,   17,
-        1,   21,    1,   22,    1,    1,   17,   23,   17,   17,
+       16,    1,    1,   17,   18,   18,   18,   18,   19,   20,
+       18,   18,   18,   18,   18,   18,   18,   18,   21,   18,
+       18,   18,   18,   18,   18,   18,   18,   18,   18,   18,
+        1,   22,    1,   23,    1,    1,   24,   25,   26,   18,
 
-       24,   25,   17,   26,   27,   17,   17,   28,   17,   29,
-       17,   17,   17,   17,   17,   29,   17,   17,   30,   17,
-       17,   17,   31,   32,   33,   34,    1,    1,    1,    1,
+       27,   28,   18,   29,   30,   18,   31,   32,   18,   33,
+       34,   18,   18,   35,   18,   36,   37,   18,   38,   18,
+       18,   18,   39,   40,   41,   42,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -463,82 +465,96 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[35] =
+static const YY_CHAR yy_meta[43] =
     {   0,
         1,    1,    2,    1,    1,    1,    1,    3,    1,    1,
-        1,    1,    4,    1,    1,    1,    4,    4,    4,    4,
-        1,    1,    5,    4,    5,    4,    4,    4,    4,    4,
-        1,    1,    1,    1
+        1,    1,    4,    1,    1,    1,    1,    4,    4,    4,
+        4,    1,    1,    4,    4,    4,    4,    4,    4,    4,
+        4,    4,    4,    4,    4,    4,    4,    4,    1,    1,
+        1,    1
     } ;
 
-static const flex_int16_t yy_base[74] =
+static const flex_int16_t yy_base[95] =
     {   0,
-        0,    0,   32,   33,   34,   39,    0,    0,  102,  101,
-      103,  106,   42,  106,   43,  106,  106,  106,  106,  106,
-      106,  106,   40,   89,  106,  106,   85,    0,   80,  106,
-       74,   65,  106,  106,  106,  106,    0,  106,   41,  106,
-      106,  106,   58,  106,  106,   52,  106,  106,   73,  106,
-        0,   40,    0,   24,    0,   49,   50,  106,  106,  106,
-        0,   22,   15,    0,  106,   62,   67,   72,   77,   79,
-       84,   89,   94
+        0,    0,   40,   41,   42,   47,    0,    0,  121,  120,
+      122,  125,   50,  125,   51,  125,  125,  125,  125,  125,
+      125,  125,   48,  108,  125,  125,  104,  100,    0,  125,
+       83,   83,   88,   88,   85,  125,  125,  125,  125,    0,
+      125,   49,  125,  125,  125,   26,  125,  125,  125,   61,
+      125,  125,  100,  125,   91,    0,   84,   77,    0,   73,
+       78,    0,   58,   59,  125,  125,  125,   87,   82,   69,
+       67,   71,  125,   71,   71,   65,   66,    0,   57,   56,
+        0,   31,    0,   31,    0,  125,   71,   75,   79,   83,
+       43,   87,   91,   95
+
     } ;
 
-static const flex_int16_t yy_def[74] =
+static const flex_int16_t yy_def[95] =
     {   0,
-       65,    1,   66,   66,   67,   67,   68,   68,   69,   69,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   70,   70,   65,
-       70,   70,   65,   65,   65,   65,   71,   65,   72,   65,
-       65,   65,   73,   65,   65,   65,   65,   65,   65,   65,
-       70,   70,   70,   70,   71,   72,   72,   65,   65,   65,
-       70,   70,   70,   70,    0,   65,   65,   65,   65,   65,
-       65,   65,   65
+       86,    1,   87,   87,   88,   88,   89,   89,   90,   90,
+       86,   86,   86,   86,   86,   86,   86,   86,   86,   86,
+       86,   86,   86,   86,   86,   86,   86,   86,   91,   86,
+       91,   91,   91,   91,   91,   86,   86,   86,   86,   92,
+       86,   93,   86,   86,   86,   94,   86,   86,   86,   86,
+       86,   86,   86,   86,   86,   91,   91,   91,   91,   91,
+       91,   92,   93,   93,   86,   86,   86,   86,   91,   91,
+       91,   91,   86,   91,   91,   91,   91,   91,   91,   91,
+       91,   91,   91,   91,   91,    0,   86,   86,   86,   86,
+       86,   86,   86,   86
+
     } ;
 
-static const flex_int16_t yy_nxt[141] =
+static const flex_int16_t yy_nxt[168] =
     {   0,
        12,   13,   14,   15,   16,   17,   18,   19,   20,   21,
-       22,   23,   24,   25,   26,   27,   28,   29,   28,   28,
-       12,   30,   28,   28,   28,   28,   31,   28,   28,   32,
-       33,   34,   35,   36,   38,   38,   41,   42,   64,   39,
-       39,   41,   42,   46,   46,   46,   46,   47,   57,   63,
-       62,   48,   58,   46,   43,   46,   65,   57,   61,   43,
-       65,   65,   37,   37,   37,   37,   37,   40,   40,   40,
-       40,   40,   41,   41,   41,   41,   41,   44,   44,   44,
-       44,   44,   51,   51,   55,   49,   60,   55,   55,   56,
-       54,   56,   56,   56,   59,   59,   59,   59,   53,   52,
+       22,   23,   24,   25,   26,   27,   28,   29,   29,   29,
+       29,   12,   30,   29,   31,   32,   29,   29,   29,   33,
+       29,   29,   29,   29,   34,   29,   29,   35,   36,   37,
+       38,   39,   41,   41,   44,   45,   56,   42,   42,   44,
+       45,   50,   50,   50,   50,   51,   64,   85,   67,   52,
+       65,   67,   50,   46,   50,   86,   64,   84,   46,   86,
+       86,   40,   40,   40,   40,   43,   43,   43,   43,   47,
+       47,   47,   47,   48,   48,   48,   48,   62,   83,   82,
+       62,   63,   81,   63,   63,   66,   66,   66,   66,   80,
 
-       50,   49,   65,   45,   45,   11,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65
+       79,   78,   77,   76,   75,   74,   73,   72,   71,   70,
+       69,   68,   53,   61,   60,   59,   58,   57,   55,   54,
+       53,   86,   49,   49,   11,   86,   86,   86,   86,   86,
+       86,   86,   86,   86,   86,   86,   86,   86,   86,   86,
+       86,   86,   86,   86,   86,   86,   86,   86,   86,   86,
+       86,   86,   86,   86,   86,   86,   86,   86,   86,   86,
+       86,   86,   86,   86,   86,   86,   86
     } ;
 
-static const flex_int16_t yy_chk[141] =
+static const flex_int16_t yy_chk[168] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    3,    4,    5,    5,   63,    3,
-        4,    6,    6,   13,   15,   13,   15,   23,   39,   62,
-       54,   23,   39,   46,    5,   46,   56,   57,   52,    6,
-       56,   57,   66,   66,   66,   66,   66,   67,   67,   67,
-       67,   67,   68,   68,   68,   68,   68,   69,   69,   69,
-       69,   69,   70,   70,   71,   49,   43,   71,   71,   72,
-       32,   72,   72,   72,   73,   73,   73,   73,   31,   29,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    3,    4,    5,    5,   91,    3,    4,    6,
+        6,   13,   15,   13,   15,   23,   42,   84,   46,   23,
+       42,   46,   50,    5,   50,   63,   64,   82,    6,   63,
+       64,   87,   87,   87,   87,   88,   88,   88,   88,   89,
+       89,   89,   89,   90,   90,   90,   90,   92,   80,   79,
+       92,   93,   77,   93,   93,   94,   94,   94,   94,   76,
 
-       27,   24,   11,   10,    9,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65
+       75,   74,   72,   71,   70,   69,   68,   61,   60,   58,
+       57,   55,   53,   35,   34,   33,   32,   31,   28,   27,
+       24,   11,   10,    9,   86,   86,   86,   86,   86,   86,
+       86,   86,   86,   86,   86,   86,   86,   86,   86,   86,
+       86,   86,   86,   86,   86,   86,   86,   86,   86,   86,
+       86,   86,   86,   86,   86,   86,   86,   86,   86,   86,
+       86,   86,   86,   86,   86,   86,   86
     } ;
 
-static const flex_int16_t yy_rule_linenum[39] =
+static const flex_int16_t yy_rule_linenum[43] =
     {   0,
-       57,   59,   60,   62,   63,   64,   65,   67,   68,   72,
-       77,   84,   88,   92,   98,  100,  103,  107,  111,  115,
-      119,  123,  127,  130,  133,  136,  139,  142,  145,  148,
-      151,  154,  157,  160,  163,  166,  170,  175
+       58,   60,   61,   63,   65,   66,   67,   69,   70,   76,
+       81,   88,   92,   96,  101,  107,  110,  113,  117,  121,
+      125,  129,  133,  137,  141,  145,  149,  152,  155,  158,
+      161,  164,  167,  170,  173,  176,  179,  182,  185,  188,
+      192,  198
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -561,6 +577,7 @@ static const flex_int16_t yy_rule_linenum[39] =
   #include "LoonScanner.h"   //包含yyFlexLexer子类的头文件
   #include "location.hh" //包含位置调试信息头文件
   #include "Tokens.h"
+  #include "Error.h"
 
   static LoonScanner::location loc;//声明位置实例
   #define YY_USER_ACTION  loc.columns (yyleng); /* 定义了YY_USER_ACTION，该宏在每个记号的语义动作之前被调用，来根据记号的长度设置位置的信息 */
@@ -572,9 +589,9 @@ static const flex_int16_t yy_rule_linenum[39] =
   #define yyterminate() Parser::make_END(loc);
 
   std::string strBuffer;
-#line 575 "lex.Loon_.cc"
+#line 592 "lex.Loon_.cc"
 
-#line 577 "lex.Loon_.cc"
+#line 594 "lex.Loon_.cc"
 
 #define INITIAL 0
 #define COMMENT 1
@@ -770,16 +787,16 @@ YY_DECL
 
 	{
 /* %% [7.0] user's declarations go here */
-#line 49 "LoonLexer.flex"
+#line 50 "LoonLexer.flex"
 
 
-#line 52 "LoonLexer.flex"
+#line 53 "LoonLexer.flex"
   // C++ 兼容的词法分析器的规则，step函数把位置的起始值设置为与结束值相等，这样位置就指向了上一个极少的结束位置。
   loc.step();
 
 
 
-#line 782 "lex.Loon_.cc"
+#line 799 "lex.Loon_.cc"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -808,13 +825,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 66 )
+				if ( yy_current_state >= 87 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 106 );
+		while ( yy_base[yy_current_state] != 125 );
 
 yy_find_action:
 /* %% [10.0] code to find the action number goes here */
@@ -837,12 +854,12 @@ do_action:	/* This label is used only to access EOF actions. */
 			{
 			if ( yy_act == 0 )
 				std::cerr << "--scanner backing up\n";
-			else if ( yy_act < 39 )
+			else if ( yy_act < 43 )
 				std::cerr << "--accepting rule at line " << yy_rule_linenum[yy_act] <<
 				         "(\"" << yytext << "\")\n";
-			else if ( yy_act == 39 )
+			else if ( yy_act == 43 )
 				std::cerr << "--accepting default rule (\"" << yytext << "\")\n";
-			else if ( yy_act == 40 )
+			else if ( yy_act == 44 )
 				std::cerr << "--(end of buffer or a NUL)\n";
 			else
 				std::cerr << "--EOF (start condition " << YY_START << ")\n";
@@ -860,56 +877,59 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 57 "LoonLexer.flex"
-{ yyterminate(); }
+#line 58 "LoonLexer.flex"
+{ return Parser::make_END(loc); }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 59 "LoonLexer.flex"
+#line 60 "LoonLexer.flex"
 BEGIN(COMMENT);
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 60 "LoonLexer.flex"
+#line 61 "LoonLexer.flex"
 BEGIN(SINGLE_COMMENT);
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 62 "LoonLexer.flex"
-{ }
+#line 63 "LoonLexer.flex"
+{            loc.lines(yyleng); 
+            loc.step();  }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 63 "LoonLexer.flex"
+#line 65 "LoonLexer.flex"
 { }       /* eat anything that's not a '*' */
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 64 "LoonLexer.flex"
+#line 66 "LoonLexer.flex"
 { }  /* eat up '*'s not followed by '/'s */
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 65 "LoonLexer.flex"
+#line 67 "LoonLexer.flex"
 BEGIN(INITIAL);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 67 "LoonLexer.flex"
+#line 69 "LoonLexer.flex"
 
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 68 "LoonLexer.flex"
+#line 70 "LoonLexer.flex"
 {
+    loc.lines(yyleng); 
+    loc.step();
     BEGIN(INITIAL);
 }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 72 "LoonLexer.flex"
+#line 76 "LoonLexer.flex"
 {
     strBuffer.clear();
     BEGIN(STRING);
@@ -917,7 +937,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 77 "LoonLexer.flex"
+#line 81 "LoonLexer.flex"
 {
     if (yytext[1] == 'n')
     	strBuffer.push_back('\n');
@@ -928,180 +948,211 @@ YY_RULE_SETUP
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 84 "LoonLexer.flex"
+#line 88 "LoonLexer.flex"
 {
     strBuffer.push_back(yytext[1]);
 }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 88 "LoonLexer.flex"
+#line 92 "LoonLexer.flex"
 {
     strBuffer.push_back(yytext[0]);
   }
 	YY_BREAK
 case 14:
+/* rule 14 can match eol */
 YY_RULE_SETUP
-#line 92 "LoonLexer.flex"
+#line 96 "LoonLexer.flex"
+{
+    loc.lines(yyleng); 
+    loc.step();
+}
+	YY_BREAK
+case 15:
+YY_RULE_SETUP
+#line 101 "LoonLexer.flex"
 {
     BEGIN(INITIAL);
     return Parser::make_STR(Loonguage::TokenString(loc.begin.line, strBuffer, strTable), loc); 
 }
 	YY_BREAK
-case 15:
-/* rule 15 can match eol */
-YY_RULE_SETUP
-#line 98 "LoonLexer.flex"
-{  }
-	YY_BREAK
 case 16:
+/* rule 16 can match eol */
 YY_RULE_SETUP
-#line 100 "LoonLexer.flex"
-{ }
+#line 107 "LoonLexer.flex"
+{     loc.lines(yyleng); 
+    loc.step(); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 103 "LoonLexer.flex"
+#line 110 "LoonLexer.flex"
+{ }
+	YY_BREAK
+case 18:
+YY_RULE_SETUP
+#line 113 "LoonLexer.flex"
 {
             return Parser::make_INT(Loonguage::TokenInt(loc.begin.line, std::stoi(yytext)), loc); 
           }
 	YY_BREAK
-case 18:
+case 19:
 YY_RULE_SETUP
-#line 107 "LoonLexer.flex"
+#line 117 "LoonLexer.flex"
 {
             return Parser::make_IF(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordIf), loc); 
             }
 	YY_BREAK
-case 19:
+case 20:
 YY_RULE_SETUP
-#line 111 "LoonLexer.flex"
+#line 121 "LoonLexer.flex"
 {
             return Parser::make_WHILE(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordIf), loc); 
             }
 	YY_BREAK
-case 20:
+case 21:
 YY_RULE_SETUP
-#line 115 "LoonLexer.flex"
+#line 125 "LoonLexer.flex"
+{
+return Parser::make_CONTINUE(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordContinue), loc); 
+}
+	YY_BREAK
+case 22:
+YY_RULE_SETUP
+#line 129 "LoonLexer.flex"
+{
+return Parser::make_BREAK(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordBreak), loc); 
+}
+	YY_BREAK
+case 23:
+YY_RULE_SETUP
+#line 133 "LoonLexer.flex"
+{
+return Parser::make_RETURN(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordReturn), loc); 
+}
+	YY_BREAK
+case 24:
+YY_RULE_SETUP
+#line 137 "LoonLexer.flex"
 {
                 return Parser::make_IDEN(Loonguage::TokenIden(loc.begin.line, yytext, idenTable), loc); 
             }
 	YY_BREAK
-case 21:
+case 25:
 YY_RULE_SETUP
-#line 119 "LoonLexer.flex"
+#line 141 "LoonLexer.flex"
 {
                 return Parser::make_EQUAL(Loonguage::TokenSymbol(loc.begin.line, '#'), loc); 
             }
 	YY_BREAK
-case 22:
+case 26:
 YY_RULE_SETUP
-#line 123 "LoonLexer.flex"
+#line 145 "LoonLexer.flex"
 {
                 return Parser::make_PLUS(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 23:
+case 27:
 YY_RULE_SETUP
-#line 127 "LoonLexer.flex"
+#line 149 "LoonLexer.flex"
 {
                 return Parser::make_MINUS(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 24:
+case 28:
 YY_RULE_SETUP
-#line 130 "LoonLexer.flex"
+#line 152 "LoonLexer.flex"
 {
                 return Parser::make_TIME(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 25:
+case 29:
 YY_RULE_SETUP
-#line 133 "LoonLexer.flex"
+#line 155 "LoonLexer.flex"
 {
                 return Parser::make_DIVISION(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 26:
+case 30:
 YY_RULE_SETUP
-#line 136 "LoonLexer.flex"
+#line 158 "LoonLexer.flex"
 {
                 return Parser::make_LBRACE(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 27:
+case 31:
 YY_RULE_SETUP
-#line 139 "LoonLexer.flex"
+#line 161 "LoonLexer.flex"
 {
                 return Parser::make_RBRACE(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 28:
+case 32:
 YY_RULE_SETUP
-#line 142 "LoonLexer.flex"
+#line 164 "LoonLexer.flex"
 {
                 return Parser::make_LBRACKET(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 29:
+case 33:
 YY_RULE_SETUP
-#line 145 "LoonLexer.flex"
+#line 167 "LoonLexer.flex"
 {
                 return Parser::make_RBRACKET(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 30:
+case 34:
 YY_RULE_SETUP
-#line 148 "LoonLexer.flex"
+#line 170 "LoonLexer.flex"
 {
                 return Parser::make_COMMA(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 31:
+case 35:
 YY_RULE_SETUP
-#line 151 "LoonLexer.flex"
+#line 173 "LoonLexer.flex"
 {
                 return Parser::make_ASSIGN(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 32:
+case 36:
 YY_RULE_SETUP
-#line 154 "LoonLexer.flex"
+#line 176 "LoonLexer.flex"
 {
                 return Parser::make_SEMICOLON(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 33:
+case 37:
 YY_RULE_SETUP
-#line 157 "LoonLexer.flex"
+#line 179 "LoonLexer.flex"
 {
                 return Parser::make_AND(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 34:
+case 38:
 YY_RULE_SETUP
-#line 160 "LoonLexer.flex"
+#line 182 "LoonLexer.flex"
 {
                 return Parser::make_OR(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 35:
+case 39:
 YY_RULE_SETUP
-#line 163 "LoonLexer.flex"
+#line 185 "LoonLexer.flex"
 {
                 return Parser::make_REV(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 36:
+case 40:
 YY_RULE_SETUP
-#line 166 "LoonLexer.flex"
+#line 188 "LoonLexer.flex"
 {
                 return Parser::make_XOR(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
-case 37:
+case 41:
 YY_RULE_SETUP
-#line 170 "LoonLexer.flex"
+#line 192 "LoonLexer.flex"
 {
                 return Parser::make_LESS(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
@@ -1111,23 +1162,23 @@ case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(STRING):
 case YY_STATE_EOF(STRING_ERROR):
 case YY_STATE_EOF(SINGLE_COMMENT):
-#line 174 "LoonLexer.flex"
+#line 196 "LoonLexer.flex"
 { return yyterminate(); }
 	YY_BREAK
-case 38:
+case 42:
 YY_RULE_SETUP
-#line 175 "LoonLexer.flex"
+#line 198 "LoonLexer.flex"
 {
-             printf("Mystery character %c\n", *yytext);
+             errs.push_back(Loonguage::Error( std::string("Lexical Analysis"), (int)loc.begin.line, std::string("Unknown character \'") + yytext[0] + '\'' ));
              loc.step();
           }
 	YY_BREAK
-case 39:
+case 43:
 YY_RULE_SETUP
-#line 179 "LoonLexer.flex"
+#line 202 "LoonLexer.flex"
 ECHO;
 	YY_BREAK
-#line 1130 "lex.Loon_.cc"
+#line 1181 "lex.Loon_.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1564,7 +1615,7 @@ int yyFlexLexer::yy_get_next_buffer()
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 66 )
+			if ( yy_current_state >= 87 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1597,11 +1648,11 @@ int yyFlexLexer::yy_get_next_buffer()
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 66 )
+		if ( yy_current_state >= 87 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 65);
+	yy_is_jam = (yy_current_state == 86);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -2243,7 +2294,7 @@ void yyfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 179 "LoonLexer.flex"
+#line 202 "LoonLexer.flex"
 
 //这里可以放一些C或者C++代码
 

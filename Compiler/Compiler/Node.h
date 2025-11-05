@@ -18,6 +18,9 @@ namespace Loonguage {
 			NdSBlock,
 			NdSDecl,
 			NdSExpr,
+			NdSReturn,
+			NdSContinue,
+			NdSBreak,
 			NdExpr,
 			NdEIden,
 			NdEBracket,
@@ -30,7 +33,7 @@ namespace Loonguage {
 			NdEInt,
 			NdActual,
 			NdActuals,
-			NdEStr
+			NdEStr,
 		};
 
 	protected:

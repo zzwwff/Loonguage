@@ -4,7 +4,7 @@
 signed main()
 {
 	Loonguage::Lexical lexical;
-	lexical.parse();
 
+	lexical.parse();
 	return 0;
 }

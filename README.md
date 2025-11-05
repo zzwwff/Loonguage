@@ -4,7 +4,7 @@ Loonguage is a language specified to generate assembly code to run on a specifie
 The CPU is self-made on FPGA, using a set of instructions designed for this CPU.
 This repository contains a compiler to compile Loonguage and a user-friendly interface to edit, run and debug the code in Qt.
 
-## How is the compiler down?
+## How is the compiler done?
 Loonguage compiler has four phases.
 ### Lexical Analysis
 Use flex to generate lexical analyzer to transform raw code into token list.

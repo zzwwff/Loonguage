@@ -1,17 +1,7 @@
-﻿  LoonParser.y:10.1-36: warning: deprecated directive: '%define parser_class_name { Parser }', use '%define api.parser.class { Parser }' [-Wdeprecated]
-     10 | %define parser_class_name { Parser }
-        | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        | %define api.parser.class { Parser }
-  LoonParser.y:131.6: warning: empty rule for typed nonterminal, and no action [-Wother]
-    131 | expr:
-        |      ^
-LoonParser.y : warning : 175 shift/reduce conflicts [-Wconflicts-sr]
-LoonParser.y : warning : 1 reduce/reduce conflict [-Wconflicts-rr]
-  LoonParser.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-  LoonParser.y:154.1-47: warning: rule useless in parser due to conflicts [-Wother]
-    154 | actual { $$ = new Loonguage::NodeActuals($1); }
-        | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-LoonParser.y : warning : fix-its can be applied.  Rerun with option '--update'. [-Wother]
+﻿  Lexical.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1017,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+  LoonParser.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1017,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   lex.Loon_.cc
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(49,9): warning C4005: “INT8_MIN”: 宏重定义
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(50,9): warning C4005: “INT16_MIN”: 宏重定义
@@ -22,31 +12,8 @@ D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.3380
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(57,9): warning C4005: “UINT8_MAX”: 宏重定义
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(58,9): warning C4005: “UINT16_MAX”: 宏重定义
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(59,9): warning C4005: “UINT32_MAX”: 宏重定义
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1004,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
-  Lexical.cpp
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1004,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
-  LoonParser.cpp
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(106,85): error C2661: “Loonguage::NodeFormal::NodeFormal”: 没有重载函数接受 2 个参数
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(111,86): error C2248: “Loonguage::NodeFormals::NodeFormals”: 无法访问 private 成员(在“Loonguage::NodeFormals”类中声明)
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(114,243): error C2512: “Loonguage::NodeFormals::NodeFormals”: 没有合适的默认构造函数可用
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(114,116): error C2665: “Loonguage::NodeFunction::NodeFunction”: 没有重载函数可以转换所有参数类型
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(116,81): error C2665: “Loonguage::NodeFunction::NodeFunction”: 没有重载函数可以转换所有参数类型
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(123,122): error C2512: “Loonguage::NodeSentences::NodeSentences”: 没有合适的默认构造函数可用
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(127,90): error C2665: “Loonguage::NodeFunctions::NodeFunctions”: 没有重载函数可以转换所有参数类型
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(127,90): error C2440: “=”: 无法从“Loonguage::NodeFunctions *”转换为“T”
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(127,90): error C2440:         with
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(127,90): error C2440:         [
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(127,90): error C2440:             T=Loonguage::NodeSentences *
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(127,90): error C2440:         ]
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(135,175): error C2512: “Loonguage::NodeActuals”: 没有合适的默认构造函数可用
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(135,102): error C2665: “Loonguage::NodeEDispatch::NodeEDispatch”: 没有重载函数可以转换所有参数类型
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.y(151,80): error C2665: “Loonguage::NodeActual::NodeActual”: 没有重载函数可以转换所有参数类型
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1017,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   main.cpp
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1004,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
-  NodeActual.cpp
-  NodeExpr.cpp
-  NodeFormal.cpp
-  NodeFunction.cpp
-  NodeProgram.cpp
-  NodeSentence.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1017,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   正在生成代码...
+  Compiler.vcxproj -> E:\source\repos\Loonguage\Compiler\x64\Debug\Compiler.exe

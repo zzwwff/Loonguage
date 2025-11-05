@@ -7,6 +7,12 @@ namespace Loonguage {
 			return "KeyWordIf";
 		else if (keyWordType == KeyWordType::KeyWordWhile)
 			return "KeyWordWhile";
+		else if (keyWordType == KeyWordType::KeyWordContinue)
+			return "KeyWordContinue";
+		else if (keyWordType == KeyWordType::KeyWordBreak)
+			return "KeyWordBreak";
+		else if (keyWordType == KeyWordType::KeyWordReturn)
+			return "KeyWordReturn";
 		else throw;
 	}
 
@@ -16,6 +22,12 @@ namespace Loonguage {
 			keyWordType = KeyWordType::KeyWordIf;
 		else if (str == "KeyWordWhile")
 			keyWordType = KeyWordType::KeyWordWhile;
+		else if (str == "KeyWordBreak")
+			keyWordType = KeyWordType::KeyWordBreak;
+		else if (str == "KeyWordContinue")
+			keyWordType = KeyWordType::KeyWordContinue;
+		else if (str == "KeyWordReturn")
+			keyWordType = KeyWordType::KeyWordReturn;
 		else throw;
 	}
 

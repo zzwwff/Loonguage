@@ -20,7 +20,7 @@ namespace Loonguage {
 	TokenInt::TokenInt(int l, int v) :
 		Token(Token::TokenType::TokenInt, l), value(v)
 	{
-
+		//std::cout << "v" << v << std::endl;
 	}
 
 	TokenInt::TokenInt(std::istream& cin)

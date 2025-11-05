@@ -1,15 +1,16 @@
 #pragma once
-#include "Node.h"
-#include "TokenIden.h"
 #include <vector>
+#include "NodeExpr.h"
+#include "Node.h"
 namespace Loonguage {
+	class NodeExpr;
+
 	class NodeActual :
 		public Node
 	{
-		TokenIden type;
-		TokenIden name;
+		NodeExpr* expr;
 	public:
-		NodeActual(TokenIden, TokenIden);
+		NodeActual(NodeExpr*);
 		void dump(std::ostream&, int) const;
 	};
 
@@ -18,7 +19,9 @@ namespace Loonguage {
 		public Node
 	{
 	public:
-		void dump(std::ostream&, int) const;
 		NodeActuals(NodeActual*);
+		NodeActuals(int);
+		void dump(std::ostream&, int) const;
 	};
 }
+

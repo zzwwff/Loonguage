@@ -7,7 +7,10 @@ namespace Loonguage {
     public:
         enum KeyWordType {
             KeyWordIf,
-            KeyWordWhile
+            KeyWordWhile,
+            KeyWordReturn,
+            KeyWordContinue,
+            KeyWordBreak
         };
 
         KeyWordType keyWordType;                        //key word

@@ -11,6 +11,7 @@
   #include "LoonScanner.h"   //包含yyFlexLexer子类的头文件
   #include "location.hh" //包含位置调试信息头文件
   #include "Tokens.h"
+  #include "Error.h"
 
   static LoonScanner::location loc;//声明位置实例
   #define YY_USER_ACTION  loc.columns (yyleng); /* 定义了YY_USER_ACTION，该宏在每个记号的语义动作之前被调用，来根据记号的长度设置位置的信息 */
@@ -53,18 +54,21 @@ BLANK [" "\f\r\t\v]+
 %}
 
 
-EOF { yyterminate(); }
+<INITIAL>@EOF { return Parser::make_END(loc); }
 
 <INITIAL>"/*" BEGIN(COMMENT);
 <INITIAL>"//" BEGIN(SINGLE_COMMENT);
 
-<COMMENT>{NEW_LINE} { }
+<COMMENT>{NEW_LINE} {            loc.lines(yyleng); 
+            loc.step();  }
 <COMMENT>[^*\n]* { }       /* eat anything that's not a '*' */
 <COMMENT>"*"+[^*/\n]* { }  /* eat up '*'s not followed by '/'s */
 <COMMENT>"*/" BEGIN(INITIAL);
 
 <SINGLE_COMMENT>[^\n]
 <SINGLE_COMMENT>\n {
+    loc.lines(yyleng); 
+    loc.step();
     BEGIN(INITIAL);
 }
 
@@ -80,7 +84,7 @@ EOF { yyterminate(); }
     	strBuffer.push_back('\t');
 }
 
-<STRING>\\[^btnf] {
+<STRING>\\[^tn] {
     strBuffer.push_back(yytext[1]);
 }
 
@@ -88,13 +92,19 @@ EOF { yyterminate(); }
     strBuffer.push_back(yytext[0]);
   }
 
+<STRING>\n {
+    loc.lines(yyleng); 
+    loc.step();
+}
+
 <STRING>\" {
     BEGIN(INITIAL);
     return Parser::make_STR(Loonguage::TokenString(loc.begin.line, strBuffer, strTable), loc); 
 }
 
 
-<INITIAL>{NEW_LINE}  {  }
+<INITIAL>{NEW_LINE}  {     loc.lines(yyleng); 
+    loc.step(); }
 
 <INITIAL>{BLANK} { }
 
@@ -110,6 +120,18 @@ EOF { yyterminate(); }
 <INITIAL>while        {
             return Parser::make_WHILE(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordIf), loc); 
             }
+
+<INITIAL>continue        {
+return Parser::make_CONTINUE(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordContinue), loc); 
+}
+
+<INITIAL>break        {
+return Parser::make_BREAK(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordBreak), loc); 
+}
+
+<INITIAL>return        {
+return Parser::make_RETURN(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordReturn), loc); 
+}
 
 <INITIAL>{IDEN}  {
                 return Parser::make_IDEN(Loonguage::TokenIden(loc.begin.line, yytext, idenTable), loc); 
@@ -171,8 +193,9 @@ EOF { yyterminate(); }
             }
 
 <<EOF>>   { return yyterminate(); }
+
 .         {
-             printf("Mystery character %c\n", *yytext);
+             errs.push_back(Loonguage::Error( std::string("Lexical Analysis"), (int)loc.begin.line, std::string("Unknown character \'") + yytext[0] + '\'' ));
              loc.step();
           }
 %%

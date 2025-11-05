@@ -59,12 +59,13 @@
   #include "NodeFunction.h"
   #include "NodeProgram.h"
   #include "NodeSentence.h"
+    #include "Error.h"
 
   namespace LoonScanner { 
     class Scanner;
   }
 
-#line 68 "LoonParser.hpp"
+#line 69 "LoonParser.hpp"
 
 # include <cassert>
 # include <cstdlib> // std::abort
@@ -205,7 +206,7 @@
 
 #line 9 "LoonParser.y"
 namespace LoonScanner {
-#line 209 "LoonParser.hpp"
+#line 210 "LoonParser.hpp"
 
 
 
@@ -462,6 +463,9 @@ namespace LoonScanner {
 
       // IF
       // WHILE
+      // CONTINUE
+      // BREAK
+      // RETURN
       char dummy13[sizeof (Loonguage::TokenKeyWord)];
 
       // STR
@@ -542,27 +546,30 @@ namespace LoonScanner {
     TOKEN_YYUNDEF = 257,           // "invalid token"
     TOKEN_IF = 258,                // IF
     TOKEN_WHILE = 259,             // WHILE
-    TOKEN_INT = 260,               // INT
-    TOKEN_STR = 261,               // STR
-    TOKEN_IDEN = 262,              // IDEN
-    TOKEN_PLUS = 263,              // PLUS
-    TOKEN_MINUS = 264,             // MINUS
-    TOKEN_TIME = 265,              // TIME
-    TOKEN_DIVISION = 266,          // DIVISION
-    TOKEN_AND = 267,               // AND
-    TOKEN_OR = 268,                // OR
-    TOKEN_XOR = 269,               // XOR
-    TOKEN_REV = 270,               // REV
-    TOKEN_LBRACKET = 271,          // LBRACKET
-    TOKEN_RBRACKET = 272,          // RBRACKET
-    TOKEN_LBRACE = 273,            // LBRACE
-    TOKEN_RBRACE = 274,            // RBRACE
-    TOKEN_SEMICOLON = 275,         // SEMICOLON
-    TOKEN_COMMA = 276,             // COMMA
-    TOKEN_ASSIGN = 277,            // ASSIGN
-    TOKEN_EQUAL = 278,             // EQUAL
-    TOKEN_LESS = 279,              // LESS
-    TOKEN_ERROR = 280              // ERROR
+    TOKEN_CONTINUE = 260,          // CONTINUE
+    TOKEN_BREAK = 261,             // BREAK
+    TOKEN_RETURN = 262,            // RETURN
+    TOKEN_INT = 263,               // INT
+    TOKEN_STR = 264,               // STR
+    TOKEN_IDEN = 265,              // IDEN
+    TOKEN_PLUS = 266,              // PLUS
+    TOKEN_MINUS = 267,             // MINUS
+    TOKEN_TIME = 268,              // TIME
+    TOKEN_DIVISION = 269,          // DIVISION
+    TOKEN_AND = 270,               // AND
+    TOKEN_OR = 271,                // OR
+    TOKEN_XOR = 272,               // XOR
+    TOKEN_REV = 273,               // REV
+    TOKEN_LBRACKET = 274,          // LBRACKET
+    TOKEN_RBRACKET = 275,          // RBRACKET
+    TOKEN_LBRACE = 276,            // LBRACE
+    TOKEN_RBRACE = 277,            // RBRACE
+    TOKEN_SEMICOLON = 278,         // SEMICOLON
+    TOKEN_COMMA = 279,             // COMMA
+    TOKEN_ASSIGN = 280,            // ASSIGN
+    TOKEN_EQUAL = 281,             // EQUAL
+    TOKEN_LESS = 282,              // LESS
+    TOKEN_ERROR = 283              // ERROR
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -579,45 +586,48 @@ namespace LoonScanner {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 26, ///< Number of tokens.
+        YYNTOKENS = 29, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // END
         S_YYerror = 1,                           // error
         S_YYUNDEF = 2,                           // "invalid token"
         S_IF = 3,                                // IF
         S_WHILE = 4,                             // WHILE
-        S_INT = 5,                               // INT
-        S_STR = 6,                               // STR
-        S_IDEN = 7,                              // IDEN
-        S_PLUS = 8,                              // PLUS
-        S_MINUS = 9,                             // MINUS
-        S_TIME = 10,                             // TIME
-        S_DIVISION = 11,                         // DIVISION
-        S_AND = 12,                              // AND
-        S_OR = 13,                               // OR
-        S_XOR = 14,                              // XOR
-        S_REV = 15,                              // REV
-        S_LBRACKET = 16,                         // LBRACKET
-        S_RBRACKET = 17,                         // RBRACKET
-        S_LBRACE = 18,                           // LBRACE
-        S_RBRACE = 19,                           // RBRACE
-        S_SEMICOLON = 20,                        // SEMICOLON
-        S_COMMA = 21,                            // COMMA
-        S_ASSIGN = 22,                           // ASSIGN
-        S_EQUAL = 23,                            // EQUAL
-        S_LESS = 24,                             // LESS
-        S_ERROR = 25,                            // ERROR
-        S_YYACCEPT = 26,                         // $accept
-        S_program = 27,                          // program
-        S_functions = 28,                        // functions
-        S_formal = 29,                           // formal
-        S_formals = 30,                          // formals
-        S_function = 31,                         // function
-        S_sentence = 32,                         // sentence
-        S_sentences = 33,                        // sentences
-        S_expr = 34,                             // expr
-        S_actual = 35,                           // actual
-        S_actuals = 36                           // actuals
+        S_CONTINUE = 5,                          // CONTINUE
+        S_BREAK = 6,                             // BREAK
+        S_RETURN = 7,                            // RETURN
+        S_INT = 8,                               // INT
+        S_STR = 9,                               // STR
+        S_IDEN = 10,                             // IDEN
+        S_PLUS = 11,                             // PLUS
+        S_MINUS = 12,                            // MINUS
+        S_TIME = 13,                             // TIME
+        S_DIVISION = 14,                         // DIVISION
+        S_AND = 15,                              // AND
+        S_OR = 16,                               // OR
+        S_XOR = 17,                              // XOR
+        S_REV = 18,                              // REV
+        S_LBRACKET = 19,                         // LBRACKET
+        S_RBRACKET = 20,                         // RBRACKET
+        S_LBRACE = 21,                           // LBRACE
+        S_RBRACE = 22,                           // RBRACE
+        S_SEMICOLON = 23,                        // SEMICOLON
+        S_COMMA = 24,                            // COMMA
+        S_ASSIGN = 25,                           // ASSIGN
+        S_EQUAL = 26,                            // EQUAL
+        S_LESS = 27,                             // LESS
+        S_ERROR = 28,                            // ERROR
+        S_YYACCEPT = 29,                         // $accept
+        S_program = 30,                          // program
+        S_functions = 31,                        // functions
+        S_formal = 32,                           // formal
+        S_formals = 33,                          // formals
+        S_function = 34,                         // function
+        S_sentence = 35,                         // sentence
+        S_sentences = 36,                        // sentences
+        S_expr = 37,                             // expr
+        S_actual = 38,                           // actual
+        S_actuals = 39                           // actuals
       };
     };
 
@@ -704,6 +714,9 @@ namespace LoonScanner {
 
       case symbol_kind::S_IF: // IF
       case symbol_kind::S_WHILE: // WHILE
+      case symbol_kind::S_CONTINUE: // CONTINUE
+      case symbol_kind::S_BREAK: // BREAK
+      case symbol_kind::S_RETURN: // RETURN
         value.move< Loonguage::TokenKeyWord > (std::move (that.value));
         break;
 
@@ -1056,6 +1069,9 @@ switch (yykind)
 
       case symbol_kind::S_IF: // IF
       case symbol_kind::S_WHILE: // WHILE
+      case symbol_kind::S_CONTINUE: // CONTINUE
+      case symbol_kind::S_BREAK: // BREAK
+      case symbol_kind::S_RETURN: // RETURN
         value.template destroy< Loonguage::TokenKeyWord > ();
         break;
 
@@ -1221,7 +1237,7 @@ switch (yykind)
 #endif
       {
 #if !defined _MSC_VER || defined __clang__
-        YY_ASSERT ((token::TOKEN_IF <= tok && tok <= token::TOKEN_WHILE));
+        YY_ASSERT ((token::TOKEN_IF <= tok && tok <= token::TOKEN_RETURN));
 #endif
       }
 #if 201103L <= YY_CPLUSPLUS
@@ -1263,7 +1279,7 @@ switch (yykind)
     };
 
     /// Build a parser object.
-     Parser  (LoonScanner::Scanner& scanner_yyarg, Loonguage::SymbolTable<std::string>& idenTable_yyarg, Loonguage::SymbolTable<std::string>& strTable_yyarg);
+     Parser  (LoonScanner::Scanner& scanner_yyarg, Loonguage::SymbolTable<std::string>& idenTable_yyarg, Loonguage::SymbolTable<std::string>& strTable_yyarg, Loonguage::NodeProgram** program_yyarg, Loonguage::Errors& errs_yyarg);
     virtual ~ Parser  ();
 
 #if 201103L <= YY_CPLUSPLUS
@@ -1381,6 +1397,51 @@ switch (yykind)
       make_WHILE (const Loonguage::TokenKeyWord& v, const location_type& l)
       {
         return symbol_type (token::TOKEN_WHILE, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_CONTINUE (Loonguage::TokenKeyWord v, location_type l)
+      {
+        return symbol_type (token::TOKEN_CONTINUE, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_CONTINUE (const Loonguage::TokenKeyWord& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_CONTINUE, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_BREAK (Loonguage::TokenKeyWord v, location_type l)
+      {
+        return symbol_type (token::TOKEN_BREAK, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_BREAK (const Loonguage::TokenKeyWord& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_BREAK, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_RETURN (Loonguage::TokenKeyWord v, location_type l)
+      {
+        return symbol_type (token::TOKEN_RETURN, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_RETURN (const Loonguage::TokenKeyWord& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_RETURN, v, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -2028,7 +2089,7 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 151,     ///< Last index in yytable_.
+      yylast_ = 212,     ///< Last index in yytable_.
       yynnts_ = 11,  ///< Number of nonterminal symbols.
       yyfinal_ = 6 ///< Termination state number.
     };
@@ -2038,6 +2099,8 @@ switch (yykind)
     LoonScanner::Scanner& scanner;
     Loonguage::SymbolTable<std::string>& idenTable;
     Loonguage::SymbolTable<std::string>& strTable;
+    Loonguage::NodeProgram** program;
+    Loonguage::Errors& errs;
 
   };
 
@@ -2079,10 +2142,10 @@ switch (yykind)
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25
+      25,    26,    27,    28
     };
     // Last valid token kind.
-    const int code_max = 280;
+    const int code_max = 283;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -2151,6 +2214,9 @@ switch (yykind)
 
       case symbol_kind::S_IF: // IF
       case symbol_kind::S_WHILE: // WHILE
+      case symbol_kind::S_CONTINUE: // CONTINUE
+      case symbol_kind::S_BREAK: // BREAK
+      case symbol_kind::S_RETURN: // RETURN
         value.copy< Loonguage::TokenKeyWord > (YY_MOVE (that.value));
         break;
 
@@ -2263,6 +2329,9 @@ switch (yykind)
 
       case symbol_kind::S_IF: // IF
       case symbol_kind::S_WHILE: // WHILE
+      case symbol_kind::S_CONTINUE: // CONTINUE
+      case symbol_kind::S_BREAK: // BREAK
+      case symbol_kind::S_RETURN: // RETURN
         value.move< Loonguage::TokenKeyWord > (YY_MOVE (s.value));
         break;
 
@@ -2361,7 +2430,7 @@ switch (yykind)
 
 #line 9 "LoonParser.y"
 } // LoonScanner
-#line 2365 "LoonParser.hpp"
+#line 2434 "LoonParser.hpp"
 
 
 
