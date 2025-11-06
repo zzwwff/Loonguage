@@ -9,20 +9,25 @@ namespace Loonguage {
 	class NodeExpr :
 		public Node
 	{
+	public:
 		using Symbol = SymbolTable<std::string>::Symbol;
 		Symbol type;
 	public:
-		
+		Symbol getType() const;
 		NodeExpr(int, Node::NodeType);
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 
 	class NodeEIden :
 		public NodeExpr
 	{
 		TokenIden iden;
+		Symbol idenDeco;
 	public:
 		NodeEIden(TokenIden);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+
 	};
 
 	class NodeEBracket :
@@ -31,7 +36,8 @@ namespace Loonguage {
 		NodeExpr* expr;
 	public:
 		NodeEBracket(NodeExpr*);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 
 	class NodeActuals;
@@ -41,9 +47,11 @@ namespace Loonguage {
 	{
 		TokenIden iden;
 		NodeActuals* actuals;
+		Symbol idenDeco;
 	public:
 		NodeEDispatch(TokenIden, NodeActuals*);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 
 	class NodeECalc :
@@ -53,7 +61,7 @@ namespace Loonguage {
 		char op;
 	public:
 		NodeECalc(NodeExpr*, char, NodeExpr*);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
 	};
 
 	class NodeEEqua :
@@ -62,7 +70,7 @@ namespace Loonguage {
 		NodeExpr* expr1, * expr2;
 	public:
 		NodeEEqua(NodeExpr*, NodeExpr*);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
 	};
 
 	class NodeELess :
@@ -71,7 +79,7 @@ namespace Loonguage {
 		NodeExpr* expr1, * expr2;
 	public:
 		NodeELess(NodeExpr*, NodeExpr*);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
 	};
 
 	class NodeERev :
@@ -80,7 +88,7 @@ namespace Loonguage {
 		NodeExpr* expr;
 	public:
 		NodeERev(NodeExpr*);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
 	};
 
 	class NodeEAssign :
@@ -90,7 +98,7 @@ namespace Loonguage {
 		NodeExpr* expr;
 	public:
 		NodeEAssign(TokenIden, NodeExpr*);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
 	};
 
 	class NodeEInt :
@@ -99,7 +107,7 @@ namespace Loonguage {
 		TokenInt int_;
 	public:
 		NodeEInt(TokenInt);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
 	};
 
 	class NodeEStr :
@@ -108,7 +116,7 @@ namespace Loonguage {
 		TokenString str;
 	public:
 		NodeEStr(TokenString);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
 	};
 }
 

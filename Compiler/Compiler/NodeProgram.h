@@ -9,6 +9,7 @@ namespace Loonguage {
 		NodeFunctions* functions;
 		NodeProgram();
 		NodeProgram(NodeFunctions*);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 }

@@ -9,12 +9,22 @@ namespace Loonguage {
 		Node(p->getLine(), Node::NdProgram), functions(p)
 	{
 	}
-	void NodeProgram::dump(std::ostream& cout, int indent) const
+
+	void NodeProgram::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeProgram" << std::endl;
 		if (functions != NULL)
-			functions->dump(cout, indent + 2);
+			functions->dumpAST(cout, indent + 2);
+	}
+
+	void NodeProgram::annotateType(std::map<std::string, int>& numOfSymbol,
+							std::map<Symbol, Symbol>& nameOfSymbol, 
+							const FunctionMapNameOrdered& functionMap, 
+							SemanticContext context, Errors& errs)
+	{
+		
+		functions->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
 	}
 }
 

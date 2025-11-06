@@ -59,7 +59,7 @@
   #include "NodeFunction.h"
   #include "NodeProgram.h"
   #include "NodeSentence.h"
-    #include "Error.h"
+  #include "Error.h"
 
   namespace LoonScanner { 
     class Scanner;

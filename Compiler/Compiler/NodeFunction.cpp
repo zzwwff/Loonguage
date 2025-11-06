@@ -4,31 +4,48 @@ namespace Loonguage {
 		Node(rt.line, Node::NdFunction), returnType(rt), name(n), formals(a), sentence(s)
 	{
 	}
-	void NodeFunction::dump(std::ostream& cout, int indent) const
+	void NodeFunction::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeFunction (Return Type: " << returnType.getString()
 			<< ", Name: " << name.getString() << ")" << std::endl;
-		formals->dump(cout, indent + 2);
-		sentence->dump(cout, indent + 2);
+		formals->dumpAST(cout, indent + 2);
+		sentence->dumpAST(cout, indent + 2);
 	}
 
-	std::vector<SymbolTable<std::string>::Symbol> NodeFunction::getSignature() const
+	void NodeFunction::annotateType(std::map<std::string, int>& numOfSymbol,
+									std::map<Symbol, Symbol>& nameOfSymbol, 
+									const FunctionMapNameOrdered& functionMap, 
+									SemanticContext context, Errors& errs)
 	{
-		std::vector<SymbolTable<std::string>::Symbol> vec;
-		vec.push_back(returnType.value);
+		std::map<Symbol, Symbol> currentNameOfSymbol = nameOfSymbol;
+		//add all the formals
 		for (auto formal : *formals)
-			vec.push_back(formal->name.value);
-		return vec;
+		{
+			//step 1: get name@type@id
+			Symbol name = formal->name.value;
+			Symbol type = formal->type.value;
+			IdenDeco deco = IdenDeco(name, type, numOfSymbol);
+			//step 2: load nameDeco into formal and currentNameOfSymbol
+			formal->nameDeco = deco.nameDeco;
+			currentNameOfSymbol[name] = deco.nameDeco;
+		}
+		//update context
+		context.pfunction = this;
+		context.returnType = returnType.value;
+		//call annotateType inside the function body
+		sentence->annotateType(numOfSymbol, currentNameOfSymbol, functionMap, context, errs);
 	}
 
-	void NodeFunctions::dump(std::ostream& cout, int indent) const
+
+
+	void NodeFunctions::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeFunctions (Size:" << size()
 			<< ")" << std::endl;
 		for (const auto ac : *this)
-			ac->dump(cout, indent + 2);
+			ac->dumpAST(cout, indent + 2);
 	}
 	NodeFunctions::NodeFunctions(NodeFunction* f):
 		Node(f->getLine(), Node::NdFormals)
@@ -39,5 +56,16 @@ namespace Loonguage {
 	NodeFunctions::NodeFunctions(int l):
 		Node(l, Node::NdFormals)
 	{
+	}
+
+	void NodeFunctions::annotateType(std::map<std::string, int>& numOfSymbol,
+									 std::map<Symbol, Symbol>& nameOfSymbol, 
+									 const FunctionMapNameOrdered& functionMap, 
+									 SemanticContext context, Errors& errs)
+	{
+		//just call function
+		//formal will be added in function::annotateType
+		for (auto function : *this)
+			function->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
 	}
 }

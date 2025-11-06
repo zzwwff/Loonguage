@@ -24,12 +24,17 @@ namespace Loonguage {
 		bool operator == (const Symbol_& s) const {
 			return id == s.id && pointer == s.pointer;
 		}
+		SymbolTable<T>* getPointer() const {
+			return pointer;
+		}
 		int getId() const;
 		Symbol_(int, SymbolTable<T>*);
 		Symbol_() : id(0), pointer(NULL) {};
 		//no matter whether REAL_NAME defined, getString() will be defined
 		//that's no the case in SymbolTable
 		T getString() const;
+		bool same(T) const;
+		Symbol_ getWrongType() const;
 	};
 
 	//template class SymbolTable<std::string>;
@@ -45,8 +50,8 @@ namespace Loonguage {
 #ifdef REAL_NAME
 		std::map<int, T> revM;
 #endif // REAL_NAME
-
 	public:
+		Symbol wrongType;
 		SymbolTable() = default;
 
 		Symbol operator [] (const T& t) {

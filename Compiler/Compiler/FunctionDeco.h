@@ -1,10 +1,11 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "NodeFunction.h"
 #include "SymbolTable.h"
 
 namespace Loonguage {
+	class NodeFunction;
+
 	class FunctionDeco
 	{
 		using Symbol = SymbolTable<std::string>::Symbol;
@@ -14,7 +15,7 @@ namespace Loonguage {
 		std::vector<Symbol> paramType;
 		std::vector<Symbol> paramName;
 		NodeFunction* function;
-		std::string nameDeco;
+		Symbol nameDeco;
 		FunctionDeco(NodeFunction*);
 
 		bool operator < (const FunctionDeco& f) const;

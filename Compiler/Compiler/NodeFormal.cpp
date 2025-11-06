@@ -4,19 +4,19 @@ namespace Loonguage {
 		Node(t.line, Node::NdFormal), type(t), name(n)
 	{
 	}
-	void NodeFormal::dump(std::ostream& cout, int indent) const
+	void NodeFormal::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeActual (Type:" << type.getString() 
 			<< ", Name: " << name.getString() << ")" << std::endl;
 	}
-	void NodeFormals::dump(std::ostream& cout, int indent) const
+	void NodeFormals::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeActuals (Size:" << size()
 			<< ")" << std::endl;
 		for (const auto ac : *this)
-			ac->dump(cout, indent + 2);
+			ac->dumpAST(cout, indent + 2);
 	}
 	NodeFormals::NodeFormals(NodeFormal* a):
 		Node(a->getLine(), Node::NodeType::NdFormals)

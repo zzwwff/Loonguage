@@ -7,11 +7,11 @@ namespace Loonguage {
 	{
 	}
 
-	void NodeActual::dump(std::ostream& cout, int indent) const
+	void NodeActual::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeActual" << std::endl;
-		expr->dump(cout, indent + 2);
+		expr->dumpAST(cout, indent + 2);
 	}
 
 	NodeActuals::NodeActuals(NodeActual* n) :
@@ -25,12 +25,12 @@ namespace Loonguage {
 	{
 	}
 
-	void NodeActuals::dump(std::ostream& cout, int indent) const
+	void NodeActuals::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeActuals (Size:" << size()
 			<< ")" << std::endl;
 		for (const auto ac : *this)
-			ac->dump(cout, indent + 2);
+			ac->dumpAST(cout, indent + 2);
 	}
 }

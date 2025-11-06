@@ -9,8 +9,9 @@ namespace Loonguage {
 	public:
 		TokenIden type;
 		TokenIden name;
+		Symbol nameDeco;
 		NodeFormal(TokenIden, TokenIden);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
 	};
 
 	class NodeFormals :
@@ -18,7 +19,7 @@ namespace Loonguage {
 		public Node
 	{
 	public:
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
 		NodeFormals(NodeFormal*);
 		NodeFormals(int);
 	};

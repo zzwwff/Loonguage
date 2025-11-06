@@ -1,7 +1,20 @@
 #include "NodeExpr.h"
+#include "NodeFunction.h"
 namespace Loonguage {
+	Node::Symbol NodeExpr::getType() const
+	{
+		return type;
+	}
 	NodeExpr::NodeExpr(int l, Node::NodeType t) :
 		Node(l, t)
+	{
+
+	}
+
+	void NodeExpr::annotateType(std::map<std::string, int>& numOfSymbol,
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
+		const FunctionMapNameOrdered& functionMap,
+		SemanticContext context, Errors& errs)
 	{
 
 	}
@@ -11,11 +24,29 @@ namespace Loonguage {
 	{
 	}
 
-	void NodeEIden::dump(std::ostream& cout, int indent) const
+	void NodeEIden::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeEIden (Name:" << iden.getString()
 			<< ")" << std::endl;
+	}
+
+	void NodeEIden::annotateType(std::map<std::string, int>& numOfSymbol,
+								 std::map<Symbol, IdenDeco>& nameOfSymbol,
+								 const FunctionMapNameOrdered& functionMap,
+								 SemanticContext context, Errors& errs)
+	{
+		if (nameOfSymbol.find(iden.value) == nameOfSymbol.end())
+		{
+			errs.push_back(Error("", getLine(),
+				std::string("Unknown identifier \"" + iden.value.getString() + "\".")));
+			idenDeco = type = iden.value.getWrongType();
+		}
+		else
+		{
+			idenDeco = nameOfSymbol[iden.value].nameDeco;
+			type = nameOfSymbol[iden.value].type;
+		}
 	}
 
 	NodeEBracket::NodeEBracket(NodeExpr* e):
@@ -23,11 +54,20 @@ namespace Loonguage {
 	{
 	}
 
-	void NodeEBracket::dump(std::ostream& cout, int indent) const
+	void NodeEBracket::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << std::endl;
-		expr->dump(cout, indent + 2);
+		expr->dumpAST(cout, indent + 2);
+	}
+
+	void NodeEBracket::annotateType(std::map<std::string, int>& numOfSymbol,
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
+		const FunctionMapNameOrdered& functionMap,
+		SemanticContext context, Errors& errs)
+	{
+		expr->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
+		type = expr->type;
 	}
 
 	NodeEDispatch::NodeEDispatch(TokenIden i, NodeActuals* a):
@@ -35,11 +75,50 @@ namespace Loonguage {
 	{
 	}
 
-	void NodeEDispatch::dump(std::ostream& cout, int indent) const
+	void NodeEDispatch::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeEDispatch (Iden:" << iden.getString() << ")" << std::endl;
-		actuals->dump(cout, indent + 2);
+		actuals->dumpAST(cout, indent + 2);
+	}
+
+	void NodeEDispatch::annotateType(std::map<std::string, int>& numOfSymbol,
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
+		const FunctionMapNameOrdered& functionMap,
+		SemanticContext context, Errors& errs)
+	{
+		//name of function not found
+		if (functionMap.find(iden.value) == functionMap.end())
+		{
+			errs.push_back(Error("", getLine(), "Unknown function \"" + iden.value.getString() + "\"."));
+			type = iden.value.getWrongType();
+			return;
+		}
+		for (auto actual : *actuals)
+			actual->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
+		//overloading resolution
+		for (const auto& fuc : functionMap.at(iden.value))
+		{
+			const auto& types = fuc->first.paramType;
+			bool signal = (types.size() == actuals->size());
+			//check all types are the same
+			for (int i = 0; i < types.size() && signal; i++)
+			{
+				if (!(types[i] == ((*actuals)[i])->type))
+					signal = false;
+			}
+			//resolution done, update type and idenDeco
+			if (signal)
+			{
+				type = fuc->first.returnType;
+				idenDeco = fuc->first.nameDeco;
+				return;
+			}
+		}
+		//no match for function
+		errs.push_back(Error("", getLine(), "No match for function \"" + iden.value.getString() + "\"."));
+		type = iden.value.getWrongType();
+		return;
 	}
 
 	NodeECalc::NodeECalc(NodeExpr* e1, char c, NodeExpr* e2):
@@ -47,12 +126,12 @@ namespace Loonguage {
 	{
 	}
 
-	void NodeECalc::dump(std::ostream& cout, int indent) const
+	void NodeECalc::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeECalc (Op:" << op << ")" << std::endl;
-		expr1->dump(cout, indent + 2);
-		expr2->dump(cout, indent + 2);
+		expr1->dumpAST(cout, indent + 2);
+		expr2->dumpAST(cout, indent + 2);
 	}
 
 	NodeEEqua::NodeEEqua(NodeExpr* e1, NodeExpr* e2):
@@ -60,12 +139,12 @@ namespace Loonguage {
 	{
 	}
 
-	void NodeEEqua::dump(std::ostream& cout, int indent) const
+	void NodeEEqua::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeEEqua" << std::endl;
-		expr1->dump(cout, indent + 2);
-		expr2->dump(cout, indent + 2);
+		expr1->dumpAST(cout, indent + 2);
+		expr2->dumpAST(cout, indent + 2);
 	}
 
 	NodeELess::NodeELess(NodeExpr* e1, NodeExpr* e2) :
@@ -73,23 +152,23 @@ namespace Loonguage {
 	{
 	}
 
-	void NodeELess::dump(std::ostream& cout, int indent) const
+	void NodeELess::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeELess" << std::endl;
-		expr1->dump(cout, indent + 2);
-		expr2->dump(cout, indent + 2);
+		expr1->dumpAST(cout, indent + 2);
+		expr2->dumpAST(cout, indent + 2);
 	}
 
 	NodeERev::NodeERev(NodeExpr* e):
 		NodeExpr(e->getLine(), Node::NdERev), expr(e)
 	{
 	}
-	void NodeERev::dump(std::ostream& cout, int indent) const
+	void NodeERev::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeERev" << std::endl;
-		expr->dump(cout, indent + 2);
+		expr->dumpAST(cout, indent + 2);
 	}
 
 	NodeEAssign::NodeEAssign(TokenIden i, NodeExpr* e):
@@ -97,11 +176,11 @@ namespace Loonguage {
 	{
 	}
 
-	void NodeEAssign::dump(std::ostream& cout, int indent) const
+	void NodeEAssign::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeEAssign (Iden:" << iden.getString() << ")" << std::endl;
-		expr->dump(cout, indent + 2);
+		expr->dumpAST(cout, indent + 2);
 	}
 
 	NodeEInt::NodeEInt(TokenInt i):
@@ -109,7 +188,7 @@ namespace Loonguage {
 	{
 	}
 
-	void NodeEInt::dump(std::ostream& cout, int indent) const
+	void NodeEInt::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeEInt (Value:" << int_.getValue() << ")" << std::endl;
@@ -119,7 +198,7 @@ namespace Loonguage {
 		NodeExpr(s.line, Node::NdEStr), str(s)
 	{
 	}
-	void NodeEStr::dump(std::ostream& cout, int indent) const
+	void NodeEStr::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeEStr (Value:\"" << str.getValue() << "\")" << std::endl;

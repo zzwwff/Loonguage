@@ -1,5 +1,6 @@
 E:\source\repos\Loonguage\Compiler\Compiler\Error.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\Error.obj
 E:\source\repos\Loonguage\Compiler\Compiler\FunctionDeco.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\FunctionDeco.obj
+E:\source\repos\Loonguage\Compiler\Compiler\IdenDeco.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\IdenDeco.obj
 E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\lex.Loon_.obj
 E:\source\repos\Loonguage\Compiler\Compiler\Compiler.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\Compiler.obj
 E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\LoonParser.obj
@@ -11,6 +12,7 @@ E:\source\repos\Loonguage\Compiler\Compiler\NodeActual.cpp;E:\source\repos\Loong
 E:\source\repos\Loonguage\Compiler\Compiler\NodeFunction.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\NodeFunction.obj
 E:\source\repos\Loonguage\Compiler\Compiler\NodeProgram.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\NodeProgram.obj
 E:\source\repos\Loonguage\Compiler\Compiler\NodeSentence.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\NodeSentence.obj
+E:\source\repos\Loonguage\Compiler\Compiler\SemanticContext.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\SemanticContext.obj
 E:\source\repos\Loonguage\Compiler\Compiler\SymbolTable.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\SymbolTable.obj
 E:\source\repos\Loonguage\Compiler\Compiler\Token.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\Token.obj
 E:\source\repos\Loonguage\Compiler\Compiler\TokenIden.cpp;E:\source\repos\Loonguage\Compiler\Compiler\x64\Debug\TokenIden.obj

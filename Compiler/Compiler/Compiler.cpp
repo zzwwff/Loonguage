@@ -1,4 +1,5 @@
 #include "Compiler.h"
+#include "IdenDeco.h"
 
 namespace Loonguage {
 	void Compiler::registerDefaultTypes()
@@ -53,8 +54,14 @@ namespace Loonguage {
 				errs.push_back(Error("Semantic Analysis", function->getLine(), "Function \"" + funcDeco.name.getString() + "\" redefined."));
 			}
 			if (valid)
+			{
 				functionDeco[funcDeco] = 1;
+			}
 		}
+		//sort all the decorated name by function name
+		//for overload resolution
+		for (auto iter = functionDeco.begin(); iter != functionDeco.end(); iter++)
+			functionDecoNameOrdered[iter->first.name].push_back(iter);
 	}
 
 	Compiler::Compiler(std::istream& i, std::ostream& o1, std::ostream& o2, std::ostream& o3, std::ostream& o4):
@@ -82,7 +89,7 @@ namespace Loonguage {
 		else
 		{
 			infoOut << "Lexical and syntax analysis are implemented successfully." << std::endl;
-			program->dump(lexSynOut, 0);
+			program->dumpAST(lexSynOut, 0);
 			return true;
 		}
 
@@ -103,20 +110,33 @@ namespace Loonguage {
 		functionDecoration();
 
 		//Phase 3-3: type check
+		//set wrong type
+		idenTable.wrongType = idenTable.addSymbol("@error");
 		//traverse the AST upside down and annotate type downside up
+		//show how many times has symbol@type be used
+		std::map<std::string, int> numOfSymbol;
+		//show what is the current implication of symbol
+		std::map<Symbol, Symbol> decoOfSymbol;
+		//record nearest function and while(used for continue/return/break)
+		SemanticContext context = { Symbol(), NULL, NULL };
+		//annotate from root
+		program->annotateType(numOfSymbol, decoOfSymbol,functionDecoNameOrdered, context, errs);
 
-
+		//semantic analysis completed
 		if (errs.size() == 0)
 			semOut << "Semantic analysis are implemented successfully." << std::endl;
 		else
 		{
 			semOut << "Compiling halted due to error(s) in semantic analysis." << std::endl;
+			for (auto& err : errs)
+				if (err.msg.size() == 0)
+					err.msg = "Semantic Analysis";
 			errs.dump(semOut);
 		}
 		//debug == 1: Output Debug
 		semOut << "Function with decorated name:" << std::endl;
 		for (auto func : functionDeco)
-			semOut << func.first.nameDeco << std::endl;
+			semOut << func.first.nameDeco.getString() << std::endl;
 		semOut << std::endl;
 		return errs.size() == 0;
 	}

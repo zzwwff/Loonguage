@@ -1,5 +1,11 @@
 #pragma once
 #include <iostream>
+#include <map>
+#include "IdenDeco.h"
+#include "SymbolTable.h"
+#include "FunctionDeco.h"
+#include "Error.h"
+#include "SemanticContext.h"
 namespace Loonguage {
 	class Node
 	{
@@ -35,6 +41,8 @@ namespace Loonguage {
 			NdActuals,
 			NdEStr,
 		};
+		using Symbol = SymbolTable<std::string>::Symbol;
+		using FunctionMapNameOrdered = std::map<Symbol, std::vector<std::map<FunctionDeco, int>::iterator>>;
 
 	protected:
 		int line;
@@ -42,10 +50,11 @@ namespace Loonguage {
 		void indent(std::ostream&, int) const;
 	public:
 		
-		int getLine();
+		int getLine() const;
 		Node(int l, NodeType nt);
 		Node();
-		virtual void dump(std::ostream&, int) const;
+		virtual void dumpAST(std::ostream&, int) const;
+		virtual void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 
 };

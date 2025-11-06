@@ -15,8 +15,8 @@ namespace Loonguage {
 		NodeFormals* formals;
 		NodeSentence* sentence;
 		NodeFunction(TokenIden, TokenIden, NodeFormals*, NodeSentence*);
-		void dump(std::ostream&, int) const;
-		std::vector<SymbolTable<std::string>::Symbol> getSignature() const;
+		void dumpAST(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 
 	class NodeFunctions :
@@ -24,8 +24,9 @@ namespace Loonguage {
 		public Node
 	{
 	public:
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
 		NodeFunctions(NodeFunction*);
 		NodeFunctions(int);
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 }

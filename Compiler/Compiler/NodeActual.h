@@ -10,8 +10,9 @@ namespace Loonguage {
 	{
 		NodeExpr* expr;
 	public:
+		Symbol type;
 		NodeActual(NodeExpr*);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
 	};
 
 	class NodeActuals :
@@ -21,7 +22,7 @@ namespace Loonguage {
 	public:
 		NodeActuals(NodeActual*);
 		NodeActuals(int);
-		void dump(std::ostream&, int) const;
+		void dumpAST(std::ostream&, int) const;
 	};
 }
 

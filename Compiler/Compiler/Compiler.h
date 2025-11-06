@@ -27,6 +27,9 @@ namespace Loonguage {
 		//Phase 3
 		//function with decorated name 
 		std::map<FunctionDeco, int> functionDeco;
+		using Iter = decltype(functionDeco)::iterator;
+		//function with decorated name, ordered in original name
+		std::map<Symbol, std::vector<Iter>> functionDecoNameOrdered;
 		//all types
 		std::map<Symbol, int> types;
 		void registerDefaultTypes();

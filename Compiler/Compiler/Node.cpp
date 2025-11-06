@@ -7,7 +7,7 @@ namespace Loonguage {
 			cout << ' ';
 	}
 
-	int Node::getLine()
+	int Node::getLine() const
 	{
 		return line;
 	}
@@ -22,10 +22,18 @@ namespace Loonguage {
 	{
 	}
 
-	void Node::dump(std::ostream& cout, int indent) const
+	void Node::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": Node" << std::endl;
 	}
+
+	void Node::annotateType(std::map<std::string, int>& numOfSymbol, 
+							std::map<Symbol, IdenDeco>& nameOfSymbol, 
+							const FunctionMapNameOrdered& functionMap, 
+							SemanticContext context, Errors& errs)
+	{
+	}
+
 }
 

@@ -26,7 +26,7 @@
   #include "NodeFunction.h"
   #include "NodeProgram.h"
   #include "NodeSentence.h"
-    #include "Error.h"
+  #include "Error.h"
 
   namespace LoonScanner { 
     class Scanner;
@@ -40,7 +40,6 @@
   #include "LoonParser.hpp"
   #include "location.hh"
   #include "NodeProgram.h"
-  
   class NodeProgram;
   static LoonScanner::Parser::symbol_type yylex(LoonScanner::Scanner& scanner, 
                                                 Loonguage::SymbolTable<std::string>& idenTable, 
