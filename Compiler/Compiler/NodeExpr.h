@@ -4,11 +4,15 @@
 #include "NodeActual.h"
 #include "TokenInt.h"
 #include "TokenString.h"
+#include "SymbolTable.h"
 namespace Loonguage {
 	class NodeExpr :
 		public Node
 	{
+		using Symbol = SymbolTable<std::string>::Symbol;
+		Symbol type;
 	public:
+		
 		NodeExpr(int, Node::NodeType);
 	};
 

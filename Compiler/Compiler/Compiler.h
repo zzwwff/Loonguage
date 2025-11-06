@@ -13,12 +13,13 @@ namespace Loonguage {
 
 	class Compiler
 	{
+		using Symbol = SymbolTable<std::string>::Symbol;
 		//Phase 1 ~ 2
 		//for lexical and syntax analysis
 		LoonScanner::Scanner scanner;
 		LoonScanner::Parser parser;
 		//syntax table
-		Loonguage::SymbolTable<std::string> strTable, idenTable;
+		SymbolTable<std::string> strTable, idenTable;
 		//root of AST tree
 		NodeProgram* program;
 
@@ -26,7 +27,10 @@ namespace Loonguage {
 		//Phase 3
 		//function with decorated name 
 		std::map<FunctionDeco, int> functionDeco;
-
+		//all types
+		std::map<Symbol, int> types;
+		void registerDefaultTypes();
+		void functionDecoration();
 
 		//common toolkits
 		Errors errs;

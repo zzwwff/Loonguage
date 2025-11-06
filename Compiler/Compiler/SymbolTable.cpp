@@ -2,12 +2,15 @@
 #include <iostream>
 namespace Loonguage{
 
-
 	template<typename T>
-	inline Symbol_<T> SymbolTable<T>::operator[](const T& t) const
+	Symbol_<T>::Symbol_(int i, SymbolTable<T>* p) :
+		id(i), pointer(p)
 	{
-		return Symbol(m.at(t), this);
+
 	}
+
+	//WATCH OUT!
+	//some definitions are put in header, turn to SymbolTable.h for more detals
 
 	template<typename T>
 	Symbol_<T> SymbolTable<T>::addSymbol(const T& t)
@@ -30,23 +33,11 @@ namespace Loonguage{
 	}
 
 	template<typename T>
-	bool Symbol_<T>::operator<(const Symbol_& s) const
-	{
-		return id < s.id;
-	}
-
-	template<typename T>
 	inline int Symbol_<T>::getId() const
 	{
 		return id;
 	}
 
-	template<typename T>
-	Symbol_<T>::Symbol_(int i, SymbolTable<T>* p) :
-		id(i), pointer(p)
-	{
-
-	}
 
 #ifdef REAL_NAME
 	template<typename T>

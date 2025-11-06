@@ -1,6 +1,62 @@
 #include "Compiler.h"
 
 namespace Loonguage {
+	void Compiler::registerDefaultTypes()
+	{
+		types[idenTable.addSymbol("int")] = 1;
+		types[idenTable.addSymbol("string")] = 1;
+		//symbol 'void' will be used
+		//but void is not a kind of type
+		idenTable.addSymbol("void");
+	}
+
+	void Compiler::functionDecoration()
+	{
+		NodeFunctions* functions = program->functions;
+		for (const auto& function : *functions)
+		{
+			bool valid = true;
+			FunctionDeco funcDeco(function);
+			//check parameters type
+			for (const auto& t : funcDeco.paramType)
+			{
+				if (types.find(t) == types.end())
+				{
+					errs.push_back(Error("Semantic Analysis", function->getLine(), "Unknown parameter type \"" + t.getString() + "\" in function \"" + funcDeco.name.getString() + "\"."));
+					valid = false;
+				}
+			}
+			//check names are distinct
+			std::map<Symbol, int> names;
+			for (const auto& t : funcDeco.paramName)
+			{
+				if (names.find(t) != names.end())
+				{
+					errs.push_back(Error("Semantic Analysis", function->getLine(), "Redefined parameter name \"" + t.getString() + "\" in function \"" + funcDeco.name.getString() + "\"."));
+					valid = false;
+				}
+				else names[t] = 1;
+			}
+			//check return type
+			if (types.find(funcDeco.returnType) == types.end())
+			{
+				if (!(funcDeco.returnType == idenTable["void"]))
+				{
+					errs.push_back(Error("Semantic Analysis", function->getLine(), "Unknown return type \"" + funcDeco.returnType.getString() + "\" in function \"" + funcDeco.name.getString() + "\"."));
+					valid = false;
+				}
+
+			}
+			//check redefined functions(same function with same parameter type)
+			if (functionDeco.find(funcDeco) != functionDeco.end())
+			{
+				errs.push_back(Error("Semantic Analysis", function->getLine(), "Function \"" + funcDeco.name.getString() + "\" redefined."));
+			}
+			if (valid)
+				functionDeco[funcDeco] = 1;
+		}
+	}
+
 	Compiler::Compiler(std::istream& i, std::ostream& o1, std::ostream& o2, std::ostream& o3, std::ostream& o4):
 		scanner(), 
 		parser(scanner, idenTable, strTable, &program, errs),
@@ -32,42 +88,23 @@ namespace Loonguage {
 
 	}
 
-	//VecLess is used to compare signature of functions
-	//It only compare whether the type of all parameters are all the same
-	template <typename T>
-	class VecLess {
-	public:
-		bool operator() (const T& v1, const T& v2) const
-		{
-			for (int i = 1; i < v1.size() && v2.size(); i++)
-				if (v1[i] < v2[i])
-					return true;
-				else if (v1[i] > v2[i])
-					return false;
-			if (v1.size() < v2.size())
-				return true;
-			if (v1.size() > v2.size())
-				return false;
-		}
-	};
 
 	bool Compiler::semanticAnalysis(int debug = 0)
 	{
-		using Symbol = decltype(idenTable)::Symbol;
 		//Phase 3: Semantic analysis
 		//Multiple tasks will be executed in semantic analysis
-		//Phase 3-1: Function Decoration
-		NodeFunctions* functions = program->functions;
-		for (const auto& function : *functions)
-		{
-			FunctionDeco funcDeco(function);
-			if (functionDeco.find(funcDeco) != functionDeco.end())
-			{
-				errs.push_back(Error("Semantic Analysis", function->getLine(), ""));
-			}
-			functionDeco[funcDeco] = 1;
-		}
-		
+		//Phase 3-1: Collect all types
+		registerDefaultTypes();
+
+		//Phase 3-2: Function Decoration
+		//check that types of formals are valid
+		//check that return type is void or valid type
+		//check that names of formals are distinct
+		functionDecoration();
+
+		//Phase 3-3: type check
+		//traverse the AST upside down and annotate type downside up
+
 
 		if (errs.size() == 0)
 			semOut << "Semantic analysis are implemented successfully." << std::endl;
