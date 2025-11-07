@@ -1,4 +1,5 @@
 #include "NodeSentence.h"
+#include "NodeFunction.h"
 namespace Loonguage
 {
 	NodeSentence::NodeSentence(int i):
@@ -11,7 +12,7 @@ namespace Loonguage
 	}
 
 	void NodeSentence::annotateType(std::map<std::string, int>& numOfSymbol,
-									std::map<Symbol, Symbol>& nameOfSymbol,
+									std::map<Symbol, IdenDeco>& nameOfSymbol,
 									const FunctionMapNameOrdered& functionMap,
 									SemanticContext context, Errors& errs)
 	{
@@ -24,11 +25,13 @@ namespace Loonguage
 	}
 
 	void NodeSIf::annotateType(std::map<std::string, int>& numOfSymbol,
-							   std::map<Symbol, Symbol>& nameOfSymbol,
+							   std::map<Symbol, IdenDeco>& nameOfSymbol,
 							   const FunctionMapNameOrdered& functionMap,
 							   SemanticContext context, Errors& errs)
 	{
 		predicate->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
+		//if will start a new scope even though there's no block
+		std::map<Symbol, IdenDeco> currentNameOfSymbol = nameOfSymbol;
 		sentence->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
 		Symbol pt = predicate->getType();
 		if (!pt.same("int"))
@@ -45,6 +48,15 @@ namespace Loonguage
 		sentence->dumpAST(cout, indent + 2);
 	}
 
+	void NodeSIf::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSIf" << std::endl;
+		predicate->dumpSem(cout, indent + 2);
+		sentence->dumpSem(cout, indent + 2);
+	}
+
+
 	NodeSWhile::NodeSWhile(NodeExpr* e, NodeSentence* s) :
 		NodeSentence(e->getLine(), Node::NdSWhile), predicate(e), sentence(s)
 	{
@@ -58,13 +70,24 @@ namespace Loonguage
 		sentence->dumpAST(cout, indent + 2);
 	}
 
+	void NodeSWhile::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSWhile" << std::endl;
+		predicate->dumpSem(cout, indent + 2);
+		sentence->dumpSem(cout, indent + 2);
+	}
+
 	void NodeSWhile::annotateType(std::map<std::string, int>& numOfSymbol,
-								  std::map<Symbol, Symbol>& nameOfSymbol,
+								  std::map<Symbol, IdenDeco>& nameOfSymbol,
 								  const FunctionMapNameOrdered& functionMap,
 								  SemanticContext context, Errors& errs)
 	{
 		predicate->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
-		sentence->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
+		context.pwhile = this;
+		//if will start a new scope even though there's no block
+		std::map<Symbol, IdenDeco> currentNameOfSymbol = nameOfSymbol;
+		sentence->annotateType(numOfSymbol, currentNameOfSymbol, functionMap, context, errs);
 		Symbol pt = predicate->getType();
 		if (!pt.same("int"))
 			errs.push_back(Error("Semantic Analysis",
@@ -85,14 +108,21 @@ namespace Loonguage
 		sentences->dumpAST(cout, indent + 2);
 	}
 
+	void NodeSBlock::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSBlock" << std::endl;
+		sentences->dumpSem(cout, indent + 2);
+	}
+
 	void NodeSBlock::annotateType(std::map<std::string, int>& numOfSymbol,
-								  std::map<Symbol, Symbol>& nameOfSymbol,
+								  std::map<Symbol, IdenDeco>& nameOfSymbol,
 								  const FunctionMapNameOrdered& functionMap,
 								  SemanticContext context, Errors& errs)
 	{
 		//inside a block is a new scope
 		//so have to set new nameOfSymbol context
-		std::map<Symbol, Symbol>& currentNameOfSymbol = nameOfSymbol;
+		std::map<Symbol, IdenDeco> currentNameOfSymbol = nameOfSymbol;
 		sentences->annotateType(numOfSymbol, currentNameOfSymbol, functionMap, context, errs);
 	}
 
@@ -100,6 +130,7 @@ namespace Loonguage
 		NodeSentence(t.line, Node::NdSDecl), type(t), name(n)
 	{
 	}
+
 	void NodeSDecl::dumpAST(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
@@ -107,8 +138,15 @@ namespace Loonguage
 			<< ", Name: " << name.getString() << ")" << std::endl;
 	}
 
+	void NodeSDecl::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSDecl (Type: " << type.getString()
+			<< ", NameDeco: " << nameDeco.getString() << ")" << std::endl;
+	}
+
 	void NodeSDecl::annotateType(std::map<std::string, int>& numOfSymbol,
-								 std::map<Symbol, Symbol>& nameOfSymbol,
+								 std::map<Symbol, IdenDeco>& nameOfSymbol,
 								 const FunctionMapNameOrdered& functionMap,
 								 SemanticContext context, Errors& errs)
 	{
@@ -116,7 +154,7 @@ namespace Loonguage
 		Symbol name = this->name.value;
 		Symbol type = this->type.value;
 		//decide whether type is valid
-		if (functionMap.find(type) == functionMap.end())
+		if (context.types->find(type) == context.types->end())
 			errs.push_back(Error("", getLine(),
 				"Unknown type \"" + type.getString() + "\" of variable \"" + name.getString() + "\"."));
 		else
@@ -125,7 +163,7 @@ namespace Loonguage
 			IdenDeco deco = IdenDeco(name, type, numOfSymbol);
 			//step 2: load nameDeco into nameOfSymbol
 			nameDeco = deco.nameDeco;
-			nameOfSymbol[name] = deco.nameDeco;
+			nameOfSymbol[name] = deco;
 		}
 
 	}
@@ -136,6 +174,14 @@ namespace Loonguage
 		cout << "#" << line << ": NodeSentences (Size: " << size() << ")" << std::endl;
 		for (const auto& e : *this)
 			e->dumpAST(cout, indent + 2);
+	}
+
+	void NodeSentences::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSentences (Size: " << size() << ")" << std::endl;
+		for (const auto& e : *this)
+			e->dumpSem(cout, indent + 2);
 	}
 
 	NodeSentences::NodeSentences(NodeSentence* s):
@@ -150,7 +196,7 @@ namespace Loonguage
 	}
 
 	void NodeSentences::annotateType(std::map<std::string, int>& numOfSymbol,
-									std::map<Symbol, Symbol>& nameOfSymbol, 
+									std::map<Symbol, IdenDeco>& nameOfSymbol, 
 									const FunctionMapNameOrdered& functionMap, 
 									SemanticContext context, Errors& errs)
 	{
@@ -172,8 +218,15 @@ namespace Loonguage
 		expr->dumpAST(cout, indent + 2);
 	}
 
+	void NodeSExpr::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSExpr" << std::endl;
+		expr->dumpSem(cout, indent + 2);
+	}
+
 	void NodeSExpr::annotateType(std::map<std::string, int>& numOfSymbol,
-									std::map<Symbol, Symbol>& nameOfSymbol, 
+									std::map<Symbol, IdenDeco>& nameOfSymbol, 
 									const FunctionMapNameOrdered& functionMap, 
 									SemanticContext context, Errors& errs)
 	{
@@ -192,8 +245,15 @@ namespace Loonguage
 		expr->dumpAST(cout, indent + 2);
 	}
 
+	void NodeSReturn::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSReturn (Return position: #" << pfunction->getLine() << ")" << std::endl;
+		expr->dumpSem(cout, indent + 2);
+	}
+
 	void NodeSReturn::annotateType(std::map<std::string, int>& numOfSymbol,
-								   std::map<Symbol, Symbol>& nameOfSymbol,
+								   std::map<Symbol, IdenDeco>& nameOfSymbol,
 								   const FunctionMapNameOrdered& functionMap,
 								   SemanticContext context, Errors& errs)
 	{
@@ -220,8 +280,14 @@ namespace Loonguage
 		cout << "#" << line << ": NodeSContinue" << std::endl;
 	}
 
+	void NodeSContinue::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSContinue (Return position: #" << pwhile->getLine() << ")" << std::endl;
+	}
+
 	void NodeSContinue::annotateType(std::map<std::string, int>& numOfSymbol,
-		std::map<Symbol, Symbol>& nameOfSymbol,
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
 		const FunctionMapNameOrdered& functionMap,
 		SemanticContext context, Errors& errs)
 	{
@@ -243,8 +309,14 @@ namespace Loonguage
 		cout << "#" << line << ": NodeSBreak" << std::endl;
 	}
 
+	void NodeSBreak::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSBreak (Return position: #" << pwhile->getLine() << ")" << std::endl;
+	}
+
 	void NodeSBreak::annotateType(std::map<std::string, int>& numOfSymbol,
-		std::map<Symbol, Symbol>& nameOfSymbol,
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
 		const FunctionMapNameOrdered& functionMap,
 		SemanticContext context, Errors& errs)
 	{
@@ -252,7 +324,7 @@ namespace Loonguage
 		if (context.pwhile == NULL)
 			errs.push_back(Error("", getLine(),
 				std::string("\"break\" should be used inside a loop.")));
-		pwhile = context.pwhile;
+		else pwhile = context.pwhile;
 	}
 }
 

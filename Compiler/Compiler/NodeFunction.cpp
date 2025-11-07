@@ -13,22 +13,33 @@ namespace Loonguage {
 		sentence->dumpAST(cout, indent + 2);
 	}
 
+	void NodeFunction::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeFunction (Return Type: " << returnType.getString()
+			<< ", NameDeco: " << nameDeco.getString() << ")" << std::endl;
+		formals->dumpSem(cout, indent + 2);
+		sentence->dumpSem(cout, indent + 2);
+	}
+
+
 	void NodeFunction::annotateType(std::map<std::string, int>& numOfSymbol,
-									std::map<Symbol, Symbol>& nameOfSymbol, 
+									std::map<Symbol, IdenDeco>& nameOfSymbol, 
 									const FunctionMapNameOrdered& functionMap, 
 									SemanticContext context, Errors& errs)
 	{
-		std::map<Symbol, Symbol> currentNameOfSymbol = nameOfSymbol;
+		std::map<Symbol, IdenDeco> currentNameOfSymbol = nameOfSymbol;
 		//add all the formals
 		for (auto formal : *formals)
 		{
 			//step 1: get name@type@id
+			//we can make sure that type is valid because it is checked in Compiler::functionDecoration
 			Symbol name = formal->name.value;
 			Symbol type = formal->type.value;
 			IdenDeco deco = IdenDeco(name, type, numOfSymbol);
 			//step 2: load nameDeco into formal and currentNameOfSymbol
 			formal->nameDeco = deco.nameDeco;
-			currentNameOfSymbol[name] = deco.nameDeco;
+			currentNameOfSymbol[name] = deco;
 		}
 		//update context
 		context.pfunction = this;
@@ -47,6 +58,16 @@ namespace Loonguage {
 		for (const auto ac : *this)
 			ac->dumpAST(cout, indent + 2);
 	}
+
+	void NodeFunctions::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeFunctions (Size:" << size()
+			<< ")" << std::endl;
+		for (const auto ac : *this)
+			ac->dumpSem(cout, indent + 2);
+	}
+
 	NodeFunctions::NodeFunctions(NodeFunction* f):
 		Node(f->getLine(), Node::NdFormals)
 	{
@@ -59,7 +80,7 @@ namespace Loonguage {
 	}
 
 	void NodeFunctions::annotateType(std::map<std::string, int>& numOfSymbol,
-									 std::map<Symbol, Symbol>& nameOfSymbol, 
+									 std::map<Symbol, IdenDeco>& nameOfSymbol, 
 									 const FunctionMapNameOrdered& functionMap, 
 									 SemanticContext context, Errors& errs)
 	{

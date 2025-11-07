@@ -43,7 +43,7 @@ DIGIT {UNSIGNEDDIGIT}+
 IDEN [a-zA-Z][a-zA-Z0-9]*
 
 NEW_LINE \n
-BLANK [" "\f\r\t\v]+
+BLANK [ \f\r\t\v]+
 
 
 
@@ -77,6 +77,12 @@ BLANK [" "\f\r\t\v]+
     BEGIN(STRING);
 }
 
+
+<STRING>\" {
+    BEGIN(INITIAL);
+    return Parser::make_STR(Loonguage::TokenString(loc.begin.line, strBuffer, strTable), loc); 
+}
+
 <STRING>\\[tn] {
     if (yytext[1] == 'n')
     	strBuffer.push_back('\n');
@@ -97,10 +103,6 @@ BLANK [" "\f\r\t\v]+
     loc.step();
 }
 
-<STRING>\" {
-    BEGIN(INITIAL);
-    return Parser::make_STR(Loonguage::TokenString(loc.begin.line, strBuffer, strTable), loc); 
-}
 
 
 <INITIAL>{NEW_LINE}  {     loc.lines(yyleng); 

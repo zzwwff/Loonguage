@@ -14,7 +14,7 @@ namespace Loonguage {
 	void Compiler::functionDecoration()
 	{
 		NodeFunctions* functions = program->functions;
-		for (const auto& function : *functions)
+		for (auto& function : *functions)
 		{
 			bool valid = true;
 			FunctionDeco funcDeco(function);
@@ -56,6 +56,7 @@ namespace Loonguage {
 			if (valid)
 			{
 				functionDeco[funcDeco] = 1;
+				function->nameDeco = funcDeco.nameDeco;
 			}
 		}
 		//sort all the decorated name by function name
@@ -116,11 +117,11 @@ namespace Loonguage {
 		//show how many times has symbol@type be used
 		std::map<std::string, int> numOfSymbol;
 		//show what is the current implication of symbol
-		std::map<Symbol, Symbol> decoOfSymbol;
+		std::map<Symbol, IdenDeco> decoOfSymbol;
 		//record nearest function and while(used for continue/return/break)
-		SemanticContext context = { Symbol(), NULL, NULL };
+		SemanticContext context = { Symbol(), NULL, NULL, &idenTable, &types };
 		//annotate from root
-		program->annotateType(numOfSymbol, decoOfSymbol,functionDecoNameOrdered, context, errs);
+		program->annotateType(numOfSymbol, decoOfSymbol, functionDecoNameOrdered, context, errs);
 
 		//semantic analysis completed
 		if (errs.size() == 0)
@@ -129,11 +130,12 @@ namespace Loonguage {
 		{
 			semOut << "Compiling halted due to error(s) in semantic analysis." << std::endl;
 			for (auto& err : errs)
-				if (err.msg.size() == 0)
-					err.msg = "Semantic Analysis";
+				if (err.status.size() == 0)
+					err.status = "Semantic Analysis";
 			errs.dump(semOut);
 		}
 		//debug == 1: Output Debug
+		program->dumpSem(semOut, 0);
 		semOut << "Function with decorated name:" << std::endl;
 		for (auto func : functionDeco)
 			semOut << func.first.nameDeco.getString() << std::endl;

@@ -28,6 +28,12 @@ namespace Loonguage {
 		cout << "#" << line << ": Node" << std::endl;
 	}
 
+	void Node::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": Node" << std::endl;
+	}
+
 	void Node::annotateType(std::map<std::string, int>& numOfSymbol, 
 							std::map<Symbol, IdenDeco>& nameOfSymbol, 
 							const FunctionMapNameOrdered& functionMap, 

@@ -14,7 +14,7 @@ namespace Loonguage {
 
 		NodeSentence(int);
 		NodeSentence(int, Node::NodeType);
-		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 
 	};
 
@@ -24,9 +24,10 @@ namespace Loonguage {
 	{
 	public:
 		void dumpAST(std::ostream&, int) const;
+		void dumpSem(std::ostream&, int) const;
 		NodeSentences(NodeSentence*);
 		NodeSentences(int);
-		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 
 	};
 
@@ -37,7 +38,8 @@ namespace Loonguage {
 	public:
 		NodeSExpr(NodeExpr*);
 		void dumpAST(std::ostream&, int) const;
-		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void dumpSem(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 
 	};
 
@@ -49,7 +51,8 @@ namespace Loonguage {
 	public:
 		NodeSIf(NodeExpr*, NodeSentence*);
 		void dumpAST(std::ostream&, int) const;
-		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void dumpSem(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 
 	};
 
@@ -61,7 +64,8 @@ namespace Loonguage {
 	public:
 		NodeSWhile(NodeExpr*, NodeSentence*);
 		void dumpAST(std::ostream&, int) const;
-		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void dumpSem(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 
 	class NodeSBlock :
@@ -71,7 +75,9 @@ namespace Loonguage {
 	public:
 		NodeSBlock(NodeSentences*);
 		void dumpAST(std::ostream&, int) const;
-		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void dumpSem(std::ostream&, int) const;
+
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 
 	};
 
@@ -84,7 +90,9 @@ namespace Loonguage {
 	public:
 		NodeSDecl(TokenIden, TokenIden);
 		void dumpAST(std::ostream&, int) const;
-		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void dumpSem(std::ostream&, int) const;
+
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 
 	};
 
@@ -96,26 +104,31 @@ namespace Loonguage {
 	public:
 		NodeSReturn(NodeExpr*);
 		void dumpAST(std::ostream&, int) const;
-		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void dumpSem(std::ostream&, int) const;
+
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 
 	class NodeSContinue :
 		public NodeSentence
 	{
-		NodeWhile* pwhile;
+		NodeSWhile* pwhile;
 	public:
 		NodeSContinue(int);
 		void dumpAST(std::ostream&, int) const;
-		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void dumpSem(std::ostream&, int) const;
+
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 
 	class NodeSBreak :
 		public NodeSentence
 	{
-		NodeWhile* pwhile;
+		NodeSWhile* pwhile;
 	public:
 		NodeSBreak(int);
 		void dumpAST(std::ostream&, int) const;
-		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void dumpSem(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 }

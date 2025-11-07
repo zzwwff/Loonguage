@@ -1,16 +1,20 @@
 #pragma once
 #include "SymbolTable.h"
+#include <map>
 namespace Loonguage {
 	class NodeFunction;
-	class NodeWhile;
+	class NodeSWhile;
 
 
 	class SemanticContext
 	{
 	public:
-		SymbolTable<std::string>::Symbol returnType;
+		using Symbol = SymbolTable<std::string>::Symbol;
+		Symbol returnType;
 		NodeFunction* pfunction;
-		NodeWhile* pwhile;
+		NodeSWhile* pwhile;
+		SymbolTable<std::string>* idenTable;
+		std::map<Symbol, int>* types;
 	};
 }
 

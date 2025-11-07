@@ -11,6 +11,7 @@ namespace Loonguage {
 		Symbol nameDeco;
 		bool operator < (const IdenDeco&) const;
 		IdenDeco(Symbol n, Symbol t, std::map<std::string, int>&);
+		IdenDeco() {}
 	};
 
 }

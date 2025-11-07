@@ -54,6 +54,8 @@ namespace Loonguage {
 		Node(int l, NodeType nt);
 		Node();
 		virtual void dumpAST(std::ostream&, int) const;
+		virtual void dumpSem(std::ostream&, int) const;
+
 		virtual void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 

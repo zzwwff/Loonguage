@@ -12,11 +12,13 @@ namespace Loonguage {
 	public:
 		TokenIden returnType;
 		TokenIden name;
+		Symbol nameDeco;
 		NodeFormals* formals;
 		NodeSentence* sentence;
 		NodeFunction(TokenIden, TokenIden, NodeFormals*, NodeSentence*);
 		void dumpAST(std::ostream&, int) const;
-		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void dumpSem(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 
 	class NodeFunctions :
@@ -25,8 +27,9 @@ namespace Loonguage {
 	{
 	public:
 		void dumpAST(std::ostream&, int) const;
+		void dumpSem(std::ostream&, int) const;
 		NodeFunctions(NodeFunction*);
 		NodeFunctions(int);
-		void annotateType(std::map<std::string, int>&, std::map<Symbol, Symbol>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 	};
 }

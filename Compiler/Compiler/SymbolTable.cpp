@@ -54,21 +54,6 @@ namespace Loonguage{
 		return pointer->getString(id);
 	}
 
-	template<typename T>
-	bool Symbol_<T>::same(T t) const
-	{
-		if (*this == pointer->wrongType)
-			return true;
-		if (!pointer->exist(T))
-			return false;
-		return (*pointer)[t] == *this;
-	}
-
-	template<typename T>
-	Symbol_<T> Symbol_<T>::getWrongType() const
-	{
-		return pointer->wrongType;
-	}
 
 #else // REAL_NAME
 

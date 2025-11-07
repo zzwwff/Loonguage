@@ -33,8 +33,16 @@ namespace Loonguage {
 		//no matter whether REAL_NAME defined, getString() will be defined
 		//that's no the case in SymbolTable
 		T getString() const;
-		bool same(T) const;
-		Symbol_ getWrongType() const;
+		bool same(T t) const {
+			if (*this == pointer->wrongType)
+				return true;
+			if (!pointer->exist(t))
+				return false;
+			return (*pointer)[t] == *this;
+		}
+		Symbol_ getWrongType() const {
+			return pointer->wrongType;
+		}
 	};
 
 	//template class SymbolTable<std::string>;
