@@ -48,6 +48,31 @@ namespace Loonguage {
 		sentence->annotateType(numOfSymbol, currentNameOfSymbol, functionMap, context, errs);
 	}
 
+	void NodeFunction::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		//initiate frame
+		codes.push_back(Code(Code::PUSH, Reg::rfp));
+		codes.push_back(Code(Code::MOVRR, Reg::rfp, Reg::rsp));
+		//offset of formals from %rfp
+		for (int i = 0; i < formals->size(); i++)
+			context.delta[(*formals)[i]->nameDeco] = i;
+		//push back all parameters
+		codes.push_back(Code(Code::MOVRI, Reg::rtm, formals->size() * context.width));
+		codes.push_back(Code(Code::SUB, Reg::rsp, Reg::rtm));
+		sentence->codeGen(context, codes);
+		std::string returnStr = std::string("return@") + nameDeco.getString();
+		Label returnLabel(context.allocator->addName(returnStr));
+		context.returnLabel = returnLabel;
+		//pop back all parameters
+		//attach returnLabel to the first instruction, make sure that %rax is set at 'return'
+		codes.push_back(Code(Code::MOVRI, Reg::rtm, formals->size() * context.width));
+		codes.back().addLabel(returnLabel);
+		codes.push_back(Code(Code::ADD, Reg::rsp, Reg::rtm));
+		//restore frame
+		codes.push_back(Code(Code::POP, Reg::rfp));
+		codes.push_back(Code(Code::RET));
+	}
+
 
 
 	void NodeFunctions::dumpAST(std::ostream& cout, int indent) const
@@ -89,4 +114,11 @@ namespace Loonguage {
 		for (auto function : *this)
 			function->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
 	}
+
+	void NodeFunctions::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		for (auto function : *this)
+			function->codeGen(context, codes);
+	}
+
 }

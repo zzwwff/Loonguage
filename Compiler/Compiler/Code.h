@@ -1,0 +1,52 @@
+#pragma once
+#include "Label.h"
+#include "Register.h"
+#include "Address.h"
+#include <vector>
+namespace Loonguage {
+	class Code
+	{
+	public:
+		//all label that points at this code
+		std::vector<Label> labelAttached;
+		//it should begin with PUSH and end with NOP
+		enum CodeType {
+			PUSH,
+			POP,
+			CALL,
+			RET,
+			MOVRI,
+			MOVRM,
+			MOVMR,
+			MOVRR,
+			LEA,
+			ADD,
+			SUB,
+			MUL,
+			DIV,
+			AND,
+			OR,
+			XOR,
+			NOT,
+			NOP,
+			JMP,
+			JMZ
+		};
+		CodeType codeType;
+		Register::Registers r1;
+		Register::Registers r2;
+		//label as its parameter
+		Label label;
+		Address address;
+		unsigned int immediate;
+		Code(CodeType c, Register::Registers);
+		Code(CodeType c, Label);
+		Code(CodeType c);
+		Code(CodeType c, Register::Registers, unsigned int);
+		Code(CodeType c, Register::Registers, Address);
+		Code(CodeType c, Address, Register::Registers);
+		Code(CodeType c, Register::Registers, Register::Registers);
+		void addLabel(Label);
+	};
+}
+

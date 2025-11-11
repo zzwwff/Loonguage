@@ -19,6 +19,10 @@ namespace Loonguage
 
 	}
 
+	void NodeSentence::codeGen(CodeGenContext&, std::vector<Code>&)
+	{
+	}
+
 	NodeSIf::NodeSIf(NodeExpr* e, NodeSentence* s) :
 		NodeSentence(e->getLine(), Node::NdSIf), predicate(e), sentence(s)
 	{
@@ -38,6 +42,19 @@ namespace Loonguage
 			errs.push_back(Error("Semantic Analysis",
 								getLine(),
 								"Return type of the predicate in \"if\" shou be \"int\", not \"" + pt.getString() + "\"."));
+	}
+
+	void NodeSIf::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		std::string endIf = std::string("endOfIf");
+		Label endIfLabel(context.allocator->addName(endIf));
+		predicate->codeGen(context, codes);
+		//test %rax
+		codes.push_back(Code(Code::AND, Reg::rax, Reg::rax));
+		codes.push_back(Code(Code::JMZ, endIfLabel));
+		sentence->codeGen(context, codes);
+		codes.push_back(Code(Code::NOP));
+		codes.back().addLabel(endIfLabel);
 	}
 
 	void NodeSIf::dumpAST(std::ostream& cout, int indent) const
@@ -60,6 +77,7 @@ namespace Loonguage
 	NodeSWhile::NodeSWhile(NodeExpr* e, NodeSentence* s) :
 		NodeSentence(e->getLine(), Node::NdSWhile), predicate(e), sentence(s)
 	{
+
 	}
 
 	void NodeSWhile::dumpAST(std::ostream& cout, int indent) const
@@ -93,6 +111,26 @@ namespace Loonguage
 			errs.push_back(Error("Semantic Analysis",
 				getLine(),
 				"Return type of the predicate in \"while\" shou be \"int\", not \"" + pt.getString() + "\"."));
+	}
+
+	void NodeSWhile::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		std::string startOfWhile = std::string("endOfIf");
+		Label startOfWhileLabel(context.allocator->addName(startOfWhile));
+		std::string endOfWhile = std::string("endOfIf");
+		Label endOfWhileLabel(context.allocator->addName(endOfWhile));
+		//oldSize is used to attach start label at first line of predicate
+		int oldSize = codes.size();
+		predicate->codeGen(context, codes);
+		codes[oldSize].addLabel(startOfWhileLabel);
+		//loop logic
+		//test %rax
+		codes.push_back(Code(Code::AND, Reg::rax, Reg::rax));
+		codes.push_back(Code(Code::JMZ, endOfWhileLabel));
+		sentence->codeGen(context, codes);
+		codes.push_back(Code(Code::JMP, startOfWhileLabel));
+		codes.push_back(Code(Code::NOP));
+		codes.back().addLabel(endOfWhileLabel);
 	}
 
 
@@ -206,6 +244,14 @@ namespace Loonguage
 			sentence->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
 	}
 
+
+	void NodeSentences::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		for (auto sentence : *this)
+			sentence->codeGen(context, codes);
+	}
+
+
 	NodeSExpr::NodeSExpr(NodeExpr* e) :
 		NodeSentence(e->getLine(), Node::NdSExpr), expr(e)
 	{
@@ -233,6 +279,17 @@ namespace Loonguage
 		expr->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
 	}
 
+	void NodeSExpr::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		expr->codeGen(context, codes);
+	}
+
+	NodeSReturn::NodeSReturn(int l) :
+		NodeSentence(l, Node::NdSReturn), expr(NULL), pfunction(NULL)
+	{
+	}
+
+
 	NodeSReturn::NodeSReturn(NodeExpr* e) :
 		NodeSentence(e->getLine(), Node::NdSReturn), expr(e), pfunction(NULL)
 	{
@@ -242,30 +299,44 @@ namespace Loonguage
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeSReturn" << std::endl;
-		expr->dumpAST(cout, indent + 2);
+		if (expr != NULL)
+			expr->dumpAST(cout, indent + 2);
 	}
 
 	void NodeSReturn::dumpSem(std::ostream& cout, int indent) const
 	{
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeSReturn (Return position: #" << pfunction->getLine() << ")" << std::endl;
-		expr->dumpSem(cout, indent + 2);
-	}
+		if (expr != NULL)
+			expr->dumpSem(cout, indent + 2);
+	}	
 
 	void NodeSReturn::annotateType(std::map<std::string, int>& numOfSymbol,
-								   std::map<Symbol, IdenDeco>& nameOfSymbol,
-								   const FunctionMapNameOrdered& functionMap,
-								   SemanticContext context, Errors& errs)
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
+		const FunctionMapNameOrdered& functionMap,
+		SemanticContext context, Errors& errs)
 	{
 		//check return type
 		pfunction = context.pfunction;
-		expr->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
-		Symbol ret = context.returnType;
-		if (!(ret == expr->getType()))
+		if (expr == NULL)
 		{
-			errs.push_back(Error("", getLine(), 
-				std::string("Return type \"") + expr->getType().getString() + 
-				"\" does not match with definition \"" + ret.getString() + "\"."));
+			if (!(pfunction->returnType.value.same("void")))
+			{
+				errs.push_back(Error("", getLine(),
+				std::string("Return type \"void\" does not match with definition \"" + pfunction->returnType.value.getString() + "\".")));
+			}
+			return;
+		}
+		else
+		{
+			expr->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
+			Symbol ret = context.returnType;
+			if (!(ret == expr->getType()))
+			{
+				errs.push_back(Error("", getLine(),
+					std::string("Return type \"") + expr->getType().getString() +
+					"\" does not match with definition \"" + ret.getString() + "\"."));
+			}
 		}
 	}
 

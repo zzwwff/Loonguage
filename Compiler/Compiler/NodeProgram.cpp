@@ -34,5 +34,11 @@ namespace Loonguage {
 		
 		functions->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
 	}
+
+	void NodeProgram::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		functions->codeGen(context, codes);
+	}
+
 }
 

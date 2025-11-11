@@ -125,17 +125,20 @@ namespace Loonguage {
 
 		//semantic analysis completed
 		if (errs.size() == 0)
-			semOut << "Semantic analysis are implemented successfully." << std::endl;
+		{
+			infoOut << "Semantic analysis are implemented successfully." << std::endl;
+			//watch out that dumpSem is available only when no error occur
+			program->dumpSem(semOut, 0);
+		}
 		else
 		{
-			semOut << "Compiling halted due to error(s) in semantic analysis." << std::endl;
+			infoOut << "Compiling halted due to error(s) in semantic analysis." << std::endl;
 			for (auto& err : errs)
 				if (err.status.size() == 0)
 					err.status = "Semantic Analysis";
 			errs.dump(semOut);
 		}
 		//debug == 1: Output Debug
-		program->dumpSem(semOut, 0);
 		semOut << "Function with decorated name:" << std::endl;
 		for (auto func : functionDeco)
 			semOut << func.first.nameDeco.getString() << std::endl;
@@ -143,15 +146,29 @@ namespace Loonguage {
 		return errs.size() == 0;
 	}
 
+	//generate ASM code
+	bool Compiler::codeGeneration()
+	{
+		LabelAllocator* alloc = new LabelAllocator();
+		CodeGenContext context;
+		context.allocator = alloc;
+		program->codeGen(context, codes);
+		//no bug will be reported in code generation
+		return true;
+	}
+
 	bool Compiler::parse()
 	{
 		infoOut << "Compiling begin..." << std::endl;
-		//There are altogether 4 phases in compiling, all are integrated into function parse()
+		//There are altogether 4 phases in compiling, all are integrated into function Compiler::parse()
 		//In parse(), the 4 phases will be executed one by one, and if error(s) occurred, will immediately terminate
 		if (!lexicalAndSyntaxAnalysis())
 			return false;
 		if (!semanticAnalysis())
 			return false;
+		if (!codeGeneration())
+			return false;
+		return true;
 	}
 
 

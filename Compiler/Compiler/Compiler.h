@@ -35,6 +35,10 @@ namespace Loonguage {
 		void registerDefaultTypes();
 		void functionDecoration();
 
+		//Phase 4
+		//code generation
+		std::vector<Code> codes;
+
 		//common toolkits
 		Errors errs;
 		std::ostream& infoOut;
@@ -50,6 +54,8 @@ namespace Loonguage {
 		bool lexicalAndSyntaxAnalysis();
 		//Phase 3
 		bool semanticAnalysis(int);
+		//Phase 4
+		bool codeGeneration();
 		//Integrated all phases into one function
 		bool parse();
 	};

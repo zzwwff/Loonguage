@@ -15,7 +15,7 @@ namespace Loonguage {
 		NodeSentence(int);
 		NodeSentence(int, Node::NodeType);
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
-
+		void codeGen(CodeGenContext&, std::vector<Code>&);
 	};
 
 	class NodeSentences :
@@ -28,7 +28,7 @@ namespace Loonguage {
 		NodeSentences(NodeSentence*);
 		NodeSentences(int);
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
-
+		void codeGen(CodeGenContext&, std::vector<Code>&);
 	};
 
 	class NodeSExpr :
@@ -40,7 +40,7 @@ namespace Loonguage {
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
-
+		void codeGen(CodeGenContext&, std::vector<Code>&);
 	};
 
 	class NodeSIf :
@@ -53,7 +53,7 @@ namespace Loonguage {
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
-
+		void codeGen(CodeGenContext&, std::vector<Code>&);
 	};
 
 	class NodeSWhile :
@@ -66,6 +66,8 @@ namespace Loonguage {
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void codeGen(CodeGenContext&, std::vector<Code>&);
+
 	};
 
 	class NodeSBlock :
@@ -102,6 +104,7 @@ namespace Loonguage {
 		NodeExpr* expr;
 		NodeFunction* pfunction;
 	public:
+		NodeSReturn(int);
 		NodeSReturn(NodeExpr*);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;

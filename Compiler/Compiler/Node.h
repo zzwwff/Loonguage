@@ -6,6 +6,8 @@
 #include "FunctionDeco.h"
 #include "Error.h"
 #include "SemanticContext.h"
+#include "CodeGenContext.h"
+#include "Code.h"
 namespace Loonguage {
 	class Node
 	{
@@ -43,6 +45,7 @@ namespace Loonguage {
 		};
 		using Symbol = SymbolTable<std::string>::Symbol;
 		using FunctionMapNameOrdered = std::map<Symbol, std::vector<std::map<FunctionDeco, int>::iterator>>;
+		using Reg = Register::Registers;
 
 	protected:
 		int line;
@@ -57,6 +60,8 @@ namespace Loonguage {
 		virtual void dumpSem(std::ostream&, int) const;
 
 		virtual void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+
+		virtual void codeGen(CodeGenContext&, std::vector<Code>&);
 	};
 
 };

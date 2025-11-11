@@ -41,5 +41,9 @@ namespace Loonguage {
 	{
 	}
 
+	void Node::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+	}
+
 }
 
