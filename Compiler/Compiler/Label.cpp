@@ -4,7 +4,8 @@ namespace Loonguage {
 	{
 		int i = m[s];
 		m[s]++;
-		s = s + "@" + std::to_string(i);
+		if (i)
+			s += std::string("@") + std::to_string(i);
 		return s;
 	}
 

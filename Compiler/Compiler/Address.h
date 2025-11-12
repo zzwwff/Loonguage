@@ -7,6 +7,8 @@ namespace Loonguage {
 	public:
 		Register::Registers reg;
 		int delta;
+		Address(Register::Registers, int);
+		Address() = default;
 	};
 
 }

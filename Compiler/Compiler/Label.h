@@ -7,6 +7,7 @@ namespace Loonguage {
 	public:
 		std::string name;
 		Label(std::string);
+		Label() = default;
 	};
 
 	class LabelAllocator {

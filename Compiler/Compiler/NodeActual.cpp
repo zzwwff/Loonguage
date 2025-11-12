@@ -31,6 +31,11 @@ namespace Loonguage {
 		type = expr->type;
 	}
 
+	void NodeActual::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		expr->codeGen(context, codes);
+	}
+
 	NodeActuals::NodeActuals(NodeActual* n) :
 		Node(n->getLine(), Node::NdActuals)
 	{

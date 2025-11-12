@@ -56,6 +56,12 @@ namespace Loonguage {
 		}
 	}
 
+	void NodeEIden::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		codes.push_back(Code(Code::MOVRM, Reg::rax, Address(Reg::rfp, -context.width * context.delta[idenDeco])));
+	}
+
+
 	NodeEBracket::NodeEBracket(NodeExpr* e):
 		NodeExpr(e->getLine(), Node::NdEBracket), expr(e)
 	{
@@ -82,6 +88,11 @@ namespace Loonguage {
 	{
 		expr->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
 		type = expr->type;
+	}
+
+	void NodeEBracket::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		expr->codeGen(context, codes);
 	}
 
 	NodeEDispatch::NodeEDispatch(TokenIden i, NodeActuals* a):
@@ -142,6 +153,18 @@ namespace Loonguage {
 		return;
 	}
 
+	void NodeEDispatch::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		//load all parameters
+		for (int i = 0; i < actuals->size(); i++)
+		{
+			(*actuals)[i]->codeGen(context, codes);
+			codes.push_back(Code(Code::MOVMR, Address(Reg::rsp, -context.width * (i + 2)), Reg::rax));
+		}
+		std::string callLabel = std::string("call@") + idenDeco.getString();
+		codes.push_back(Code(Code::CALL, Label(callLabel)));
+	}
+
 	NodeECalc::NodeECalc(NodeExpr* e1, char c, NodeExpr* e2):
 		NodeExpr(e1->getLine(), Node::NdECalc), expr1(e1), op(c), expr2(e2)
 	{
@@ -176,6 +199,22 @@ namespace Loonguage {
 			type = expr1->getType().getWrongType();
 		}
 		else type = (*(expr1->getType().getPointer()))["int"];
+	}
+
+	void NodeECalc::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		expr2->codeGen(context, codes);
+		codes.push_back(Code(Code::PUSH, Reg::rtm));
+		expr1->codeGen(context, codes);
+		codes.push_back(Code(Code::POP, Reg::rtm));
+		Code::CodeType type;
+		if (op == '+') type = Code::ADD;
+		else if (op == '-') type = Code::SUB;
+		else if (op == '*') type = Code::MUL;
+		else if (op == '/') type = Code::DIV;
+		else if (op == '&') type = Code::AND;
+		else if (op == '|') type = Code::OR;
+		else if (op == '^') type = Code::XOR;
 	}
 
 	NodeEEqua::NodeEEqua(NodeExpr* e1, NodeExpr* e2):
@@ -347,6 +386,11 @@ namespace Loonguage {
 		SemanticContext context, Errors& errs)
 	{
 		type = (*(context.idenTable))["int"];
+	}
+
+	void NodeEInt::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		codes.push_back(Code(Code::MOVRI, Reg::rax, int_.getValue()));
 	}
 
 	NodeEStr::NodeEStr(TokenString s):

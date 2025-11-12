@@ -1,7 +1,16 @@
 ﻿  Compiler.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1017,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+  FunctionDeco.cpp
   LoonParser.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1017,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+  NodeActual.cpp
+  NodeExpr.cpp
+  NodeFunction.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\NodeFunction.cpp(66,63): warning C4267: “参数”: 从“size_t”转换到“unsigned int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\NodeFunction.cpp(71,63): warning C4267: “参数”: 从“size_t”转换到“unsigned int”，可能丢失数据
+  NodeProgram.cpp
+  NodeSentence.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\NodeSentence.cpp(125,15): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
   lex.Loon_.cc
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(49,9): warning C4005: “INT8_MIN”: 宏重定义
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(50,9): warning C4005: “INT16_MIN”: 宏重定义
@@ -16,5 +25,4 @@ E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1017,9): warning C406
   main.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1017,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   正在生成代码...
-E:\source\repos\Loonguage\Compiler\Compiler\Compiler.cpp(158,1): warning C4715: “Loonguage::Compiler::parse”: 不是所有的控件路径都返回值
   Compiler.vcxproj -> E:\source\repos\Loonguage\Compiler\x64\Debug\Compiler.exe

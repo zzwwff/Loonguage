@@ -1,5 +1,6 @@
 #pragma once
 #include "Label.h"
+#include "SymbolTable.h"
 #include <map>
 namespace Loonguage {
 	class CodeGenContext
@@ -10,6 +11,8 @@ namespace Loonguage {
 		std::map<Symbol, int> delta;
 		int width;
 		Label returnLabel;
+		Label continueLabel;
+		Label breakLabel;
 	};
 
 

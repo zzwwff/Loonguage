@@ -1,9 +1,11 @@
 #include <iostream>
 #include "Compiler.h"
-
+#include <string>
+#include <sstream>
 signed main()
 {
-	Loonguage::Compiler lexical(std::cin, std::cout, std::cout, std::cout, std::cout);
+	std::stringstream lexySynOut, semOut;
+	Loonguage::Compiler lexical(std::cin, std::cout, lexySynOut, semOut, std::cout);
 	lexical.parse();
 	return 0;
 }

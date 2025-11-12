@@ -2,6 +2,7 @@
 #include "Label.h"
 #include "Register.h"
 #include "Address.h"
+#include <iostream>
 #include <vector>
 namespace Loonguage {
 	class Code
@@ -46,6 +47,9 @@ namespace Loonguage {
 		Code(CodeType c, Register::Registers, Address);
 		Code(CodeType c, Address, Register::Registers);
 		Code(CodeType c, Register::Registers, Register::Registers);
+		void dumpReg(std::ostream&, Register::Registers) const;
+		void dumpAddress(std::ostream&, Address) const;	
+		void dump(std::ostream&) const;
 		void addLabel(Label);
 	};
 }

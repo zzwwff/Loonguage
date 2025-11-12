@@ -89,7 +89,7 @@ namespace Loonguage {
 		}
 		else
 		{
-			infoOut << "Lexical and syntax analysis are implemented successfully." << std::endl;
+			infoOut << "Lexical and syntax analysis is implemented successfully." << std::endl;
 			program->dumpAST(lexSynOut, 0);
 			return true;
 		}
@@ -126,7 +126,7 @@ namespace Loonguage {
 		//semantic analysis completed
 		if (errs.size() == 0)
 		{
-			infoOut << "Semantic analysis are implemented successfully." << std::endl;
+			infoOut << "Semantic analysis is implemented successfully." << std::endl;
 			//watch out that dumpSem is available only when no error occur
 			program->dumpSem(semOut, 0);
 		}
@@ -151,9 +151,13 @@ namespace Loonguage {
 	{
 		LabelAllocator* alloc = new LabelAllocator();
 		CodeGenContext context;
+		context.width = 4;
 		context.allocator = alloc;
 		program->codeGen(context, codes);
 		//no bug will be reported in code generation
+		for (auto code : codes)
+			code.dump(genOut);
+		infoOut << "Code generation is implemented successfully." << std::endl;
 		return true;
 	}
 

@@ -119,6 +119,8 @@ namespace Loonguage
 		Label startOfWhileLabel(context.allocator->addName(startOfWhile));
 		std::string endOfWhile = std::string("endOfIf");
 		Label endOfWhileLabel(context.allocator->addName(endOfWhile));
+		context.continueLabel = startOfWhileLabel;
+		context.breakLabel = endOfWhileLabel;
 		//oldSize is used to attach start label at first line of predicate
 		int oldSize = codes.size();
 		predicate->codeGen(context, codes);
@@ -162,6 +164,12 @@ namespace Loonguage
 		//so have to set new nameOfSymbol context
 		std::map<Symbol, IdenDeco> currentNameOfSymbol = nameOfSymbol;
 		sentences->annotateType(numOfSymbol, currentNameOfSymbol, functionMap, context, errs);
+	}
+
+	void NodeSBlock::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		for (auto sentence : *sentences)
+			sentence->codeGen(context, codes);
 	}
 
 	NodeSDecl::NodeSDecl(TokenIden t, TokenIden n):
@@ -340,6 +348,14 @@ namespace Loonguage
 		}
 	}
 
+	void NodeSReturn::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		expr->codeGen(context, codes);
+		//return value are already store in %rax
+		codes.push_back(Code(Code::JMP, context.returnLabel));
+	}
+
+
 	NodeSContinue::NodeSContinue(int l) :
 		NodeSentence(l, Node::NdSContinue), pwhile(NULL)
 	{
@@ -369,6 +385,11 @@ namespace Loonguage
 		else pwhile = context.pwhile;
 	}
 
+	void NodeSContinue::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		codes.push_back(Code(Code::JMP, context.continueLabel));	
+	}
+
 	NodeSBreak::NodeSBreak(int l) :
 		NodeSentence(l, Node::NdSBreak), pwhile(NULL)
 	{
@@ -396,6 +417,11 @@ namespace Loonguage
 			errs.push_back(Error("", getLine(),
 				std::string("\"break\" should be used inside a loop.")));
 		else pwhile = context.pwhile;
+	}
+
+	void NodeSBreak::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		codes.push_back(Code(Code::JMP, context.breakLabel));
 	}
 }
 
