@@ -1,4 +1,4 @@
-#include "NodeExpr.h"
+﻿#include "NodeExpr.h"
 #include "NodeFunction.h"
 namespace Loonguage {
 	Node::Symbol NodeExpr::getType() const
@@ -204,7 +204,7 @@ namespace Loonguage {
 	void NodeECalc::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
 		expr2->codeGen(context, codes);
-		codes.push_back(Code(Code::PUSH, Reg::rtm));
+        codes.push_back(Code(Code::PUSH, Reg::rax));
 		expr1->codeGen(context, codes);
 		codes.push_back(Code(Code::POP, Reg::rtm));
 		Code::CodeType type;
@@ -215,7 +215,8 @@ namespace Loonguage {
 		else if (op == '&') type = Code::AND;
 		else if (op == '|') type = Code::OR;
 		else if (op == '^') type = Code::XOR;
-	}
+        codes.push_back(Code(type, Reg::rax, Reg::rtm));
+    }
 
 	NodeEEqua::NodeEEqua(NodeExpr* e1, NodeExpr* e2):
 		NodeExpr(e1->getLine(), Node::NdEEqua), expr1(e1), expr2(e2)
@@ -251,6 +252,15 @@ namespace Loonguage {
 			type = expr1->getType().getWrongType();
 		}
 		else type = (*(expr1->getType().getPointer()))["int"];
+	}
+
+	void NodeEEqua::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		expr2->codeGen(context, codes);
+		codes.push_back(Code(Code::PUSH, Reg::rax));
+		expr1->codeGen(context, codes);
+		codes.push_back(Code(Code::POP, Reg::rtm));
+		codes.push_back(Code(Code::EQU, Reg::rax, Reg::rtm));
 	}
 
 	NodeELess::NodeELess(NodeExpr* e1, NodeExpr* e2) :
@@ -289,6 +299,16 @@ namespace Loonguage {
 		else type = (*(expr1->getType().getPointer()))["int"];
 	}
 
+
+	void NodeELess::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		expr2->codeGen(context, codes);
+		codes.push_back(Code(Code::PUSH, Reg::rax));
+		expr1->codeGen(context, codes);
+		codes.push_back(Code(Code::POP, Reg::rtm));
+        codes.push_back(Code(Code::LES, Reg::rax, Reg::rtm));
+	}
+
 	NodeERev::NodeERev(NodeExpr* e):
 		NodeExpr(e->getLine(), Node::NdERev), expr(e)
 	{
@@ -319,6 +339,12 @@ namespace Loonguage {
 			type = expr->getType().getWrongType();
 		}
 		else type = expr->getType();
+	}
+
+	void NodeERev::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		expr->codeGen(context, codes);
+		codes.push_back(Code(Code::REV, Reg::rax));
 	}
 
 	NodeEAssign::NodeEAssign(TokenIden i, NodeExpr* e):
@@ -360,6 +386,12 @@ namespace Loonguage {
 			type = expr->getType().getWrongType();
 		}
 		else type = expr->getType();
+	}
+
+	void NodeEAssign::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		expr->codeGen(context, codes);
+		codes.push_back(Code(Code::MOVMR, Address(Reg::rfp, -context.width * context.delta[idenDeco]), Reg::rax));
 	}
 
 

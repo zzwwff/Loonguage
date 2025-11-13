@@ -1,4 +1,4 @@
-#include "Code.h"
+﻿#include "Code.h"
 
 namespace Loonguage {
 	Code::Code(CodeType c, Register::Registers r):
@@ -16,7 +16,7 @@ namespace Loonguage {
 	{
 	}
 
-	Code::Code(CodeType c, Register::Registers r, unsigned int i):
+	Code::Code(CodeType c, Register::Registers r,  int i):
 		codeType(c), r1(r), immediate(i)
 	{
 	}
@@ -76,10 +76,13 @@ namespace Loonguage {
 		if (codeType == AND) cout << "AND ", dumpReg(cout, r1), dumpReg(cout, r2);
 		if (codeType == OR) cout << "OR ", dumpReg(cout, r1), dumpReg(cout, r2);
 		if (codeType == XOR) cout << "XOR ", dumpReg(cout, r1), dumpReg(cout, r2);
-		if (codeType == NOT) cout << "NOT ", dumpReg(cout, r1);
+		if (codeType == LES) cout << "LES ", dumpReg(cout, r1), dumpReg(cout, r2);
+		if (codeType == EQU) cout << "EQU ", dumpReg(cout, r1), dumpReg(cout, r2);
+		if (codeType == REV) cout << "REV ", dumpReg(cout, r1);
 		if (codeType == NOP) cout << "NOP ";
 		if (codeType == JMP) cout << "JMP " << label.name;
 		if (codeType == JMZ) cout << "JMZ " << label.name;
+        if (codeType == HLT) cout << "HLT ";
 		cout << std::endl;
 	}
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Label.h"
 #include "Register.h"
 #include "Address.h"
@@ -28,8 +28,11 @@ namespace Loonguage {
 			AND,
 			OR,
 			XOR,
-			NOT,
+			LES,
+			EQU,
+			REV,
 			NOP,
+            HLT,
 			JMP,
 			JMZ
 		};
@@ -39,11 +42,11 @@ namespace Loonguage {
 		//label as its parameter
 		Label label;
 		Address address;
-		unsigned int immediate;
+		int immediate;
 		Code(CodeType c, Register::Registers);
 		Code(CodeType c, Label);
 		Code(CodeType c);
-		Code(CodeType c, Register::Registers, unsigned int);
+		Code(CodeType c, Register::Registers, int);
 		Code(CodeType c, Register::Registers, Address);
 		Code(CodeType c, Address, Register::Registers);
 		Code(CodeType c, Register::Registers, Register::Registers);

@@ -1,9 +1,8 @@
-#pragma once
+﻿#pragma once
 #include "Node.h"
 #include "TokenIden.h"
 #include "NodeFormal.h"
 #include "NodeSentence.h"
-#include "SymbolTable.h"
 #include <vector>
 namespace Loonguage {
 	class NodeFunction :
@@ -15,6 +14,7 @@ namespace Loonguage {
 		Symbol nameDeco;
 		NodeFormals* formals;
 		NodeSentence* sentence;
+		std::vector<Symbol> locals;
 		NodeFunction(TokenIden, TokenIden, NodeFormals*, NodeSentence*);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;

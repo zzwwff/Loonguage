@@ -1,4 +1,4 @@
-#include "Compiler.h"
+﻿#include "Compiler.h"
 #include "IdenDeco.h"
 
 namespace Loonguage {
@@ -64,6 +64,7 @@ namespace Loonguage {
 		for (auto iter = functionDeco.begin(); iter != functionDeco.end(); iter++)
 			functionDecoNameOrdered[iter->first.name].push_back(iter);
 	}
+
 
 	Compiler::Compiler(std::istream& i, std::ostream& o1, std::ostream& o2, std::ostream& o3, std::ostream& o4):
 		scanner(), 
@@ -151,9 +152,11 @@ namespace Loonguage {
 	{
 		LabelAllocator* alloc = new LabelAllocator();
 		CodeGenContext context;
-		context.width = 4;
+        context.width = 8;
 		context.allocator = alloc;
-		program->codeGen(context, codes);
+        codes.push_back(Code(Code::CALL, Label("call@main")));
+        codes.push_back(Code(Code::HLT));
+        program->codeGen(context, codes);
 		//no bug will be reported in code generation
 		for (auto code : codes)
 			code.dump(genOut);

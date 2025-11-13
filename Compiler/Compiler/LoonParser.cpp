@@ -1100,7 +1100,7 @@ namespace LoonScanner {
 
   case 22: // sentence: RETURN SEMICOLON
 #line 153 "LoonParser.y"
-                   { yylhs.value.as < Loonguage::NodeSentence* > () = new Loonguage::NodeSReturn(NULL);}
+                   { yylhs.value.as < Loonguage::NodeSentence* > () = new Loonguage::NodeSReturn(nullptr);}
 #line 1105 "LoonParser.cpp"
     break;
 

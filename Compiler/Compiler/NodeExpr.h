@@ -85,6 +85,7 @@ namespace Loonguage {
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void codeGen(CodeGenContext&, std::vector<Code>&);
 	};
 
 	class NodeELess :
@@ -96,6 +97,8 @@ namespace Loonguage {
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void codeGen(CodeGenContext&, std::vector<Code>&);
+
 	};
 
 	class NodeERev :
@@ -107,6 +110,7 @@ namespace Loonguage {
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void codeGen(CodeGenContext&, std::vector<Code>&);
 	};
 
 	class NodeEAssign :
@@ -120,6 +124,7 @@ namespace Loonguage {
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void codeGen(CodeGenContext&, std::vector<Code>&);
 	};
 
 	class NodeEInt :

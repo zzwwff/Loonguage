@@ -1,4 +1,4 @@
-#include "NodeFunction.h"
+﻿#include "NodeFunction.h"
 namespace Loonguage {
 	NodeFunction::NodeFunction(TokenIden rt, TokenIden n, NodeFormals* a, NodeSentence* s) :
 		Node(rt.line, Node::NdFunction), returnType(rt), name(n), formals(a), sentence(s)
@@ -62,13 +62,16 @@ namespace Loonguage {
 		//offset of formals from %rfp
 		for (int i = 0; i < formals->size(); i++)
 			context.delta[(*formals)[i]->nameDeco] = i;
-		//push back all parameters
-		codes.push_back(Code(Code::MOVRI, Reg::rtm, formals->size() * context.width));
+		//offset of locals
+		for (int i = 0; i < locals.size(); i++)
+			context.delta[locals[i]] = i + formals->size();
+		//push back all parameters and locals
+		codes.push_back(Code(Code::MOVRI, Reg::rtm, (formals->size() + locals.size()) * context.width));
 		codes.push_back(Code(Code::SUB, Reg::rsp, Reg::rtm));
 		sentence->codeGen(context, codes);
 		//pop back all parameters
 		//attach returnLabel to the first instruction, make sure that %rax is set at 'return'
-		codes.push_back(Code(Code::MOVRI, Reg::rtm, formals->size() * context.width));
+        codes.push_back(Code(Code::MOVRI, Reg::rtm, (formals->size() + locals.size()) * context.width));
 		codes.back().addLabel(returnLabel);
 		codes.push_back(Code(Code::ADD, Reg::rsp, Reg::rtm));
 		//restore frame

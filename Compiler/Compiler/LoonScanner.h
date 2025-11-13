@@ -6,7 +6,7 @@
 #undef yyFlexLexer
 #define yyFlexLexer Loon_FlexLexer  // ¸ù¾ÝprefixÐÞ¸Ä
 
-#include <FlexLexer.h>
+#include "win_flex\FlexLexer.h"
 
 #endif
 

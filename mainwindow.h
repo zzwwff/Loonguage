@@ -1,7 +1,10 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "Compiler/Compiler/RunTime.h"
+#include "Compiler/Compiler/Compiler.h"
+#include <QStandardItemModel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,7 +20,21 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_pushButton_clicked();
+
+    void on_pushButton_6_clicked();
+
+    void on_nextStep_clicked();
+
+    void on_allStep_clicked();
+
 private:
     Ui::MainWindow *ui;
+    void updateData();
+    Loonguage::RunTimeConfig config;
+    Loonguage::RunTime* runtime;
+    Loonguage::Compiler* compiler;
+    QStandardItemModel* model;
 };
 #endif // MAINWINDOW_H

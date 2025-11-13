@@ -1,4 +1,4 @@
-#include "NodeSentence.h"
+﻿#include "NodeSentence.h"
 #include "NodeFunction.h"
 namespace Loonguage
 {
@@ -115,7 +115,7 @@ namespace Loonguage
 
 	void NodeSWhile::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
-		std::string startOfWhile = std::string("endOfIf");
+        std::string startOfWhile = std::string("startOfIf");
 		Label startOfWhileLabel(context.allocator->addName(startOfWhile));
 		std::string endOfWhile = std::string("endOfIf");
 		Label endOfWhileLabel(context.allocator->addName(endOfWhile));
@@ -210,6 +210,7 @@ namespace Loonguage
 			//step 2: load nameDeco into nameOfSymbol
 			nameDeco = deco.nameDeco;
 			nameOfSymbol[name] = deco;
+			context.pfunction->locals.push_back(nameDeco);
 		}
 
 	}
@@ -350,6 +351,7 @@ namespace Loonguage
 
 	void NodeSReturn::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
+		if (expr != nullptr)
 		expr->codeGen(context, codes);
 		//return value are already store in %rax
 		codes.push_back(Code(Code::JMP, context.returnLabel));

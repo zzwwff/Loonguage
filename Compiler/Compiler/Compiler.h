@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <cstring>
 #include <map>
 #include "Tokens.h"
@@ -35,10 +35,6 @@ namespace Loonguage {
 		void registerDefaultTypes();
 		void functionDecoration();
 
-		//Phase 4
-		//code generation
-		std::vector<Code> codes;
-
 		//common toolkits
 		Errors errs;
 		std::ostream& infoOut;
@@ -48,7 +44,11 @@ namespace Loonguage {
 		std::istream& cin;
 
 	public:
-		//cin of file path
+        //Phase 4
+        //code generation
+        std::vector<Code> codes;
+
+        //cin of file path
 		Compiler(std::istream&, std::ostream&, std::ostream&, std::ostream&, std::ostream&);
 		//Phase 1 & 2
 		bool lexicalAndSyntaxAnalysis();

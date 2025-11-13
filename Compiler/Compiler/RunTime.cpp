@@ -1,63 +1,106 @@
-#include "RunTime.h"
+﻿#include "RunTime.h"
 
 namespace Loonguage {
 	//read a number in x64 or x32 from memory
-	unsigned int RunTime::read(unsigned int pos) const
+	int RunTime::read(int pos) const
 	{
-		//watch out res has to be unsigned int
-		unsigned int res = 0;
+		std::vector<int> bits(width * 8);
+		int res = 0;
 		if (config.endian == config.BIG)
 		{
-			for (int i = pos; i > pos - width; i--)
-				res = (res << 8) + memory[i];
+			for (int i = 0; i < width; i++)
+				for (int j = 0; j < 8; j++)
+					bits[8 * i + j] = memory[pos - i][j];
 		}
 		else
 		{
-			for (int i = pos - width + 1; i <= pos; i++)
-				res = (res << 8) + memory[i];
+			for (int i = 0; i < width; i++)
+				for (int j = 0; j < 8; j++)
+					bits[8 * i + j] = memory[pos - width + 1 + i][j];
 		}
-		return res;
+        return bit2int(bits);
 	}
 
 	//write a number in x64 or x32 into memory
-	void RunTime::write(unsigned int pos, unsigned int dat)
+	void RunTime::write(int pos, int dat)
 	{
+        std::vector<int> bits = int2bit(dat);
 		if (config.endian == config.BIG)
 		{
-			for (int i = pos - width + 1; i <= pos; i++)
-			{
-				memory[i] = dat & 255;
-				dat >>= 8;
-			}
+			for (int i = 0; i < width; i++)
+				for (int j = 0; j < 8; j++)
+					memory[pos - i][j] = bits[8 * i + j];
 		}
 		else
 		{
-			for (int i = pos; i > pos - width; i--)
-			{
-				memory[i] = dat & 255;
-				dat >>= 8;
-			}
+			for (int i = 0; i < width; i++)
+				for (int j = 0; j < 8; j++)
+					memory[pos - width + 1 + i][j] = bits[8 * i + j];
 		}
 	}
 
-	RunTime::RunTime(RunTimeConfig c, std::vector<Code>&& co) :
-		config(c), Z(0)
+	std::vector<int> RunTime::int2bit(int i) const
 	{
-		codes = std::move(co);
+		bool signal = i < 0;
+		if (i < 0) i = -i - 1;
+		std::vector<int> vec;
+		if (config.width == config.x32)
+		{
+			vec = std::vector<int>(32);
+			for (int j = 0; j < 31; j++)
+                vec[31 - j] = ((long long)i >> j) & 1;
+		}
+		else{
+			vec = std::vector<int>(64);
+			for (int j = 0; j < 63; j++)
+                vec[63 - j] = ((long long)i >> j) & 1;
+		}
+		if (signal)
+			for (auto& n : vec)
+                n = ~n;
+		return vec;
+	}
+
+	int RunTime::bit2int(std::vector<int> vec) const
+	{
+		bool signal = vec[0];
+		if (signal)
+			for (auto& j : vec)
+                j = ~j;
+		int val = 0;
+		if (config.width == config.x32)
+		{
+			for (int j = 0; j < 31; j++)
+                val += vec[31 - j] << j;
+		}
+		else
+		{
+			for (int j = 0; j < 63; j++)
+                val += vec[63 - j] << j;
+		}
+		if (signal)
+			val = -val - 1;
+		return val;
+	}
+
+    RunTime::RunTime(RunTimeConfig c, std::vector<Code>& co) :
+		config(c), Z(0), S(0)
+	{
+        codes = co;
 		//initiate registers
 		for (Reg::Registers reg = Reg::rsp; reg <= Reg::rdx; reg = static_cast<Reg::Registers>(reg + 1))
 		{
 			regs[reg] = 0;
 		}
 		//initiate memory
-		memory = std::vector<char>(c.memorySize);
+		memory = std::vector<std::bitset<8>>(c.memorySize);
 		//64 width = 64 bits = 8byte
 		//32 width = 32 bits = 4byte
 		if (c.width == RunTimeConfig::x64)
 			width = 8;
 		else width = 4;
 		//width * codes.size() from top are reserved for codes, which will not be really used in RunTime simulator
-		regs[Reg::ins] = codes.size() - 1;
+        regs[Reg::ins] = memory.size() - 1;
 		regs[Reg::rsp] = regs[Reg::ins] - width * codes.size();
 		//initiate label lists, for easy jump, labels points to memory position, which is %ins - i * width
 		for (int i = 0; i < codes.size(); i++)
@@ -65,13 +108,14 @@ namespace Loonguage {
 			for (int j = 0; j < codes[i].labelAttached.size(); j++)
 				labels[codes[i].labelAttached[j].name] = regs[Reg::ins] - i * width;
 		}
+        currentCode = 0;
 	}
 	
 	//advance a step
-	void RunTime::tick()
+    int RunTime::tick()
 	{
 		//real position of nextInstruction is (size() - 1 - %ins) / width
-		unsigned int nextInstruction = (memory.size() - 1 - regs[Reg::ins]) / width;
+		int nextInstruction = (memory.size() - 1 - regs[Reg::ins]) / width;
 		Code nextCode = codes[nextInstruction];
 		if (nextCode.codeType == Code::CALL)
 		{
@@ -80,6 +124,7 @@ namespace Loonguage {
 			regs[Reg::rsp] -= width;
 			//%ins = label
 			regs[Reg::ins] = labels[nextCode.label.name];
+            Z = S = 0;
 		}
 		else if (nextCode.codeType == Code::RET)
 		{
@@ -87,18 +132,21 @@ namespace Loonguage {
 			//now both %rsp, %ins, %rbp should be the original (%rbp is manually set)
 			regs[Reg::rsp] += width;
 			//watch out always use read/write
-			unsigned int instruction = read(regs[Reg::rsp]);
+			int instruction = read(regs[Reg::rsp]);
 			regs[Reg::ins] = instruction;
+            Z = S = 0;
 		}
 		//unconditionally jump
 		else if (nextCode.codeType == Code::JMP)
 		{
 			regs[Reg::ins] = labels[nextCode.label.name];
+            Z = S = 0;
 		}
 		//jump when Z, which means ALU returns 0
-		else if (nextCode.codeType == Code::JMZ && Z)
+        else if (nextCode.codeType == Code::JMZ && Z)
 		{
-			regs[Reg::ins] = labels[nextCode.label.name];
+            regs[Reg::ins] = labels[nextCode.label.name];
+            Z = S = 0;
 		}
 		else
 		{
@@ -108,131 +156,167 @@ namespace Loonguage {
 			{
 				write(regs[Reg::rsp], regs[nextCode.r1]);
 				regs[Reg::rsp] -= width;
+                Z = S = 0;
 			}
 			else if (nextCode.codeType == Code::POP)
 			{
+                regs[Reg::rsp] += width;
 				regs[nextCode.r1] = read(regs[Reg::rsp]);
-				regs[Reg::rsp] += width;
+                Z = S = 0;
 			}
 			else if (nextCode.codeType == Code::MOVRI)
 			{
 				regs[nextCode.r1] = nextCode.immediate;
-			}
+                Z = S = 0;
+            }
 			else if (nextCode.codeType == Code::MOVMR)
 			{
-				unsigned int target = regs[nextCode.address.reg] + nextCode.address.delta;
+				int target = regs[nextCode.address.reg] + nextCode.address.delta;
 				write(target, regs[nextCode.r1]);
+                Z = S = 0;
 			}
 			else if (nextCode.codeType == Code::MOVRR)
 			{
 				regs[nextCode.r1] = regs[nextCode.r2];
+                Z = S = 0;
 			}
 			else if (nextCode.codeType == Code::MOVRM)
 			{
-				unsigned int target = regs[nextCode.address.reg] + nextCode.address.delta;
+				int target = regs[nextCode.address.reg] + nextCode.address.delta;
 				regs[nextCode.r1] = read(target);
+                Z = S = 0;
 			}
 			else if (nextCode.codeType == Code::LEA)
 			{
-				unsigned int target = regs[nextCode.address.reg] + nextCode.address.delta;
+				int target = regs[nextCode.address.reg] + nextCode.address.delta;
 				regs[nextCode.r1] = target;
+                Z = S = 0;
 			}
+
 			//arithmatic computation, nothing interesting
 			//just remember to set Z
 			else if (nextCode.codeType == Code::ADD)
 			{
-				unsigned int i1 = regs[nextCode.r1];
-				unsigned int i2 = regs[nextCode.r2];
+				 int i1 = regs[nextCode.r1];
+				 int i2 = regs[nextCode.r2];
 				if (config.width == RunTimeConfig::x32)
-					i1 = (unsigned short)((unsigned short)i1 + (unsigned short)i2);
+					i1 = ( short)(( short)i1 + ( short)i2);
 				else
 					i1 = i1 + i2;
 				regs[nextCode.r1] = i1;
-				Z = (i1 == 0);
+				Z = (i1 == 0); S = (i1 < 0);
+				
 			}
 			else if (nextCode.codeType == Code::SUB)
 			{
-				unsigned int i1 = regs[nextCode.r1];
-				unsigned int i2 = regs[nextCode.r2];
+				 int i1 = regs[nextCode.r1];
+				 int i2 = regs[nextCode.r2];
 				if (config.width == RunTimeConfig::x32)
-					i1 = (unsigned short)((unsigned short)i1 - (unsigned short)i2);
+					i1 = ( short)(( short)i1 - ( short)i2);
 				else
-					i1 = i1 + i2;
+                    i1 = i1 - i2;
 				regs[nextCode.r1] = i1;
-				Z = (i1 == 0);
+				Z = (i1 == 0); S = (i1 < 0);
 			}
 
 			else if (nextCode.codeType == Code::MUL)
 			{
-				unsigned int i1 = regs[nextCode.r1];
-				unsigned int i2 = regs[nextCode.r2];
+				 int i1 = regs[nextCode.r1];
+				 int i2 = regs[nextCode.r2];
 				if (config.width == RunTimeConfig::x32)
-					i1 = (unsigned short)((unsigned short)i1 * (unsigned short)i2);
+					i1 = ( short)(( short)i1 * ( short)i2);
 				else
-					i1 = i1 + i2;
+                    i1 = i1 * i2;
 				regs[nextCode.r1] = i1;
-				Z = (i1 == 0);
+				Z = (i1 == 0); S = (i1 < 0);
 			}
 
 			else if (nextCode.codeType == Code::DIV)
 			{
-				unsigned int i1 = regs[nextCode.r1];
-				unsigned int i2 = regs[nextCode.r2];
+				 int i1 = regs[nextCode.r1];
+				 int i2 = regs[nextCode.r2];
 				if (config.width == RunTimeConfig::x32)
-					i1 = (unsigned short)((unsigned short)i1 / (unsigned short)i2);
+					i1 = ( short)(( short)i1 / ( short)i2);
 				else
-					i1 = i1 + i2;
+                    i1 = i1 / i2;
 				regs[nextCode.r1] = i1;
-				Z = (i1 == 0);
+				Z = (i1 == 0); S = (i1 < 0);
 			}
 
 			else if (nextCode.codeType == Code::AND)
 			{
-				unsigned int i1 = regs[nextCode.r1];
-				unsigned int i2 = regs[nextCode.r2];
+				 int i1 = regs[nextCode.r1];
+				 int i2 = regs[nextCode.r2];
 				if (config.width == RunTimeConfig::x32)
-					i1 = (unsigned short)((unsigned short)i1 & (unsigned short)i2);
+					i1 = ( short)(( short)i1 & ( short)i2);
 				else
-					i1 = i1 + i2;
+                    i1 = i1 & i2;
 				regs[nextCode.r1] = i1;
-				Z = (i1 == 0);
+				Z = (i1 == 0); S = (i1 < 0);
 			}
 
 			else if (nextCode.codeType == Code::OR)
 			{
-				unsigned int i1 = regs[nextCode.r1];
-				unsigned int i2 = regs[nextCode.r2];
+				 int i1 = regs[nextCode.r1];
+				 int i2 = regs[nextCode.r2];
 				if (config.width == RunTimeConfig::x32)
-					i1 = (unsigned short)((unsigned short)i1 | (unsigned short)i2);
+					i1 = ( short)(( short)i1 | ( short)i2);
 				else
-					i1 = i1 + i2;
+                    i1 = i1 | i2;
 				regs[nextCode.r1] = i1;
-				Z = (i1 == 0);
+				Z = (i1 == 0); S = (i1 < 0);
 			}
 
 			else if (nextCode.codeType == Code::XOR)
 			{
-				unsigned int i1 = regs[nextCode.r1];
-				unsigned int i2 = regs[nextCode.r2];
+				 int i1 = regs[nextCode.r1];
+				 int i2 = regs[nextCode.r2];
 				if (config.width == RunTimeConfig::x32)
-					i1 = (unsigned short)((unsigned short)i1 ^ (unsigned short)i2);
+					i1 = ( short)(( short)i1 ^ ( short)i2);
 				else
-					i1 = i1 + i2;
+                    i1 = i1 ^ i2;
 				regs[nextCode.r1] = i1;
-				Z = (i1 == 0);
-				}
-			else if (nextCode.codeType == Code::NOT)
+				Z = (i1 == 0); S = (i1 < 0);
+			}
+			else if (nextCode.codeType == Code::LES)
 			{
-				unsigned int i1 = regs[nextCode.r1];
+				int i1 = regs[nextCode.r1];
+				int i2 = regs[nextCode.r2];
+				if (config.width == RunTimeConfig::x32)
+					i1 = (short)((short)i1 < (short)i2);
+				else
+					i1 = i1 < i2;
+				regs[nextCode.r1] = i1;
+				Z = (i1 == 0); S = (i1 < 0);
+			}
+			else if (nextCode.codeType == Code::LES)
+			{
+				int i1 = regs[nextCode.r1];
+				int i2 = regs[nextCode.r2];
+				if (config.width == RunTimeConfig::x32)
+					i1 = (short)((short)i1 == (short)i2);
+				else
+					i1 = i1 == i2;
+				regs[nextCode.r1] = i1;
+				Z = (i1 == 0); S = (i1 < 0);
+				}
+
+			else if (nextCode.codeType == Code::REV)
+			{
+
+				int i1 = regs[nextCode.r1];
 				if (i1)
 					regs[nextCode.r1] = 0u;
 				else regs[nextCode.r2] = 1u;
-				Z = (i1 == 0);
+				Z = (i1 == 0); S = (i1 < 0);
 			}
 			else if (nextCode.codeType == Code::NOP)
 			{
-
-				}
+            }
+            else if (nextCode.codeType == Code::HLT)
+                return 1;
 		}
+        currentCode = (memory.size() - 1 - regs[Reg::ins]) / width;;
+        return 0;
 	}
 }

@@ -150,7 +150,7 @@ expr SEMICOLON { $$ = new Loonguage::NodeSExpr($1); }
 | BREAK SEMICOLON { $$ = new Loonguage::NodeSBreak($2.line);}
 | CONTINUE SEMICOLON { $$ = new Loonguage::NodeSContinue($2.line);}
 | RETURN expr SEMICOLON { $$ = new Loonguage::NodeSReturn($2);}
-| RETURN SEMICOLON { $$ = new Loonguage::NodeSReturn(NULL);}
+| RETURN SEMICOLON { $$ = new Loonguage::NodeSReturn(nullptr);}
 | error SEMICOLON { $$ = new Loonguage::NodeSentence($2.line);}
 | LBRACE error RBRACE { $$ = new Loonguage::NodeSentence($1.line); }
 
