@@ -33,8 +33,8 @@ private:
     Ui::MainWindow *ui;
     void updateData();
     Loonguage::RunTimeConfig config;
-    Loonguage::RunTime* runtime;
-    Loonguage::Compiler* compiler;
+    std::shared_ptr<Loonguage::RunTime> runtime;
+    std::shared_ptr<Loonguage::Compiler> compiler;
     QStandardItemModel* model;
 };
 #endif // MAINWINDOW_H

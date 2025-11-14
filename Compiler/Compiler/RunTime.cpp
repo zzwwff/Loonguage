@@ -300,7 +300,7 @@ namespace Loonguage {
 				regs[nextCode.r1] = i1;
 				Z = (i1 == 0); S = (i1 < 0);
 			}
-			else if (nextCode.codeType == Code::LES)
+            else if (nextCode.codeType == Code::EQU)
 			{
 				int i1 = regs[nextCode.r1];
 				int i2 = regs[nextCode.r2];

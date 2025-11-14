@@ -4,12 +4,26 @@
 #include "QString"
 #include <sstream>
 #include <QMessageBox>
+#include <QTime>
+#include <QFile>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    if (QFile::exists("input.in"))
+    {
+        QFile file("input.in");
+        file.open(QIODevice::ReadOnly | QIODevice::Text);
+        QTextStream in(&file);
+        while (!in.atEnd())
+        {
+            QString line = in.readLine();
+            ui->input->appendPlainText(line);
+        }
+    }
+
 }
 
 MainWindow::~MainWindow()
@@ -19,15 +33,21 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
+    compiler = nullptr;
+    runtime = nullptr;
     QString qinput = ui->input->toPlainText();
     std::string input = qinput.toStdString();
+    //save input
+    QFile file("input.in");
+    file.open(QIODevice::ReadWrite | QIODevice::Text);
+    file.write(QString::fromStdString(input).toUtf8());
+    file.close();
+
     input += " @EOF";
     QMessageBox::about(NULL, "About", "Start Running!");
     std::stringstream in, infoOut, synOut, semOut, genOut;
     in << input;
-    //if (compiler != nullptr)
-    //    delete compiler;
-    compiler = new Loonguage::Compiler(in, infoOut, synOut, semOut, genOut);
+    compiler = std::make_shared<Loonguage::Compiler>(in, infoOut, synOut, semOut, genOut);
     compiler->parse();
     QString qinfoOut = QString::fromStdString(infoOut.str());
     QString qsynOut = QString::fromStdString(synOut.str());
@@ -36,9 +56,8 @@ void MainWindow::on_pushButton_clicked()
     ui->infoOut->setPlainText(qinfoOut);
     ui->lexSynOut->setPlainText(qsynOut);
     ui->semOut->setPlainText(qsemOut);
-    QStringList list;
     model = new QStandardItemModel();
-    for (auto code : compiler->codes)
+    for (const auto& code : compiler->codes)
     {
         std::stringstream stream;
         code.dump(stream);
@@ -54,13 +73,18 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_6_clicked()
 {
-    config.endian = config.BIG;
-    config.width = config.x64;
-    config.memorySize = 2048;
-    //if (runtime != nullptr)
-    //    delete runtime;
-    runtime = new Loonguage::RunTime(config, (compiler->codes));
-    updateData();
+    if (compiler != nullptr && compiler->runable)
+    {
+        config.endian = config.BIG;
+        config.width = config.x64;
+        config.memorySize = 2048;
+        //if (runtime != nullptr)
+        //    delete runtime;
+        runtime = std::make_shared<Loonguage::RunTime>(config, (compiler->codes));
+        updateData();
+    }
+    else
+        QMessageBox::about(NULL, "About", "No executable program!");
 }
 
 
@@ -101,11 +125,16 @@ void MainWindow::updateData()
 
 void MainWindow::on_allStep_clicked()
 {
-
     if (runtime != nullptr)
     {
-        while (!runtime->tick());
-        QMessageBox::about(NULL, "About", "Successfully done!");
+        int t = 0;
+        qint64 t1 = QDateTime::currentDateTime().toMSecsSinceEpoch();
+        while (!runtime->tick())
+            //updateData();
+            t++;
+        qint64 t2 = QDateTime::currentDateTime().toMSecsSinceEpoch();
+        QString mes = QString("Successfully done! %1 instructions executed in %2 ms.").arg(t).arg(t2 - t1);
+        QMessageBox::about(NULL, "About", mes);
         updateData();
     }
 }

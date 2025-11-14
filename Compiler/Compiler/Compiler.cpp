@@ -1,6 +1,6 @@
 ﻿#include "Compiler.h"
 #include "IdenDeco.h"
-
+//#include "lex.Loon_.cc"
 namespace Loonguage {
 	void Compiler::registerDefaultTypes()
 	{
@@ -65,7 +65,6 @@ namespace Loonguage {
 			functionDecoNameOrdered[iter->first.name].push_back(iter);
 	}
 
-
 	Compiler::Compiler(std::istream& i, std::ostream& o1, std::ostream& o2, std::ostream& o3, std::ostream& o4):
 		scanner(), 
 		parser(scanner, idenTable, strTable, program, errs),
@@ -75,6 +74,7 @@ namespace Loonguage {
 		//set cin and cout
 		scanner.switch_streams(cin, lexSynOut);
 	}
+
 
 	bool Compiler::lexicalAndSyntaxAnalysis()
 	{
@@ -170,12 +170,12 @@ namespace Loonguage {
 		//There are altogether 4 phases in compiling, all are integrated into function Compiler::parse()
 		//In parse(), the 4 phases will be executed one by one, and if error(s) occurred, will immediately terminate
 		if (!lexicalAndSyntaxAnalysis())
-			return false;
+            return runable = false;
 		if (!semanticAnalysis())
-			return false;
+            return runable = false;
 		if (!codeGeneration())
-			return false;
-		return true;
+            return runable = false;
+        return runable = true;
 	}
 
 

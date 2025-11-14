@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <map>
 #include <cstring>
 #include <string>
@@ -27,12 +27,24 @@ namespace Loonguage {
 		SymbolTable<T>* getPointer() const {
 			return pointer;
 		}
-		int getId() const;
-		Symbol_(int, SymbolTable<T>*);
+        int getId() const
+        {
+            return id;
+        }
+
+        Symbol_(int i, SymbolTable<T>* p) :
+            id(i), pointer(p)
+        {
+        }
+
 		Symbol_() : id(0), pointer(NULL) {};
 		//no matter whether REAL_NAME defined, getString() will be defined
 		//that's no the case in SymbolTable
-		T getString() const;
+        T getString() const
+        {
+            return pointer->getString(id);
+        }
+
 		bool same(T t) const {
 			if (*this == pointer->wrongType)
 				return true;
@@ -76,6 +88,49 @@ namespace Loonguage {
 	};
 
 	//template class SymbolTable<std::string>;
+
+    template<typename T>
+    Symbol_<T> SymbolTable<T>::addSymbol(const T& t)
+    {
+        if (exist(t))
+            return Symbol(m[t], this);
+        Symbol s = Symbol(m.size(), this);
+        m[t] = s.getId();
+#ifdef REAL_NAME
+        revM[s.getId()] = t;
+#endif // REAL_NAME
+
+        return s;
+    }
+
+    template<typename T>
+    bool SymbolTable<T>::exist(const T& t) const
+    {
+        return m.find(t) != m.end();
+    }
+
+
+
+#ifdef REAL_NAME
+    template<typename T>
+    T SymbolTable<T>::getString(int s) const
+    {
+        return revM.at(s);
+    }
+
+
+
+#else // REAL_NAME
+
+    template<typename T>
+    inline T Symbol_<T>::getString() const
+    {
+        return std::to_string(id);
+    }
+
+#endif
+
+
 };
 
 

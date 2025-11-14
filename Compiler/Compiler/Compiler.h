@@ -45,6 +45,8 @@ namespace Loonguage {
 		std::istream& cin;
 
 	public:
+        //whether is it able to run
+        bool runable;
         //Phase 4
         //code generation
         std::vector<Code> codes;

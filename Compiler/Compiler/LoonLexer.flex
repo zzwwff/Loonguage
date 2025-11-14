@@ -7,13 +7,13 @@
   #include <cstdlib>
   #include <string>
 
-  #include "LoonParser.hpp"  //包含由parser.y生成的头文件
-  #include "LoonScanner.h"   //包含yyFlexLexer子类的头文件
-  #include "location.hh" //包含位置调试信息头文件
+  #include "LoonParser.hpp"  
+  #include "LoonScanner.h"  
+  #include "location.hh" 
   #include "Tokens.h"
   #include "Error.h"
 
-  static LoonScanner::location loc;//声明位置实例
+  static LoonScanner::location loc;
   #define YY_USER_ACTION  loc.columns (yyleng); /* 定义了YY_USER_ACTION，该宏在每个记号的语义动作之前被调用，来根据记号的长度设置位置的信息 */
 
   #undef yywrap
@@ -23,6 +23,12 @@
   #define yyterminate() Parser::make_END(loc);
 
   std::string strBuffer;
+
+  void initializeLocation()
+  {
+      loc.initialize();
+  }
+
 %}
 %option c++
 

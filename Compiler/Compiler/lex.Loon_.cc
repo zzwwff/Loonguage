@@ -550,11 +550,11 @@ static const flex_int16_t yy_chk[164] =
 
 static const flex_int16_t yy_rule_linenum[43] =
     {   0,
-       58,   60,   61,   63,   65,   66,   67,   69,   70,   76,
-       82,   87,   94,   98,  102,  109,  112,  115,  119,  123,
-      127,  131,  135,  139,  143,  147,  151,  154,  157,  160,
-      163,  166,  169,  172,  175,  178,  181,  184,  187,  190,
-      194,  200
+       64,   66,   67,   69,   71,   72,   73,   75,   76,   82,
+       88,   93,  100,  104,  108,  115,  118,  121,  125,  129,
+      133,  137,  141,  145,  149,  153,  157,  160,  163,  166,
+      169,  172,  175,  178,  181,  184,  187,  190,  193,  196,
+      200,  206
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -573,13 +573,13 @@ static const flex_int16_t yy_rule_linenum[43] =
   #include <cstdlib>
   #include <string>
 
-  #include "LoonParser.hpp"  //包含由parser.y生成的头文件
-  #include "LoonScanner.h"   //包含yyFlexLexer子类的头文件
-  #include "location.hh" //包含位置调试信息头文件
+  #include "LoonParser.hpp"  
+  #include "LoonScanner.h"  
+  #include "location.hh" 
   #include "Tokens.h"
   #include "Error.h"
 
-  static LoonScanner::location loc;//声明位置实例
+  static LoonScanner::location loc;
   #define YY_USER_ACTION  loc.columns (yyleng); /* 定义了YY_USER_ACTION，该宏在每个记号的语义动作之前被调用，来根据记号的长度设置位置的信息 */
 
   #undef yywrap
@@ -589,9 +589,15 @@ static const flex_int16_t yy_rule_linenum[43] =
   #define yyterminate() Parser::make_END(loc);
 
   std::string strBuffer;
-#line 592 "lex.Loon_.cc"
 
-#line 594 "lex.Loon_.cc"
+  void initializeLocation()
+  {
+      loc.initialize();
+  }
+
+#line 598 "lex.Loon_.cc"
+
+#line 600 "lex.Loon_.cc"
 
 #define INITIAL 0
 #define COMMENT 1
@@ -787,16 +793,16 @@ YY_DECL
 
 	{
 /* %% [7.0] user's declarations go here */
-#line 50 "LoonLexer.flex"
+#line 56 "LoonLexer.flex"
 
 
-#line 53 "LoonLexer.flex"
+#line 59 "LoonLexer.flex"
   // C++ 兼容的词法分析器的规则，step函数把位置的起始值设置为与结束值相等，这样位置就指向了上一个极少的结束位置。
   loc.step();
 
 
 
-#line 799 "lex.Loon_.cc"
+#line 805 "lex.Loon_.cc"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -877,50 +883,50 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 58 "LoonLexer.flex"
+#line 64 "LoonLexer.flex"
 { return Parser::make_END(loc); }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 60 "LoonLexer.flex"
+#line 66 "LoonLexer.flex"
 BEGIN(COMMENT);
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 61 "LoonLexer.flex"
+#line 67 "LoonLexer.flex"
 BEGIN(SINGLE_COMMENT);
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 63 "LoonLexer.flex"
+#line 69 "LoonLexer.flex"
 {            loc.lines(yyleng); 
             loc.step();  }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 65 "LoonLexer.flex"
+#line 71 "LoonLexer.flex"
 { }       /* eat anything that's not a '*' */
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 66 "LoonLexer.flex"
+#line 72 "LoonLexer.flex"
 { }  /* eat up '*'s not followed by '/'s */
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 67 "LoonLexer.flex"
+#line 73 "LoonLexer.flex"
 BEGIN(INITIAL);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 69 "LoonLexer.flex"
+#line 75 "LoonLexer.flex"
 
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 70 "LoonLexer.flex"
+#line 76 "LoonLexer.flex"
 {
     loc.lines(yyleng); 
     loc.step();
@@ -929,7 +935,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 76 "LoonLexer.flex"
+#line 82 "LoonLexer.flex"
 {
     strBuffer.clear();
     BEGIN(STRING);
@@ -937,7 +943,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 82 "LoonLexer.flex"
+#line 88 "LoonLexer.flex"
 {
     BEGIN(INITIAL);
     return Parser::make_STR(Loonguage::TokenString(loc.begin.line, strBuffer, strTable), loc); 
@@ -945,7 +951,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 87 "LoonLexer.flex"
+#line 93 "LoonLexer.flex"
 {
     if (yytext[1] == 'n')
     	strBuffer.push_back('\n');
@@ -956,14 +962,14 @@ YY_RULE_SETUP
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 94 "LoonLexer.flex"
+#line 100 "LoonLexer.flex"
 {
     strBuffer.push_back(yytext[1]);
 }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 98 "LoonLexer.flex"
+#line 104 "LoonLexer.flex"
 {
     strBuffer.push_back(yytext[0]);
   }
@@ -971,7 +977,7 @@ YY_RULE_SETUP
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 102 "LoonLexer.flex"
+#line 108 "LoonLexer.flex"
 {
     loc.lines(yyleng); 
     loc.step();
@@ -980,179 +986,179 @@ YY_RULE_SETUP
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 109 "LoonLexer.flex"
+#line 115 "LoonLexer.flex"
 {     loc.lines(yyleng); 
     loc.step(); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 112 "LoonLexer.flex"
+#line 118 "LoonLexer.flex"
 { }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 115 "LoonLexer.flex"
+#line 121 "LoonLexer.flex"
 {
             return Parser::make_INT(Loonguage::TokenInt(loc.begin.line, std::stoi(yytext)), loc); 
           }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 119 "LoonLexer.flex"
+#line 125 "LoonLexer.flex"
 {
             return Parser::make_IF(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordIf), loc); 
             }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 123 "LoonLexer.flex"
+#line 129 "LoonLexer.flex"
 {
             return Parser::make_WHILE(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordIf), loc); 
             }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 127 "LoonLexer.flex"
+#line 133 "LoonLexer.flex"
 {
 return Parser::make_CONTINUE(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordContinue), loc); 
 }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 131 "LoonLexer.flex"
+#line 137 "LoonLexer.flex"
 {
 return Parser::make_BREAK(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordBreak), loc); 
 }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 135 "LoonLexer.flex"
+#line 141 "LoonLexer.flex"
 {
 return Parser::make_RETURN(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordReturn), loc); 
 }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 139 "LoonLexer.flex"
+#line 145 "LoonLexer.flex"
 {
                 return Parser::make_IDEN(Loonguage::TokenIden(loc.begin.line, yytext, idenTable), loc); 
             }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 143 "LoonLexer.flex"
+#line 149 "LoonLexer.flex"
 {
                 return Parser::make_EQUAL(Loonguage::TokenSymbol(loc.begin.line, '#'), loc); 
             }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 147 "LoonLexer.flex"
+#line 153 "LoonLexer.flex"
 {
                 return Parser::make_PLUS(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 151 "LoonLexer.flex"
+#line 157 "LoonLexer.flex"
 {
                 return Parser::make_MINUS(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 154 "LoonLexer.flex"
+#line 160 "LoonLexer.flex"
 {
                 return Parser::make_TIME(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 157 "LoonLexer.flex"
+#line 163 "LoonLexer.flex"
 {
                 return Parser::make_DIVISION(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 160 "LoonLexer.flex"
+#line 166 "LoonLexer.flex"
 {
                 return Parser::make_LBRACE(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 163 "LoonLexer.flex"
+#line 169 "LoonLexer.flex"
 {
                 return Parser::make_RBRACE(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 166 "LoonLexer.flex"
+#line 172 "LoonLexer.flex"
 {
                 return Parser::make_LBRACKET(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 169 "LoonLexer.flex"
+#line 175 "LoonLexer.flex"
 {
                 return Parser::make_RBRACKET(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 172 "LoonLexer.flex"
+#line 178 "LoonLexer.flex"
 {
                 return Parser::make_COMMA(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 175 "LoonLexer.flex"
+#line 181 "LoonLexer.flex"
 {
                 return Parser::make_ASSIGN(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 178 "LoonLexer.flex"
+#line 184 "LoonLexer.flex"
 {
                 return Parser::make_SEMICOLON(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 181 "LoonLexer.flex"
+#line 187 "LoonLexer.flex"
 {
                 return Parser::make_AND(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 184 "LoonLexer.flex"
+#line 190 "LoonLexer.flex"
 {
                 return Parser::make_OR(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 187 "LoonLexer.flex"
+#line 193 "LoonLexer.flex"
 {
                 return Parser::make_REV(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 190 "LoonLexer.flex"
+#line 196 "LoonLexer.flex"
 {
                 return Parser::make_XOR(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 194 "LoonLexer.flex"
+#line 200 "LoonLexer.flex"
 {
                 return Parser::make_LESS(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
@@ -1162,12 +1168,12 @@ case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(STRING):
 case YY_STATE_EOF(STRING_ERROR):
 case YY_STATE_EOF(SINGLE_COMMENT):
-#line 198 "LoonLexer.flex"
+#line 204 "LoonLexer.flex"
 { return yyterminate(); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 200 "LoonLexer.flex"
+#line 206 "LoonLexer.flex"
 {
              errs.push_back(Loonguage::Error( std::string("Lexical Analysis"), (int)loc.begin.line, std::string("Unknown character \'") + yytext[0] + '\'' ));
              loc.step();
@@ -1175,10 +1181,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 204 "LoonLexer.flex"
+#line 210 "LoonLexer.flex"
 ECHO;
 	YY_BREAK
-#line 1181 "lex.Loon_.cc"
+#line 1187 "lex.Loon_.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2294,7 +2300,7 @@ void yyfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 204 "LoonLexer.flex"
+#line 210 "LoonLexer.flex"
 
 //这里可以放一些C或者C++代码
 

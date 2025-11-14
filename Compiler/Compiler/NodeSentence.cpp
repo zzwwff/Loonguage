@@ -116,9 +116,9 @@ namespace Loonguage
 
 	void NodeSWhile::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
-        std::string startOfWhile = std::string("startOfIf");
+        std::string startOfWhile = std::string("startOfWhile");
 		Label startOfWhileLabel(context.allocator->addName(startOfWhile));
-		std::string endOfWhile = std::string("endOfIf");
+        std::string endOfWhile = std::string("endOfWhile");
 		Label endOfWhileLabel(context.allocator->addName(endOfWhile));
 		context.continueLabel = startOfWhileLabel;
 		context.breakLabel = endOfWhileLabel;
