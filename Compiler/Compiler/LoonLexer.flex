@@ -13,7 +13,7 @@
   #include "Tokens.h"
   #include "Error.h"
 
-  static LoonScanner::location loc;
+  
   #define YY_USER_ACTION  loc.columns (yyleng); /* 定义了YY_USER_ACTION，该宏在每个记号的语义动作之前被调用，来根据记号的长度设置位置的信息 */
 
   #undef yywrap
@@ -24,10 +24,6 @@
 
   std::string strBuffer;
 
-  void initializeLocation()
-  {
-      loc.initialize();
-  }
 
 %}
 %option c++

@@ -1,5 +1,6 @@
 ﻿#include "Compiler.h"
 #include "IdenDeco.h"
+#include "location.hh"
 //#include "lex.Loon_.cc"
 namespace Loonguage {
 	void Compiler::registerDefaultTypes()
@@ -10,6 +11,7 @@ namespace Loonguage {
 		//but void is not a kind of type
 		idenTable.addSymbol("void");
 	}
+
 
 	void Compiler::functionDecoration()
 	{
@@ -66,14 +68,16 @@ namespace Loonguage {
 	}
 
 	Compiler::Compiler(std::istream& i, std::ostream& o1, std::ostream& o2, std::ostream& o3, std::ostream& o4):
-		scanner(), 
-		parser(scanner, idenTable, strTable, program, errs),
+		scanner(),
+		loc(LoonScanner::location()),
+		parser(scanner, loc, idenTable, strTable, program, errs),
 		program(NULL),
 		cin(i), infoOut(o1), lexSynOut(o2), semOut(o3), genOut(o4)
 	{
 		//set cin and cout
 		scanner.switch_streams(cin, lexSynOut);
 	}
+
 
 
 	bool Compiler::lexicalAndSyntaxAnalysis()

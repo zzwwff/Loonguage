@@ -19,6 +19,7 @@ namespace Loonguage {
 		//for lexical and syntax analysis
 		LoonScanner::Scanner scanner;
 		LoonScanner::Parser parser;
+		LoonScanner::location loc;
 		//syntax table
 		SymbolTable<std::string> strTable, idenTable;
 		//root of AST tree

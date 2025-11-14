@@ -43,17 +43,19 @@
   #include "NodeProgram.h"
   class NodeProgram;
   static LoonScanner::Parser::symbol_type yylex(LoonScanner::Scanner& scanner, 
+                                                LoonScanner::location& loc,
                                                 Loonguage::SymbolTable<std::string>& idenTable, 
                                                 Loonguage::SymbolTable<std::string>& strTable,
                                                 std::shared_ptr<Loonguage::NodeProgram>& program,
                                                 Loonguage::Errors& errs){
-    return scanner.nextToken(idenTable, strTable, program, errs);
+    return scanner.nextToken(loc, idenTable, strTable, program, errs);
   }
   using namespace LoonScanner;
 }
 
 /*arguments from parser to scanner*/
 %lex-param { LoonScanner::Scanner& scanner }
+%lex-param { LoonScanner::location& loc }
 %lex-param { Loonguage::SymbolTable<std::string>& idenTable }
 %lex-param { Loonguage::SymbolTable<std::string>& strTable }
 %lex-param { std::shared_ptr<Loonguage::NodeProgram>& program }
@@ -62,6 +64,7 @@
 
 /*arguments from driver to parser */
 %parse-param { LoonScanner::Scanner& scanner }
+%parse-param { LoonScanner::location& loc }
 %parse-param { Loonguage::SymbolTable<std::string>& idenTable }
 %parse-param { Loonguage::SymbolTable<std::string>& strTable }
 %parse-param { std::shared_ptr<Loonguage::NodeProgram>& program }

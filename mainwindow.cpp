@@ -39,7 +39,7 @@ void MainWindow::on_pushButton_clicked()
     std::string input = qinput.toStdString();
     //save input
     QFile file("input.in");
-    file.open(QIODevice::ReadWrite | QIODevice::Text);
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
     file.write(QString::fromStdString(input).toUtf8());
     file.close();
 

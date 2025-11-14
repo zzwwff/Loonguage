@@ -1280,7 +1280,7 @@ switch (yykind)
     };
 
     /// Build a parser object.
-     Parser  (LoonScanner::Scanner& scanner_yyarg, Loonguage::SymbolTable<std::string>& idenTable_yyarg, Loonguage::SymbolTable<std::string>& strTable_yyarg, std::shared_ptr<Loonguage::NodeProgram>& program_yyarg, Loonguage::Errors& errs_yyarg);
+     Parser  (LoonScanner::Scanner& scanner_yyarg, LoonScanner::location& loc_yyarg, Loonguage::SymbolTable<std::string>& idenTable_yyarg, Loonguage::SymbolTable<std::string>& strTable_yyarg, std::shared_ptr<Loonguage::NodeProgram>& program_yyarg, Loonguage::Errors& errs_yyarg);
     virtual ~ Parser  ();
 
 #if 201103L <= YY_CPLUSPLUS
@@ -2098,6 +2098,7 @@ switch (yykind)
 
     // User arguments.
     LoonScanner::Scanner& scanner;
+    LoonScanner::location& loc;
     Loonguage::SymbolTable<std::string>& idenTable;
     Loonguage::SymbolTable<std::string>& strTable;
     std::shared_ptr<Loonguage::NodeProgram>& program;
@@ -2431,7 +2432,7 @@ switch (yykind)
 
 #line 9 "LoonParser.y"
 } // LoonScanner
-#line 2435 "LoonParser.hpp"
+#line 2436 "LoonParser.hpp"
 
 
 

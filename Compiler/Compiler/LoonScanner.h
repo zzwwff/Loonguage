@@ -5,13 +5,14 @@
 #if !defined(yyFlexLexerOnce)
 #undef yyFlexLexer
 #define yyFlexLexer Loon_FlexLexer  // ¸ù¾ÝprefixÐÞ¸Ä
-
+#include "location.hh"
 #include "win_flex\FlexLexer.h"
 
 #endif
 
 #undef YY_DECL
 #define YY_DECL LoonScanner::Parser::symbol_type LoonScanner::Scanner::nextToken(\
+                                        LoonScanner::location& loc,\
                                         Loonguage::SymbolTable<std::string>& idenTable,\
                                         Loonguage::SymbolTable<std::string>& strTable,\
                                         std::shared_ptr<Loonguage::NodeProgram>& program,\
@@ -30,6 +31,7 @@ namespace LoonScanner {
         Scanner() {}
 
         virtual LoonScanner::Parser::symbol_type nextToken(
+            LoonScanner::location& loc,
             Loonguage::SymbolTable<std::string>& idenTable,
             Loonguage::SymbolTable<std::string>& strTable,
             std::shared_ptr<Loonguage::NodeProgram>& program,

@@ -50,6 +50,12 @@
         <height>311</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Consolas</family>
+        <pointsize>13</pointsize>
+       </font>
+      </property>
      </widget>
      <widget class="QPushButton" name="pushButton">
       <property name="geometry">
@@ -99,6 +105,14 @@
         <height>61</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Consolas</family>
+       </font>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_4">
@@ -127,6 +141,14 @@
         <height>371</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Consolas</family>
+       </font>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_5">
@@ -154,6 +176,14 @@
         <width>661</width>
         <height>361</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Consolas</family>
+       </font>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
@@ -186,7 +216,19 @@
         </widget>
        </item>
        <item>
-        <widget class="QListView" name="codeOut"/>
+        <widget class="QListView" name="codeOut">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>50</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Consolas</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">

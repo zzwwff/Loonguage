@@ -1,108 +1,4 @@
-﻿  Compiler.cpp
-E:\source\repos\Loonguage\Compiler\Compiler\win_flex\FlexLexer.h(134,20): error C2555: “Loonguage::Loon_FlexLexer::yy_create_buffer”: 重写虚函数返回类型有差异，且不是来自“FlexLexer::yy_create_buffer”的协变
-E:\source\repos\Loonguage\Compiler\Compiler\win_flex\FlexLexer.h(133,20): error C2555: “Loonguage::Loon_FlexLexer::yy_create_buffer”: 重写虚函数返回类型有差异，且不是来自“FlexLexer::yy_create_buffer”的协变
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(394,9): warning C4005: “YY_DECL”: 宏重定义
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(753,1): error C2509: “yylex”: 成员函数没有在“LoonScanner::Scanner”中声明
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(795,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(798,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(804,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(885,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(890,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(895,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(901,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(907,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(912,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(917,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(922,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(928,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(937,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(945,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(953,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(964,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(971,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(979,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(988,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(994,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(999,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1006,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1013,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1020,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1027,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1034,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1041,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1048,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1055,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1062,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1069,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1076,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1083,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1090,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1097,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1104,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1111,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1118,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1125,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1132,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1139,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1146,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1153,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1160,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1170,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1175,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1183,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1186,7): error C2005: #line 应输入行号，却找到“字符串”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1513,22): error C2440: “初始化”: 无法从“Loonguage::yy_buffer_state *”转换为“Loonguage::YY_BUFFER_STATE”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1516,27): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1518,9): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1520,20): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1523,6): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1523,24): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1525,6): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1527,5): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1529,26): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1530,22): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1529,6): error C2660: “Loonguage::Loon_realloc”: 函数不接受 1 个参数
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1534,5): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1536,11): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1540,20): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1831,23): error C2511: “void Loonguage::Loon_FlexLexer::yy_switch_to_buffer(Loonguage::YY_BUFFER_STATE)”:“Loonguage::Loon_FlexLexer”中没有找到重载的成员函数
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1840,2): error C2352: “Loonguage::Loon_FlexLexer::yyensure_buffer_stack”: 调用非静态成员函数需要一个对象
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1841,7): error C2597: 对非静态成员“Loonguage::Loon_FlexLexer::yy_buffer_stack”的非法引用
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1841,7): error C2597: 对非静态成员“Loonguage::Loon_FlexLexer::yy_buffer_stack_top”的非法引用
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1841,7): error C3867: “Loonguage::Loon_FlexLexer::yy_buffer_stack”: 非标准语法；请使用 "&" 来创建指向成员的指针
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1841,7): error C2568: “[”: 无法解析函数重载
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1844,7): error C2597: 对非静态成员“Loonguage::Loon_FlexLexer::yy_buffer_stack”的非法引用
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1844,7): error C2597: 对非静态成员“Loonguage::Loon_FlexLexer::yy_buffer_stack_top”的非法引用
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1844,7): error C3867: “Loonguage::Loon_FlexLexer::yy_buffer_stack”: 非标准语法；请使用 "&" 来创建指向成员的指针
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1844,7): error C2568: “[”: 无法解析函数重载
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1847,5): error C2597: 对非静态成员“Loonguage::Loon_FlexLexer::yy_c_buf_p”的非法引用
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1848,3): error C2597: 对非静态成员“Loonguage::Loon_FlexLexer::yy_buffer_stack_top”的非法引用
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1848,3): error C2597: 对非静态成员“Loonguage::Loon_FlexLexer::yy_buffer_stack”的非法引用
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1848,3): error C3867: “Loonguage::Loon_FlexLexer::yy_buffer_stack”: 非标准语法；请使用 "&" 来创建指向成员的指针
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1848,3): error C2568: “[”: 无法解析函数重载
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1849,3): error C2597: 对非静态成员“Loonguage::Loon_FlexLexer::yy_buffer_stack_top”的非法引用
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1849,3): error C2597: 对非静态成员“Loonguage::Loon_FlexLexer::yy_buffer_stack”的非法引用
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1849,3): error C3867: “Loonguage::Loon_FlexLexer::yy_buffer_stack”: 非标准语法；请使用 "&" 来创建指向成员的指针
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1849,3): error C2568: “[”: 无法解析函数重载
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1852,2): error C2597: 对非静态成员“Loonguage::Loon_FlexLexer::yy_buffer_stack_top”的非法引用
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1852,2): error C2597: 对非静态成员“Loonguage::Loon_FlexLexer::yy_buffer_stack”的非法引用
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1852,2): error C3867: “Loonguage::Loon_FlexLexer::yy_buffer_stack”: 非标准语法；请使用 "&" 来创建指向成员的指针
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1852,2): error C2568: “[”: 无法解析函数重载
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1853,2): error C2352: “Loonguage::Loon_FlexLexer::yy_load_buffer_state”: 调用非静态成员函数需要一个对象
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1860,3): error C2597: 对非静态成员“Loonguage::Loon_FlexLexer::yy_did_buffer_switch_on_eof”的非法引用
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1888,34): error C2556: “Loonguage::YY_BUFFER_STATE Loonguage::Loon_FlexLexer::yy_create_buffer(std::istream &,int)”: 重载函数与“Loonguage::yy_buffer_state *Loonguage::Loon_FlexLexer::yy_create_buffer(std::istream &,int)”只是在返回类型上不同
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1888,34): error C2371: “Loonguage::Loon_FlexLexer::yy_create_buffer”: 重定义；不同的基类型
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1897,2): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1902,2): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1902,48): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1903,9): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1906,2): error C2027: 使用了未定义类型“yy_buffer_state”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1908,2): error C2664: “void Loonguage::Loon_FlexLexer::yy_init_buffer(Loonguage::yy_buffer_state *,std::istream &)”: 无法将参数 1 从“Loonguage::YY_BUFFER_STATE”转换为“Loonguage::yy_buffer_state *”
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1920,31): error C2556: “Loonguage::YY_BUFFER_STATE Loonguage::Loon_FlexLexer::yy_create_buffer(std::istream *,int)”: 重载函数与“Loonguage::yy_buffer_state *Loonguage::Loon_FlexLexer::yy_create_buffer(std::istream *,int)”只是在返回类型上不同
-E:\source\repos\Loonguage\Compiler\Compiler\lex.Loon_.cc(1920,31): error C1003: 错误计数超过 100；正在停止编译
-  LoonParser.cpp
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1018,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
-  lex.Loon_.cc
+﻿  lex.Loon_.cc
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(49,9): warning C4005: “INT8_MIN”: 宏重定义
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(50,9): warning C4005: “INT16_MIN”: 宏重定义
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(51,9): warning C4005: “INT32_MIN”: 宏重定义
@@ -113,6 +9,12 @@ D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.3380
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(58,9): warning C4005: “UINT16_MAX”: 宏重定义
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(59,9): warning C4005: “UINT32_MAX”: 宏重定义
 E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1018,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+  Compiler.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1018,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+E:\source\repos\Loonguage\Compiler\Compiler\SymbolTable.h(97,33): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  LoonParser.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1018,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   main.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1018,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   正在生成代码...
+  Compiler.vcxproj -> E:\source\repos\Loonguage\Compiler\x64\Debug\Compiler.exe
