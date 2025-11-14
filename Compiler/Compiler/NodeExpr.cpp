@@ -62,7 +62,7 @@ namespace Loonguage {
 	}
 
 
-	NodeEBracket::NodeEBracket(NodeExpr* e):
+	NodeEBracket::NodeEBracket(std::shared_ptr<NodeExpr> e):
 		NodeExpr(e->getLine(), Node::NdEBracket), expr(e)
 	{
 	}
@@ -95,7 +95,7 @@ namespace Loonguage {
 		expr->codeGen(context, codes);
 	}
 
-	NodeEDispatch::NodeEDispatch(TokenIden i, NodeActuals* a):
+	NodeEDispatch::NodeEDispatch(TokenIden i, std::shared_ptr<NodeActuals> a):
 		NodeExpr(i.line, Node::NdEDispatch), iden(i), actuals(a)
 	{
 	}
@@ -165,7 +165,7 @@ namespace Loonguage {
 		codes.push_back(Code(Code::CALL, Label(callLabel)));
 	}
 
-	NodeECalc::NodeECalc(NodeExpr* e1, char c, NodeExpr* e2):
+	NodeECalc::NodeECalc(std::shared_ptr<NodeExpr> e1, char c, std::shared_ptr<NodeExpr> e2):
 		NodeExpr(e1->getLine(), Node::NdECalc), expr1(e1), op(c), expr2(e2)
 	{
 	}
@@ -218,7 +218,7 @@ namespace Loonguage {
         codes.push_back(Code(type, Reg::rax, Reg::rtm));
     }
 
-	NodeEEqua::NodeEEqua(NodeExpr* e1, NodeExpr* e2):
+	NodeEEqua::NodeEEqua(std::shared_ptr<NodeExpr> e1, std::shared_ptr<NodeExpr> e2):
 		NodeExpr(e1->getLine(), Node::NdEEqua), expr1(e1), expr2(e2)
 	{
 	}
@@ -263,7 +263,7 @@ namespace Loonguage {
 		codes.push_back(Code(Code::EQU, Reg::rax, Reg::rtm));
 	}
 
-	NodeELess::NodeELess(NodeExpr* e1, NodeExpr* e2) :
+	NodeELess::NodeELess(std::shared_ptr<NodeExpr> e1, std::shared_ptr<NodeExpr> e2) :
 		NodeExpr(e1->getLine(), Node::NdEEqua), expr1(e1), expr2(e2)
 	{
 	}
@@ -309,7 +309,7 @@ namespace Loonguage {
         codes.push_back(Code(Code::LES, Reg::rax, Reg::rtm));
 	}
 
-	NodeERev::NodeERev(NodeExpr* e):
+	NodeERev::NodeERev(std::shared_ptr<NodeExpr> e):
 		NodeExpr(e->getLine(), Node::NdERev), expr(e)
 	{
 	}
@@ -347,7 +347,7 @@ namespace Loonguage {
 		codes.push_back(Code(Code::REV, Reg::rax));
 	}
 
-	NodeEAssign::NodeEAssign(TokenIden i, NodeExpr* e):
+	NodeEAssign::NodeEAssign(TokenIden i, std::shared_ptr<NodeExpr> e):
 		NodeExpr(i.line, Node::NdEAssign),  expr(e), iden(i)
 	{
 	}
@@ -417,7 +417,7 @@ namespace Loonguage {
 		const FunctionMapNameOrdered& functionMap,
 		SemanticContext context, Errors& errs)
 	{
-		type = (*(context.idenTable))["int"];
+		type = context.idenTable["int"];
 	}
 
 	void NodeEInt::codeGen(CodeGenContext& context, std::vector<Code>& codes)
@@ -446,6 +446,6 @@ namespace Loonguage {
 		const FunctionMapNameOrdered& functionMap,
 		SemanticContext context, Errors& errs)
 	{
-		type = (*(context.idenTable))["string"];
+		type = context.idenTable["string"];
 	}
 }

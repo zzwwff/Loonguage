@@ -1,6 +1,6 @@
 ﻿#include "NodeFunction.h"
 namespace Loonguage {
-	NodeFunction::NodeFunction(TokenIden rt, TokenIden n, NodeFormals* a, NodeSentence* s) :
+	NodeFunction::NodeFunction(TokenIden rt, TokenIden n, std::shared_ptr<NodeFormals> a, std::shared_ptr<NodeSentence> s) :
 		Node(rt.line, Node::NdFunction), returnType(rt), name(n), formals(a), sentence(s)
 	{
 	}
@@ -42,6 +42,7 @@ namespace Loonguage {
 			currentNameOfSymbol[name] = deco;
 		}
 		//update context
+		//note that pfunction is native pointer, because pfunction is not a path on AST tree
 		context.pfunction = this;
 		context.returnType = returnType.value;
 		//call annotateType inside the function body
@@ -99,7 +100,7 @@ namespace Loonguage {
 			ac->dumpSem(cout, indent + 2);
 	}
 
-	NodeFunctions::NodeFunctions(NodeFunction* f):
+	NodeFunctions::NodeFunctions(std::shared_ptr<NodeFunction> f):
 		Node(f->getLine(), Node::NdFormals)
 	{
 		push_back(f);

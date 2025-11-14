@@ -5,7 +5,7 @@ namespace Loonguage {
 	{
 	}
 
-	NodeProgram::NodeProgram(NodeFunctions* p) :
+	NodeProgram::NodeProgram(std::shared_ptr<NodeFunctions> p) :
 		Node(p->getLine(), Node::NdProgram), functions(p)
 	{
 	}

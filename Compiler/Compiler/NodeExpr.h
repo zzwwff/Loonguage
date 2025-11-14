@@ -35,9 +35,9 @@ namespace Loonguage {
 	class NodeEBracket :
 		public NodeExpr
 	{
-		NodeExpr* expr;
+		std::shared_ptr<NodeExpr> expr;
 	public:
-		NodeEBracket(NodeExpr*);
+		NodeEBracket(std::shared_ptr<NodeExpr>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
@@ -51,10 +51,10 @@ namespace Loonguage {
 		public NodeExpr
 	{
 		TokenIden iden;
-		NodeActuals* actuals;
+		std::shared_ptr<NodeActuals> actuals;
 		Symbol idenDeco;
 	public:
-		NodeEDispatch(TokenIden, NodeActuals*);
+		NodeEDispatch(TokenIden, std::shared_ptr<NodeActuals>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 
@@ -65,10 +65,10 @@ namespace Loonguage {
 	class NodeECalc :
 		public NodeExpr
 	{
-		NodeExpr* expr1, *expr2;
+		std::shared_ptr<NodeExpr> expr1, expr2;
 		char op;
 	public:
-		NodeECalc(NodeExpr*, char, NodeExpr*);
+		NodeECalc(std::shared_ptr<NodeExpr>, char, std::shared_ptr<NodeExpr>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
@@ -79,9 +79,9 @@ namespace Loonguage {
 	class NodeEEqua :
 		public NodeExpr
 	{
-		NodeExpr* expr1, * expr2;
+		std::shared_ptr<NodeExpr> expr1, expr2;
 	public:
-		NodeEEqua(NodeExpr*, NodeExpr*);
+		NodeEEqua(std::shared_ptr<NodeExpr>, std::shared_ptr<NodeExpr>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
@@ -91,9 +91,9 @@ namespace Loonguage {
 	class NodeELess :
 		public NodeExpr
 	{
-		NodeExpr* expr1, * expr2;
+		std::shared_ptr<NodeExpr> expr1, expr2;
 	public:
-		NodeELess(NodeExpr*, NodeExpr*);
+		NodeELess(std::shared_ptr<NodeExpr>, std::shared_ptr<NodeExpr>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
@@ -104,9 +104,9 @@ namespace Loonguage {
 	class NodeERev :
 		public NodeExpr
 	{
-		NodeExpr* expr;
+		std::shared_ptr<NodeExpr> expr;
 	public:
-		NodeERev(NodeExpr*);
+		NodeERev(std::shared_ptr<NodeExpr>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
@@ -118,9 +118,9 @@ namespace Loonguage {
 	{
 		TokenIden iden;
 		Symbol idenDeco;
-		NodeExpr* expr;
+		std::shared_ptr<NodeExpr> expr;
 	public:
-		NodeEAssign(TokenIden, NodeExpr*);
+		NodeEAssign(TokenIden, std::shared_ptr<NodeExpr>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);

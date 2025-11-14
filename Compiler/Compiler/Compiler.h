@@ -11,6 +11,7 @@
 
 namespace Loonguage {
 
+	//Compiler is memory-safe
 	class Compiler
 	{
 		using Symbol = SymbolTable<std::string>::Symbol;
@@ -21,7 +22,7 @@ namespace Loonguage {
 		//syntax table
 		SymbolTable<std::string> strTable, idenTable;
 		//root of AST tree
-		NodeProgram* program;
+		std::shared_ptr<NodeProgram> program;
 
 
 		//Phase 3

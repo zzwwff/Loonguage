@@ -83,6 +83,16 @@ namespace Loonguage {
 		return val;
 	}
 
+	std::vector<int> RunTime::getStack()
+	{
+		std::vector<int> vec;
+		for (int i = stackBegin; i > regs[Reg::rsp]; i -= width)
+		{
+			vec.push_back(read(i));
+		}
+		return vec;
+	}
+
     RunTime::RunTime(RunTimeConfig c, std::vector<Code>& co) :
 		config(c), Z(0), S(0)
 	{
@@ -102,6 +112,7 @@ namespace Loonguage {
 		//width * codes.size() from top are reserved for codes, which will not be really used in RunTime simulator
         regs[Reg::ins] = memory.size() - 1;
 		regs[Reg::rsp] = regs[Reg::ins] - width * codes.size();
+		stackBegin = regs[Reg::rsp];
 		//initiate label lists, for easy jump, labels points to memory position, which is %ins - i * width
 		for (int i = 0; i < codes.size(); i++)
 		{

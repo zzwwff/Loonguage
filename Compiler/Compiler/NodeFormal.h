@@ -16,14 +16,14 @@ namespace Loonguage {
 	};
 
 	class NodeFormals :
-		public std::vector<NodeFormal*>,
+		public std::vector<std::shared_ptr<NodeFormal>>,
 		public Node
 	{
 	public:
 		void dumpSem(std::ostream&, int) const;
 		void dumpAST(std::ostream&, int) const;
 
-		NodeFormals(NodeFormal*);
+		NodeFormals(std::shared_ptr<NodeFormal>);
 		NodeFormals(int);
 	};
 }

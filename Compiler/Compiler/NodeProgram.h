@@ -6,9 +6,9 @@ namespace Loonguage {
 		public Node
 	{
 	public:
-		NodeFunctions* functions;
+		std::shared_ptr<NodeFunctions> functions;
 		NodeProgram();
-		NodeProgram(NodeFunctions*);
+		NodeProgram(std::shared_ptr<NodeFunctions>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);

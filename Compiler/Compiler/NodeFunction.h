@@ -12,10 +12,10 @@ namespace Loonguage {
 		TokenIden returnType;
 		TokenIden name;
 		Symbol nameDeco;
-		NodeFormals* formals;
-		NodeSentence* sentence;
+		std::shared_ptr<NodeFormals> formals;
+		std::shared_ptr<NodeSentence> sentence;
 		std::vector<Symbol> locals;
-		NodeFunction(TokenIden, TokenIden, NodeFormals*, NodeSentence*);
+		NodeFunction(TokenIden, TokenIden, std::shared_ptr<NodeFormals>, std::shared_ptr<NodeSentence>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
@@ -23,13 +23,13 @@ namespace Loonguage {
 	};
 
 	class NodeFunctions :
-		public std::vector<NodeFunction*>, 
+		public std::vector<std::shared_ptr<NodeFunction>>,
 		public Node
 	{
 	public:
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
-		NodeFunctions(NodeFunction*);
+		NodeFunctions(std::shared_ptr<NodeFunction>);
 		NodeFunctions(int);
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 		void codeGen(CodeGenContext&, std::vector<Code>&);

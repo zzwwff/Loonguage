@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <map>
+#include <memory>
 #include "IdenDeco.h"
 #include "SymbolTable.h"
 #include "FunctionDeco.h"
@@ -12,6 +13,8 @@ namespace Loonguage {
 	class Node
 	{
 	public:
+		//manage memory leak
+		static int LIFE;
 		enum NodeType {
 			NdNoType,
 			NdProgram,
@@ -49,13 +52,13 @@ namespace Loonguage {
 
 	protected:
 		int line;
-		NodeType type;
 		void indent(std::ostream&, int) const;
 	public:
-		
+		NodeType type;
 		int getLine() const;
 		Node(int l, NodeType nt);
 		Node();
+		~Node();
 		virtual void dumpAST(std::ostream&, int) const;
 		virtual void dumpSem(std::ostream&, int) const;
 

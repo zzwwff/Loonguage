@@ -89,6 +89,14 @@ void MainWindow::updateData()
     ui->sSign->display(QString::number(runtime->S));
     QModelIndex index = model->index(runtime->currentCode, 0);
     ui->codeOut->setCurrentIndex(index);
+    QStandardItemModel* stackModel = new QStandardItemModel;
+    std::vector<int> stack = runtime->getStack();
+    for (auto num : stack)
+    {
+        QStandardItem *item = new QStandardItem(QString::number(num));
+        stackModel->appendRow(item);
+    }
+    ui->stack->setModel(stackModel);
 }
 
 void MainWindow::on_allStep_clicked()

@@ -8,10 +8,10 @@ namespace Loonguage {
 	class NodeActual :
 		public Node
 	{
-		NodeExpr* expr;
+		std::shared_ptr<NodeExpr> expr;
 	public:
 		Symbol type;
-		NodeActual(NodeExpr*);
+		NodeActual(std::shared_ptr<NodeExpr>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
@@ -20,11 +20,11 @@ namespace Loonguage {
 	};
 
 	class NodeActuals :
-		public std::vector<NodeActual*>,
+		public std::vector<std::shared_ptr<NodeActual>>,
 		public Node
 	{
 	public:
-		NodeActuals(NodeActual*);
+		NodeActuals(std::shared_ptr<NodeActual>);
 		NodeActuals(int);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;

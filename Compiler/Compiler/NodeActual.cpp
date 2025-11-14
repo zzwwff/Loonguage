@@ -2,7 +2,7 @@
 
 
 namespace Loonguage {
-	NodeActual::NodeActual(NodeExpr* e) :
+	NodeActual::NodeActual(std::shared_ptr<NodeExpr> e) :
 		Node(e->getLine(), Node::NdActual), expr(e)
 	{
 	}
@@ -36,7 +36,7 @@ namespace Loonguage {
 		expr->codeGen(context, codes);
 	}
 
-	NodeActuals::NodeActuals(NodeActual* n) :
+	NodeActuals::NodeActuals(std::shared_ptr<NodeActual> n) :
 		Node(n->getLine(), Node::NdActuals)
 	{
 		push_back(n);

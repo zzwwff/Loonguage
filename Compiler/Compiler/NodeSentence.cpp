@@ -23,7 +23,7 @@ namespace Loonguage
 	{
 	}
 
-	NodeSIf::NodeSIf(NodeExpr* e, NodeSentence* s) :
+	NodeSIf::NodeSIf(std::shared_ptr<NodeExpr> e, std::shared_ptr<NodeSentence> s) :
 		NodeSentence(e->getLine(), Node::NdSIf), predicate(e), sentence(s)
 	{
 	}
@@ -74,7 +74,7 @@ namespace Loonguage
 	}
 
 
-	NodeSWhile::NodeSWhile(NodeExpr* e, NodeSentence* s) :
+	NodeSWhile::NodeSWhile(std::shared_ptr<NodeExpr> e, std::shared_ptr<NodeSentence> s) :
 		NodeSentence(e->getLine(), Node::NdSWhile), predicate(e), sentence(s)
 	{
 
@@ -101,7 +101,8 @@ namespace Loonguage
 								  const FunctionMapNameOrdered& functionMap,
 								  SemanticContext context, Errors& errs)
 	{
-		predicate->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
+		predicate->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);	
+		//note that pwhile is native pointer, because pwhile is not a path on AST tree
 		context.pwhile = this;
 		//if will start a new scope even though there's no block
 		std::map<Symbol, IdenDeco> currentNameOfSymbol = nameOfSymbol;
@@ -136,7 +137,7 @@ namespace Loonguage
 	}
 
 
-	NodeSBlock::NodeSBlock(NodeSentences* s):
+	NodeSBlock::NodeSBlock(std::shared_ptr<NodeSentences> s):
 		NodeSentence(s->getLine(), Node::NdSBlock), sentences(s)
 	{
 	}
@@ -200,7 +201,7 @@ namespace Loonguage
 		Symbol name = this->name.value;
 		Symbol type = this->type.value;
 		//decide whether type is valid
-		if (context.types->find(type) == context.types->end())
+		if (context.types.find(type) == context.types.end())
 			errs.push_back(Error("", getLine(),
 				"Unknown type \"" + type.getString() + "\" of variable \"" + name.getString() + "\"."));
 		else
@@ -231,7 +232,7 @@ namespace Loonguage
 			e->dumpSem(cout, indent + 2);
 	}
 
-	NodeSentences::NodeSentences(NodeSentence* s):
+	NodeSentences::NodeSentences(std::shared_ptr<NodeSentence> s):
 		Node(s->getLine(), Node::NdSentences)
 	{
 		push_back(s);
@@ -250,7 +251,9 @@ namespace Loonguage
 		//be aware that all sentences in sentence are in one scope
 		//so nameOfSymbol will be passed to lower nodes on AST tree
 		for (auto sentence : *this)
+		{
 			sentence->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
+		}
 	}
 
 
@@ -261,7 +264,7 @@ namespace Loonguage
 	}
 
 
-	NodeSExpr::NodeSExpr(NodeExpr* e) :
+	NodeSExpr::NodeSExpr(std::shared_ptr<NodeExpr> e) :
 		NodeSentence(e->getLine(), Node::NdSExpr), expr(e)
 	{
 	}
@@ -299,7 +302,7 @@ namespace Loonguage
 	}
 
 
-	NodeSReturn::NodeSReturn(NodeExpr* e) :
+	NodeSReturn::NodeSReturn(std::shared_ptr<NodeExpr> e) :
 		NodeSentence(e->getLine(), Node::NdSReturn), expr(e), pfunction(NULL)
 	{
 	}
@@ -326,6 +329,7 @@ namespace Loonguage
 		SemanticContext context, Errors& errs)
 	{
 		//check return type
+		//note that pfunction is native pointer, because pfunction is not a path on AST tree
 		pfunction = context.pfunction;
 		if (expr == NULL)
 		{
@@ -415,7 +419,7 @@ namespace Loonguage
 		SemanticContext context, Errors& errs)
 	{
 		//make sure continue is inside a loop and set pwhile
-		if (context.pwhile == NULL)
+		if (context.pwhile == nullptr)
 			errs.push_back(Error("", getLine(),
 				std::string("\"break\" should be used inside a loop.")));
 		else pwhile = context.pwhile;

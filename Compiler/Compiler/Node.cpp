@@ -1,6 +1,9 @@
 #include "Node.h"
 
+
 namespace Loonguage {
+	int Node::LIFE = 0;
+
 	void Node::indent(std::ostream& cout, int ind) const
 	{
 		for (int i = 1; i <= ind; i++)
@@ -15,11 +18,18 @@ namespace Loonguage {
 	Node::Node(int l, NodeType nt):
 		line(l), type(nt)
 	{
+		LIFE++;
 	}
 
 	Node::Node():
 		line(0), type(NdNoType)
 	{
+		LIFE++;
+	}
+
+	Node::~Node()
+	{
+		LIFE--;
 	}
 
 	void Node::dumpAST(std::ostream& cout, int indent) const

@@ -52,6 +52,7 @@
   #include <vector>
   #include <stdint.h>
   #include <cmath>
+  #include <memory>
   #include "Tokens.h"
   #include "NodeActual.h"
   #include "NodeExpr.h"
@@ -65,7 +66,7 @@
     class Scanner;
   }
 
-#line 69 "LoonParser.hpp"
+#line 70 "LoonParser.hpp"
 
 # include <cassert>
 # include <cstdlib> // std::abort
@@ -206,7 +207,7 @@
 
 #line 9 "LoonParser.y"
 namespace LoonScanner {
-#line 210 "LoonParser.hpp"
+#line 211 "LoonParser.hpp"
 
 
 
@@ -425,51 +426,21 @@ namespace LoonScanner {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
-      // actual
-      char dummy1[sizeof (Loonguage::NodeActual*)];
-
-      // actuals
-      char dummy2[sizeof (Loonguage::NodeActuals*)];
-
-      // expr
-      char dummy3[sizeof (Loonguage::NodeExpr*)];
-
-      // formal
-      char dummy4[sizeof (Loonguage::NodeFormal*)];
-
-      // formals
-      char dummy5[sizeof (Loonguage::NodeFormals*)];
-
-      // function
-      char dummy6[sizeof (Loonguage::NodeFunction*)];
-
-      // functions
-      char dummy7[sizeof (Loonguage::NodeFunctions*)];
-
-      // program
-      char dummy8[sizeof (Loonguage::NodeProgram*)];
-
-      // sentence
-      char dummy9[sizeof (Loonguage::NodeSentence*)];
-
-      // sentences
-      char dummy10[sizeof (Loonguage::NodeSentences*)];
-
       // IDEN
-      char dummy11[sizeof (Loonguage::TokenIden)];
+      char dummy1[sizeof (Loonguage::TokenIden)];
 
       // INT
-      char dummy12[sizeof (Loonguage::TokenInt)];
+      char dummy2[sizeof (Loonguage::TokenInt)];
 
       // IF
       // WHILE
       // CONTINUE
       // BREAK
       // RETURN
-      char dummy13[sizeof (Loonguage::TokenKeyWord)];
+      char dummy3[sizeof (Loonguage::TokenKeyWord)];
 
       // STR
-      char dummy14[sizeof (Loonguage::TokenString)];
+      char dummy4[sizeof (Loonguage::TokenString)];
 
       // PLUS
       // MINUS
@@ -488,7 +459,37 @@ namespace LoonScanner {
       // ASSIGN
       // EQUAL
       // LESS
-      char dummy15[sizeof (Loonguage::TokenSymbol)];
+      char dummy5[sizeof (Loonguage::TokenSymbol)];
+
+      // actual
+      char dummy6[sizeof (std::shared_ptr<Loonguage::NodeActual>)];
+
+      // actuals
+      char dummy7[sizeof (std::shared_ptr<Loonguage::NodeActuals>)];
+
+      // expr
+      char dummy8[sizeof (std::shared_ptr<Loonguage::NodeExpr>)];
+
+      // formal
+      char dummy9[sizeof (std::shared_ptr<Loonguage::NodeFormal>)];
+
+      // formals
+      char dummy10[sizeof (std::shared_ptr<Loonguage::NodeFormals>)];
+
+      // function
+      char dummy11[sizeof (std::shared_ptr<Loonguage::NodeFunction>)];
+
+      // functions
+      char dummy12[sizeof (std::shared_ptr<Loonguage::NodeFunctions>)];
+
+      // program
+      char dummy13[sizeof (std::shared_ptr<Loonguage::NodeProgram>)];
+
+      // sentence
+      char dummy14[sizeof (std::shared_ptr<Loonguage::NodeSentence>)];
+
+      // sentences
+      char dummy15[sizeof (std::shared_ptr<Loonguage::NodeSentences>)];
 
       // ERROR
       char dummy16[sizeof (std::string)];
@@ -664,46 +665,6 @@ namespace LoonScanner {
       {
         switch (this->kind ())
     {
-      case symbol_kind::S_actual: // actual
-        value.move< Loonguage::NodeActual* > (std::move (that.value));
-        break;
-
-      case symbol_kind::S_actuals: // actuals
-        value.move< Loonguage::NodeActuals* > (std::move (that.value));
-        break;
-
-      case symbol_kind::S_expr: // expr
-        value.move< Loonguage::NodeExpr* > (std::move (that.value));
-        break;
-
-      case symbol_kind::S_formal: // formal
-        value.move< Loonguage::NodeFormal* > (std::move (that.value));
-        break;
-
-      case symbol_kind::S_formals: // formals
-        value.move< Loonguage::NodeFormals* > (std::move (that.value));
-        break;
-
-      case symbol_kind::S_function: // function
-        value.move< Loonguage::NodeFunction* > (std::move (that.value));
-        break;
-
-      case symbol_kind::S_functions: // functions
-        value.move< Loonguage::NodeFunctions* > (std::move (that.value));
-        break;
-
-      case symbol_kind::S_program: // program
-        value.move< Loonguage::NodeProgram* > (std::move (that.value));
-        break;
-
-      case symbol_kind::S_sentence: // sentence
-        value.move< Loonguage::NodeSentence* > (std::move (that.value));
-        break;
-
-      case symbol_kind::S_sentences: // sentences
-        value.move< Loonguage::NodeSentences* > (std::move (that.value));
-        break;
-
       case symbol_kind::S_IDEN: // IDEN
         value.move< Loonguage::TokenIden > (std::move (that.value));
         break;
@@ -744,6 +705,46 @@ namespace LoonScanner {
         value.move< Loonguage::TokenSymbol > (std::move (that.value));
         break;
 
+      case symbol_kind::S_actual: // actual
+        value.move< std::shared_ptr<Loonguage::NodeActual> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_actuals: // actuals
+        value.move< std::shared_ptr<Loonguage::NodeActuals> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_expr: // expr
+        value.move< std::shared_ptr<Loonguage::NodeExpr> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_formal: // formal
+        value.move< std::shared_ptr<Loonguage::NodeFormal> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_formals: // formals
+        value.move< std::shared_ptr<Loonguage::NodeFormals> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_function: // function
+        value.move< std::shared_ptr<Loonguage::NodeFunction> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_functions: // functions
+        value.move< std::shared_ptr<Loonguage::NodeFunctions> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_program: // program
+        value.move< std::shared_ptr<Loonguage::NodeProgram> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_sentence: // sentence
+        value.move< std::shared_ptr<Loonguage::NodeSentence> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_sentences: // sentences
+        value.move< std::shared_ptr<Loonguage::NodeSentences> > (std::move (that.value));
+        break;
+
       case symbol_kind::S_ERROR: // ERROR
         value.move< std::string > (std::move (that.value));
         break;
@@ -767,146 +768,6 @@ namespace LoonScanner {
 #else
       basic_symbol (typename Base::kind_type t, const location_type& l)
         : Base (t)
-        , location (l)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, Loonguage::NodeActual*&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const Loonguage::NodeActual*& v, const location_type& l)
-        : Base (t)
-        , value (v)
-        , location (l)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, Loonguage::NodeActuals*&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const Loonguage::NodeActuals*& v, const location_type& l)
-        : Base (t)
-        , value (v)
-        , location (l)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, Loonguage::NodeExpr*&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const Loonguage::NodeExpr*& v, const location_type& l)
-        : Base (t)
-        , value (v)
-        , location (l)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, Loonguage::NodeFormal*&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const Loonguage::NodeFormal*& v, const location_type& l)
-        : Base (t)
-        , value (v)
-        , location (l)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, Loonguage::NodeFormals*&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const Loonguage::NodeFormals*& v, const location_type& l)
-        : Base (t)
-        , value (v)
-        , location (l)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, Loonguage::NodeFunction*&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const Loonguage::NodeFunction*& v, const location_type& l)
-        : Base (t)
-        , value (v)
-        , location (l)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, Loonguage::NodeFunctions*&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const Loonguage::NodeFunctions*& v, const location_type& l)
-        : Base (t)
-        , value (v)
-        , location (l)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, Loonguage::NodeProgram*&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const Loonguage::NodeProgram*& v, const location_type& l)
-        : Base (t)
-        , value (v)
-        , location (l)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, Loonguage::NodeSentence*&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const Loonguage::NodeSentence*& v, const location_type& l)
-        : Base (t)
-        , value (v)
-        , location (l)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, Loonguage::NodeSentences*&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const Loonguage::NodeSentences*& v, const location_type& l)
-        : Base (t)
-        , value (v)
         , location (l)
       {}
 #endif
@@ -982,6 +843,146 @@ namespace LoonScanner {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::shared_ptr<Loonguage::NodeActual>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::shared_ptr<Loonguage::NodeActual>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::shared_ptr<Loonguage::NodeActuals>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::shared_ptr<Loonguage::NodeActuals>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::shared_ptr<Loonguage::NodeExpr>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::shared_ptr<Loonguage::NodeExpr>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::shared_ptr<Loonguage::NodeFormal>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::shared_ptr<Loonguage::NodeFormal>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::shared_ptr<Loonguage::NodeFormals>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::shared_ptr<Loonguage::NodeFormals>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::shared_ptr<Loonguage::NodeFunction>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::shared_ptr<Loonguage::NodeFunction>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::shared_ptr<Loonguage::NodeFunctions>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::shared_ptr<Loonguage::NodeFunctions>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::shared_ptr<Loonguage::NodeProgram>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::shared_ptr<Loonguage::NodeProgram>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::shared_ptr<Loonguage::NodeSentence>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::shared_ptr<Loonguage::NodeSentence>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::shared_ptr<Loonguage::NodeSentences>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::shared_ptr<Loonguage::NodeSentences>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, std::string&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
@@ -1019,46 +1020,6 @@ namespace LoonScanner {
         // Value type destructor.
 switch (yykind)
     {
-      case symbol_kind::S_actual: // actual
-        value.template destroy< Loonguage::NodeActual* > ();
-        break;
-
-      case symbol_kind::S_actuals: // actuals
-        value.template destroy< Loonguage::NodeActuals* > ();
-        break;
-
-      case symbol_kind::S_expr: // expr
-        value.template destroy< Loonguage::NodeExpr* > ();
-        break;
-
-      case symbol_kind::S_formal: // formal
-        value.template destroy< Loonguage::NodeFormal* > ();
-        break;
-
-      case symbol_kind::S_formals: // formals
-        value.template destroy< Loonguage::NodeFormals* > ();
-        break;
-
-      case symbol_kind::S_function: // function
-        value.template destroy< Loonguage::NodeFunction* > ();
-        break;
-
-      case symbol_kind::S_functions: // functions
-        value.template destroy< Loonguage::NodeFunctions* > ();
-        break;
-
-      case symbol_kind::S_program: // program
-        value.template destroy< Loonguage::NodeProgram* > ();
-        break;
-
-      case symbol_kind::S_sentence: // sentence
-        value.template destroy< Loonguage::NodeSentence* > ();
-        break;
-
-      case symbol_kind::S_sentences: // sentences
-        value.template destroy< Loonguage::NodeSentences* > ();
-        break;
-
       case symbol_kind::S_IDEN: // IDEN
         value.template destroy< Loonguage::TokenIden > ();
         break;
@@ -1097,6 +1058,46 @@ switch (yykind)
       case symbol_kind::S_EQUAL: // EQUAL
       case symbol_kind::S_LESS: // LESS
         value.template destroy< Loonguage::TokenSymbol > ();
+        break;
+
+      case symbol_kind::S_actual: // actual
+        value.template destroy< std::shared_ptr<Loonguage::NodeActual> > ();
+        break;
+
+      case symbol_kind::S_actuals: // actuals
+        value.template destroy< std::shared_ptr<Loonguage::NodeActuals> > ();
+        break;
+
+      case symbol_kind::S_expr: // expr
+        value.template destroy< std::shared_ptr<Loonguage::NodeExpr> > ();
+        break;
+
+      case symbol_kind::S_formal: // formal
+        value.template destroy< std::shared_ptr<Loonguage::NodeFormal> > ();
+        break;
+
+      case symbol_kind::S_formals: // formals
+        value.template destroy< std::shared_ptr<Loonguage::NodeFormals> > ();
+        break;
+
+      case symbol_kind::S_function: // function
+        value.template destroy< std::shared_ptr<Loonguage::NodeFunction> > ();
+        break;
+
+      case symbol_kind::S_functions: // functions
+        value.template destroy< std::shared_ptr<Loonguage::NodeFunctions> > ();
+        break;
+
+      case symbol_kind::S_program: // program
+        value.template destroy< std::shared_ptr<Loonguage::NodeProgram> > ();
+        break;
+
+      case symbol_kind::S_sentence: // sentence
+        value.template destroy< std::shared_ptr<Loonguage::NodeSentence> > ();
+        break;
+
+      case symbol_kind::S_sentences: // sentences
+        value.template destroy< std::shared_ptr<Loonguage::NodeSentences> > ();
         break;
 
       case symbol_kind::S_ERROR: // ERROR
@@ -1279,7 +1280,7 @@ switch (yykind)
     };
 
     /// Build a parser object.
-     Parser  (LoonScanner::Scanner& scanner_yyarg, Loonguage::SymbolTable<std::string>& idenTable_yyarg, Loonguage::SymbolTable<std::string>& strTable_yyarg, Loonguage::NodeProgram** program_yyarg, Loonguage::Errors& errs_yyarg);
+     Parser  (LoonScanner::Scanner& scanner_yyarg, Loonguage::SymbolTable<std::string>& idenTable_yyarg, Loonguage::SymbolTable<std::string>& strTable_yyarg, std::shared_ptr<Loonguage::NodeProgram>& program_yyarg, Loonguage::Errors& errs_yyarg);
     virtual ~ Parser  ();
 
 #if 201103L <= YY_CPLUSPLUS
@@ -2099,7 +2100,7 @@ switch (yykind)
     LoonScanner::Scanner& scanner;
     Loonguage::SymbolTable<std::string>& idenTable;
     Loonguage::SymbolTable<std::string>& strTable;
-    Loonguage::NodeProgram** program;
+    std::shared_ptr<Loonguage::NodeProgram>& program;
     Loonguage::Errors& errs;
 
   };
@@ -2164,46 +2165,6 @@ switch (yykind)
   {
     switch (this->kind ())
     {
-      case symbol_kind::S_actual: // actual
-        value.copy< Loonguage::NodeActual* > (YY_MOVE (that.value));
-        break;
-
-      case symbol_kind::S_actuals: // actuals
-        value.copy< Loonguage::NodeActuals* > (YY_MOVE (that.value));
-        break;
-
-      case symbol_kind::S_expr: // expr
-        value.copy< Loonguage::NodeExpr* > (YY_MOVE (that.value));
-        break;
-
-      case symbol_kind::S_formal: // formal
-        value.copy< Loonguage::NodeFormal* > (YY_MOVE (that.value));
-        break;
-
-      case symbol_kind::S_formals: // formals
-        value.copy< Loonguage::NodeFormals* > (YY_MOVE (that.value));
-        break;
-
-      case symbol_kind::S_function: // function
-        value.copy< Loonguage::NodeFunction* > (YY_MOVE (that.value));
-        break;
-
-      case symbol_kind::S_functions: // functions
-        value.copy< Loonguage::NodeFunctions* > (YY_MOVE (that.value));
-        break;
-
-      case symbol_kind::S_program: // program
-        value.copy< Loonguage::NodeProgram* > (YY_MOVE (that.value));
-        break;
-
-      case symbol_kind::S_sentence: // sentence
-        value.copy< Loonguage::NodeSentence* > (YY_MOVE (that.value));
-        break;
-
-      case symbol_kind::S_sentences: // sentences
-        value.copy< Loonguage::NodeSentences* > (YY_MOVE (that.value));
-        break;
-
       case symbol_kind::S_IDEN: // IDEN
         value.copy< Loonguage::TokenIden > (YY_MOVE (that.value));
         break;
@@ -2244,6 +2205,46 @@ switch (yykind)
         value.copy< Loonguage::TokenSymbol > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_actual: // actual
+        value.copy< std::shared_ptr<Loonguage::NodeActual> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_actuals: // actuals
+        value.copy< std::shared_ptr<Loonguage::NodeActuals> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_expr: // expr
+        value.copy< std::shared_ptr<Loonguage::NodeExpr> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_formal: // formal
+        value.copy< std::shared_ptr<Loonguage::NodeFormal> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_formals: // formals
+        value.copy< std::shared_ptr<Loonguage::NodeFormals> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_function: // function
+        value.copy< std::shared_ptr<Loonguage::NodeFunction> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_functions: // functions
+        value.copy< std::shared_ptr<Loonguage::NodeFunctions> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_program: // program
+        value.copy< std::shared_ptr<Loonguage::NodeProgram> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_sentence: // sentence
+        value.copy< std::shared_ptr<Loonguage::NodeSentence> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_sentences: // sentences
+        value.copy< std::shared_ptr<Loonguage::NodeSentences> > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_ERROR: // ERROR
         value.copy< std::string > (YY_MOVE (that.value));
         break;
@@ -2279,46 +2280,6 @@ switch (yykind)
     super_type::move (s);
     switch (this->kind ())
     {
-      case symbol_kind::S_actual: // actual
-        value.move< Loonguage::NodeActual* > (YY_MOVE (s.value));
-        break;
-
-      case symbol_kind::S_actuals: // actuals
-        value.move< Loonguage::NodeActuals* > (YY_MOVE (s.value));
-        break;
-
-      case symbol_kind::S_expr: // expr
-        value.move< Loonguage::NodeExpr* > (YY_MOVE (s.value));
-        break;
-
-      case symbol_kind::S_formal: // formal
-        value.move< Loonguage::NodeFormal* > (YY_MOVE (s.value));
-        break;
-
-      case symbol_kind::S_formals: // formals
-        value.move< Loonguage::NodeFormals* > (YY_MOVE (s.value));
-        break;
-
-      case symbol_kind::S_function: // function
-        value.move< Loonguage::NodeFunction* > (YY_MOVE (s.value));
-        break;
-
-      case symbol_kind::S_functions: // functions
-        value.move< Loonguage::NodeFunctions* > (YY_MOVE (s.value));
-        break;
-
-      case symbol_kind::S_program: // program
-        value.move< Loonguage::NodeProgram* > (YY_MOVE (s.value));
-        break;
-
-      case symbol_kind::S_sentence: // sentence
-        value.move< Loonguage::NodeSentence* > (YY_MOVE (s.value));
-        break;
-
-      case symbol_kind::S_sentences: // sentences
-        value.move< Loonguage::NodeSentences* > (YY_MOVE (s.value));
-        break;
-
       case symbol_kind::S_IDEN: // IDEN
         value.move< Loonguage::TokenIden > (YY_MOVE (s.value));
         break;
@@ -2357,6 +2318,46 @@ switch (yykind)
       case symbol_kind::S_EQUAL: // EQUAL
       case symbol_kind::S_LESS: // LESS
         value.move< Loonguage::TokenSymbol > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_actual: // actual
+        value.move< std::shared_ptr<Loonguage::NodeActual> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_actuals: // actuals
+        value.move< std::shared_ptr<Loonguage::NodeActuals> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_expr: // expr
+        value.move< std::shared_ptr<Loonguage::NodeExpr> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_formal: // formal
+        value.move< std::shared_ptr<Loonguage::NodeFormal> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_formals: // formals
+        value.move< std::shared_ptr<Loonguage::NodeFormals> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_function: // function
+        value.move< std::shared_ptr<Loonguage::NodeFunction> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_functions: // functions
+        value.move< std::shared_ptr<Loonguage::NodeFunctions> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_program: // program
+        value.move< std::shared_ptr<Loonguage::NodeProgram> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_sentence: // sentence
+        value.move< std::shared_ptr<Loonguage::NodeSentence> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_sentences: // sentences
+        value.move< std::shared_ptr<Loonguage::NodeSentences> > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_ERROR: // ERROR
@@ -2430,7 +2431,7 @@ switch (yykind)
 
 #line 9 "LoonParser.y"
 } // LoonScanner
-#line 2434 "LoonParser.hpp"
+#line 2435 "LoonParser.hpp"
 
 
 

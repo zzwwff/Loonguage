@@ -30,7 +30,7 @@
      <enum>QTabWidget::TabPosition::West</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -458,7 +458,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QListView" name="listView_2">
+          <widget class="QListView" name="stack">
            <property name="minimumSize">
             <size>
              <width>0</width>

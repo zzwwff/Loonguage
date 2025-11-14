@@ -19,6 +19,7 @@
   #include <vector>
   #include <stdint.h>
   #include <cmath>
+  #include <memory>
   #include "Tokens.h"
   #include "NodeActual.h"
   #include "NodeExpr.h"
@@ -44,35 +45,35 @@
   static LoonScanner::Parser::symbol_type yylex(LoonScanner::Scanner& scanner, 
                                                 Loonguage::SymbolTable<std::string>& idenTable, 
                                                 Loonguage::SymbolTable<std::string>& strTable,
-                                                Loonguage::NodeProgram** program,
+                                                std::shared_ptr<Loonguage::NodeProgram>& program,
                                                 Loonguage::Errors& errs){
     return scanner.nextToken(idenTable, strTable, program, errs);
   }
   using namespace LoonScanner;
 }
 
-/*定义parser传给scanner的参数*/
+/*arguments from parser to scanner*/
 %lex-param { LoonScanner::Scanner& scanner }
 %lex-param { Loonguage::SymbolTable<std::string>& idenTable }
 %lex-param { Loonguage::SymbolTable<std::string>& strTable }
-%lex-param { Loonguage::NodeProgram** program }
+%lex-param { std::shared_ptr<Loonguage::NodeProgram>& program }
 %lex-param { Loonguage::Errors& errs }
 
 
-/*定义driver传给parser的参数*/
+/*arguments from driver to parser */
 %parse-param { LoonScanner::Scanner& scanner }
 %parse-param { Loonguage::SymbolTable<std::string>& idenTable }
 %parse-param { Loonguage::SymbolTable<std::string>& strTable }
-%parse-param { Loonguage::NodeProgram** program }
+%parse-param { std::shared_ptr<Loonguage::NodeProgram>& program }
 %parse-param { Loonguage::Errors& errs }
 
 %locations
 //%define parse-trace
 
-/*详细显示错误信息*/
+/*show error messages*/
 %define parse.error verbose
 
-/*通过LoonScanner::Parser::make_XXX(loc)给token添加前缀*/
+/*add prefiex to LoonScanner::Parser::make_XXX(loc)*/
 %define api.token.prefix {TOKEN_}
 
 %token <Loonguage::TokenKeyWord> IF WHILE CONTINUE BREAK RETURN
@@ -91,16 +92,16 @@
 %left TIME DIVISION
 %right REV
 
-%type <Loonguage::NodeProgram*> program
-%type <Loonguage::NodeFunctions*> functions
-%type <Loonguage::NodeFunction*> function
-%type <Loonguage::NodeFormal*> formal
-%type <Loonguage::NodeFormals*> formals
-%type <Loonguage::NodeSentence*> sentence
-%type <Loonguage::NodeSentences*> sentences
-%type <Loonguage::NodeExpr*> expr
-%type <Loonguage::NodeActual*> actual
-%type <Loonguage::NodeActuals*> actuals
+%type <std::shared_ptr<Loonguage::NodeProgram>> program
+%type <std::shared_ptr<Loonguage::NodeFunctions>> functions
+%type <std::shared_ptr<Loonguage::NodeFunction>> function
+%type <std::shared_ptr<Loonguage::NodeFormal>> formal
+%type <std::shared_ptr<Loonguage::NodeFormals>> formals
+%type <std::shared_ptr<Loonguage::NodeSentence>> sentence
+%type <std::shared_ptr<Loonguage::NodeSentences>> sentences
+%type <std::shared_ptr<Loonguage::NodeExpr>> expr
+%type <std::shared_ptr<Loonguage::NodeActual>> actual
+%type <std::shared_ptr<Loonguage::NodeActuals>> actuals
 
 
 %start program
@@ -109,84 +110,84 @@
 %%
  program:
 functions
-{ $$ = new Loonguage::NodeProgram($1); 
-  *program = $$;
+{ $$ = std::make_shared<Loonguage::NodeProgram>($1); 
+  program = $$;
   }
 
 functions:
-function { $$ = new Loonguage::NodeFunctions($1); }
+function { $$ = std::make_shared<Loonguage::NodeFunctions>($1); }
 | functions function {$$ = $1;
                       $$->push_back($2);}
 | functions error {
-                //$$ = new Loonguage::NodeFunctions($1);
+                //$$ = std::make_shared<Loonguage::NodeFunctions>($1);
                 $$ = $1;
 }
 
 formal:
-IDEN IDEN { $$ = new Loonguage::NodeFormal($1, $2); }
+IDEN IDEN { $$ = std::make_shared<Loonguage::NodeFormal>($1, $2); }
 
 formals:
 formals COMMA formal { $$ = $1;
                       $$->push_back($3);  }
-| formal { $$ = new Loonguage::NodeFormals($1); }
+| formal { $$ = std::make_shared<Loonguage::NodeFormals>($1); }
 | error COMMA formal {
-    $$ = new Loonguage::NodeFormals($3);
+    $$ = std::make_shared<Loonguage::NodeFormals>($3);
 }
 
 function:
-IDEN IDEN LBRACKET RBRACKET sentence { $$ = new Loonguage::NodeFunction($1, $2, new Loonguage::NodeFormals($1.line), $5); }
+IDEN IDEN LBRACKET RBRACKET sentence { $$ = std::make_shared<Loonguage::NodeFunction>($1, $2, std::make_shared<Loonguage::NodeFormals>($1.line), $5); }
 | IDEN IDEN LBRACKET formals RBRACKET sentence {
-    $$ = new Loonguage::NodeFunction($1, $2, $4, $6); }
-| IDEN IDEN LBRACKET error RBRACKET sentence {$$ = new Loonguage::NodeFunction($1, $2, new Loonguage::NodeFormals($1.line), $6);
+    $$ = std::make_shared<Loonguage::NodeFunction>($1, $2, $4, $6); }
+| IDEN IDEN LBRACKET error RBRACKET sentence {$$ = std::make_shared<Loonguage::NodeFunction>($1, $2, std::make_shared<Loonguage::NodeFormals>($1.line), $6);
     }
 
 sentence:
-expr SEMICOLON { $$ = new Loonguage::NodeSExpr($1); }
-| IF LBRACKET expr RBRACKET sentence { $$ = new Loonguage::NodeSIf($3, $5); }
-| WHILE LBRACKET expr RBRACKET sentence { $$ = new Loonguage::NodeSWhile($3, $5); }
-| LBRACE sentences RBRACE { $$ = new Loonguage::NodeSBlock($2); }
-| LBRACE RBRACE { $$ = new Loonguage::NodeSBlock(new Loonguage::NodeSentences($1.line)); }
-| IDEN IDEN SEMICOLON { $$ = new Loonguage::NodeSDecl($1, $2);}
-| BREAK SEMICOLON { $$ = new Loonguage::NodeSBreak($2.line);}
-| CONTINUE SEMICOLON { $$ = new Loonguage::NodeSContinue($2.line);}
-| RETURN expr SEMICOLON { $$ = new Loonguage::NodeSReturn($2);}
-| RETURN SEMICOLON { $$ = new Loonguage::NodeSReturn(nullptr);}
-| error SEMICOLON { $$ = new Loonguage::NodeSentence($2.line);}
-| LBRACE error RBRACE { $$ = new Loonguage::NodeSentence($1.line); }
+expr SEMICOLON { $$ = std::make_shared<Loonguage::NodeSExpr>($1); }
+| IF LBRACKET expr RBRACKET sentence { $$ = std::make_shared<Loonguage::NodeSIf>($3, $5); }
+| WHILE LBRACKET expr RBRACKET sentence { $$ = std::make_shared<Loonguage::NodeSWhile>($3, $5); }
+| LBRACE sentences RBRACE { $$ = std::make_shared<Loonguage::NodeSBlock>($2); }
+| LBRACE RBRACE { $$ = std::make_shared<Loonguage::NodeSBlock>(std::make_shared<Loonguage::NodeSentences>($1.line)); }
+| IDEN IDEN SEMICOLON   { $$ = std::make_shared<Loonguage::NodeSDecl>($1, $2);}
+| BREAK SEMICOLON { $$ = std::make_shared<Loonguage::NodeSBreak>($2.line);}
+| CONTINUE SEMICOLON { $$ = std::make_shared<Loonguage::NodeSContinue>($2.line);}
+| RETURN expr SEMICOLON { $$ = std::make_shared<Loonguage::NodeSReturn>($2);}
+| RETURN SEMICOLON { $$ = std::make_shared<Loonguage::NodeSReturn>(nullptr);}
+| error SEMICOLON { $$ = std::make_shared<Loonguage::NodeSentence>($2.line);}
+| LBRACE error RBRACE { $$ = std::make_shared<Loonguage::NodeSentence>($1.line); }
 
 sentences:
-sentence { $$ = new Loonguage::NodeSentences($1); }
+sentence { $$ = std::make_shared<Loonguage::NodeSentences>($1); }
 | sentences sentence { $$ = $1;
                       $$->push_back($2); }
 
 expr:
-IDEN { $$ = new Loonguage::NodeEIden($1); }
-| LBRACKET expr RBRACKET {  $$ = new Loonguage::NodeEBracket($2); }
-| IDEN LBRACKET actuals RBRACKET {  $$ = new Loonguage::NodeEDispatch($1, $3); }
-| IDEN LBRACKET RBRACKET {  $$ = new Loonguage::NodeEDispatch($1, new Loonguage::NodeActuals($1.line)); }
-| expr PLUS expr {  $$ = new Loonguage::NodeECalc($1, '+', $3); }
-| expr MINUS expr {  $$ = new Loonguage::NodeECalc($1, '-', $3); }
-| expr TIME expr {  $$ = new Loonguage::NodeECalc($1, '*', $3); }
-| expr DIVISION expr {  $$ = new Loonguage::NodeECalc($1, '/', $3); }
-| expr AND expr {  $$ = new Loonguage::NodeECalc($1, '&', $3); }
-| expr OR expr {  $$ = new Loonguage::NodeECalc($1, '|', $3); }
-| expr XOR expr {  $$ = new Loonguage::NodeECalc($1, '^', $3); }
-| expr EQUAL expr {  $$ = new Loonguage::NodeEEqua($1, $3); }
-| expr LESS expr {  $$ = new Loonguage::NodeELess($1, $3); }
-| REV expr {  $$ = new Loonguage::NodeERev($2); }
-| IDEN ASSIGN expr {  $$ = new Loonguage::NodeEAssign($1, $3); }
-| INT {  $$ = new Loonguage::NodeEInt($1); }
-| STR {  $$ = new Loonguage::NodeEStr($1); }
+IDEN { $$ = std::make_shared<Loonguage::NodeEIden>($1); }
+| LBRACKET expr RBRACKET {  $$ = std::make_shared<Loonguage::NodeEBracket>($2); }
+| IDEN LBRACKET actuals RBRACKET {  $$ = std::make_shared<Loonguage::NodeEDispatch>($1, $3); }
+| IDEN LBRACKET RBRACKET {  $$ = std::make_shared<Loonguage::NodeEDispatch>($1, std::make_shared<Loonguage::NodeActuals>($1.line)); }
+| expr PLUS expr {  $$ = std::make_shared<Loonguage::NodeECalc>($1, '+', $3); }
+| expr MINUS expr {  $$ = std::make_shared<Loonguage::NodeECalc>($1, '-', $3); }
+| expr TIME expr {  $$ = std::make_shared<Loonguage::NodeECalc>($1, '*', $3); }
+| expr DIVISION expr {  $$ = std::make_shared<Loonguage::NodeECalc>($1, '/', $3); }
+| expr AND expr {  $$ = std::make_shared<Loonguage::NodeECalc>($1, '&', $3); }
+| expr OR expr {  $$ = std::make_shared<Loonguage::NodeECalc>($1, '|', $3); }
+| expr XOR expr {  $$ = std::make_shared<Loonguage::NodeECalc>($1, '^', $3); }
+| expr EQUAL expr {  $$ = std::make_shared<Loonguage::NodeEEqua>($1, $3); }
+| expr LESS expr {  $$ = std::make_shared<Loonguage::NodeELess>($1, $3); }
+| REV expr {  $$ = std::make_shared<Loonguage::NodeERev>($2); }
+| IDEN ASSIGN expr {  $$ = std::make_shared<Loonguage::NodeEAssign>($1, $3); }
+| INT {  $$ = std::make_shared<Loonguage::NodeEInt>($1); }
+| STR {  $$ = std::make_shared<Loonguage::NodeEStr>($1); }
 
 actual:
-expr { $$ = new Loonguage::NodeActual($1); }
+expr { $$ = std::make_shared<Loonguage::NodeActual>($1); }
 
 actuals:
-actual { $$ = new Loonguage::NodeActuals($1); }
+actual { $$ = std::make_shared<Loonguage::NodeActuals>($1); }
 | actuals COMMA actual {  $$ = $1;
                       $$->push_back($3); }
 | error COMMA actual{
-    $$ = new Loonguage::NodeActuals($3);
+    $$ = std::make_shared<Loonguage::NodeActuals>($3);
 }
 
 %%

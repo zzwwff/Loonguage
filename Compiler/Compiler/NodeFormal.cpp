@@ -38,7 +38,7 @@ namespace Loonguage {
 			ac->dumpSem(cout, indent + 2);
 	}
 
-	NodeFormals::NodeFormals(NodeFormal* a):
+	NodeFormals::NodeFormals(std::shared_ptr<NodeFormal> a):
 		Node(a->getLine(), Node::NodeType::NdFormals)
 	{
 		push_back(a);

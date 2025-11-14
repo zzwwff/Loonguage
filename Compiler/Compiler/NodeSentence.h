@@ -19,13 +19,13 @@ namespace Loonguage {
 	};
 
 	class NodeSentences :
-		public std::vector<NodeSentence*>,
+		public std::vector<std::shared_ptr<NodeSentence>>,
 		public Node
 	{
 	public:
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
-		NodeSentences(NodeSentence*);
+		NodeSentences(std::shared_ptr<NodeSentence>);
 		NodeSentences(int);
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 		void codeGen(CodeGenContext&, std::vector<Code>&);
@@ -34,9 +34,9 @@ namespace Loonguage {
 	class NodeSExpr :
 		public NodeSentence
 	{
-		NodeExpr* expr;
+		std::shared_ptr<NodeExpr> expr;
 	public:
-		NodeSExpr(NodeExpr*);
+		NodeSExpr(std::shared_ptr<NodeExpr>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
@@ -46,10 +46,10 @@ namespace Loonguage {
 	class NodeSIf :
 		public NodeSentence
 	{
-		NodeExpr* predicate;
-		NodeSentence* sentence;
+		std::shared_ptr<NodeExpr> predicate;
+		std::shared_ptr<NodeSentence> sentence;
 	public:
-		NodeSIf(NodeExpr*, NodeSentence*);
+		NodeSIf(std::shared_ptr<NodeExpr>, std::shared_ptr<NodeSentence>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
@@ -59,10 +59,10 @@ namespace Loonguage {
 	class NodeSWhile :
 		public NodeSentence
 	{
-		NodeExpr* predicate;
-		NodeSentence* sentence;
+		std::shared_ptr<NodeExpr> predicate;
+		std::shared_ptr<NodeSentence> sentence;
 	public:
-		NodeSWhile(NodeExpr*, NodeSentence*);
+		NodeSWhile(std::shared_ptr<NodeExpr>, std::shared_ptr<NodeSentence>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
@@ -73,9 +73,9 @@ namespace Loonguage {
 	class NodeSBlock :
 		public NodeSentence
 	{
-		NodeSentences* sentences;
+		std::shared_ptr<NodeSentences> sentences;
 	public:
-		NodeSBlock(NodeSentences*);
+		NodeSBlock(std::shared_ptr<NodeSentences>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 
@@ -102,11 +102,11 @@ namespace Loonguage {
 	class NodeSReturn :
 		public NodeSentence
 	{
-		NodeExpr* expr;
+		std::shared_ptr<NodeExpr> expr;
 		NodeFunction* pfunction;
 	public:
 		NodeSReturn(int);
-		NodeSReturn(NodeExpr*);
+		NodeSReturn(std::shared_ptr<NodeExpr>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 

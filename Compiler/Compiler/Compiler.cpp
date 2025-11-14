@@ -13,11 +13,11 @@ namespace Loonguage {
 
 	void Compiler::functionDecoration()
 	{
-		NodeFunctions* functions = program->functions;
+		auto functions = program->functions;
 		for (auto& function : *functions)
 		{
 			bool valid = true;
-			FunctionDeco funcDeco(function);
+			FunctionDeco funcDeco(function.get());
 			//check parameters type
 			for (const auto& t : funcDeco.paramType)
 			{
@@ -68,7 +68,7 @@ namespace Loonguage {
 
 	Compiler::Compiler(std::istream& i, std::ostream& o1, std::ostream& o2, std::ostream& o3, std::ostream& o4):
 		scanner(), 
-		parser(scanner, idenTable, strTable, &program, errs),
+		parser(scanner, idenTable, strTable, program, errs),
 		program(NULL),
 		cin(i), infoOut(o1), lexSynOut(o2), semOut(o3), genOut(o4)
 	{
@@ -120,7 +120,7 @@ namespace Loonguage {
 		//show what is the current implication of symbol
 		std::map<Symbol, IdenDeco> decoOfSymbol;
 		//record nearest function and while(used for continue/return/break)
-		SemanticContext context = { Symbol(), NULL, NULL, &idenTable, &types };
+		SemanticContext context = { Symbol(), NULL, NULL, idenTable, types };
 		//annotate from root
 		program->annotateType(numOfSymbol, decoOfSymbol, functionDecoNameOrdered, context, errs);
 
@@ -150,7 +150,7 @@ namespace Loonguage {
 	//generate ASM code
 	bool Compiler::codeGeneration()
 	{
-		LabelAllocator* alloc = new LabelAllocator();
+		std::shared_ptr<LabelAllocator> alloc =  std::make_shared<LabelAllocator>();
 		CodeGenContext context;
         context.width = 8;
 		context.allocator = alloc;
