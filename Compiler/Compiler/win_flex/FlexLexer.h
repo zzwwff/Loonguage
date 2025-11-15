@@ -174,7 +174,7 @@ protected:
   // yy_hold_char holds the character lost when yytext is formed.
   char yy_hold_char;
 
-  // Number of characters read into yy_ch_buf.
+  // Number of characters readMem into yy_ch_buf.
   int yy_n_chars;
 
   // Points to current character in buffer.

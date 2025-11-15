@@ -31,6 +31,8 @@ namespace Loonguage {
 			LES,
 			EQU,
 			REV,
+			IN,
+			OUT,
 			NOP,
             HLT,
 			JMP,

@@ -267,7 +267,7 @@ struct yy_buffer_state
 	 */
 	int yy_buf_size;
 
-	/* Number of characters read into yy_ch_buf, not including EOB
+	/* Number of characters readMem into yy_ch_buf, not including EOB
 	 * characters.
 	 */
 	int yy_n_chars;
@@ -656,7 +656,7 @@ static int yy_flex_strlen ( const char * );
 /* %if-c-only */
 /* %endif */
 
-/* Amount of stuff to slurp up with each read. */
+/* Amount of stuff to slurp up with each readMem. */
 #ifndef YY_READ_BUF_SIZE
 #ifdef __ia64__
 /* On IA-64, the buffer size is 16k, not 8k */
@@ -675,12 +675,12 @@ static int yy_flex_strlen ( const char * );
 /* %endif */
 #endif
 
-/* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
+/* Gets input and stuffs it into "buf".  number of characters readMem, or YY_NULL,
  * is returned in "result".
  */
 #ifndef YY_INPUT
 #define YY_INPUT(buf,result,max_size) \
-/* %% [5.0] fread()/read() definition of YY_INPUT goes here unless we're doing C++ \ */\
+/* %% [5.0] fread()/readMem() definition of YY_INPUT goes here unless we're doing C++ \ */\
 \
 /* %if-c++-only C++ definition \ */\
 	if ( (int)(result = LexerInput( (char *) buf, max_size )) < 0 ) \
@@ -689,7 +689,7 @@ static int yy_flex_strlen ( const char * );
 
 #endif
 
-/* No semi-colon after return; correct usage is to write "yyterminate();" -
+/* No semi-colon after return; correct usage is to writeMem "yyterminate();" -
  * we don't want an extra ';' after the "return" because that will cause
  * some compilers to complain about unreachable statements.
  */
@@ -1477,7 +1477,7 @@ void yyFlexLexer::LexerOutput( const char* buf, int size )
 
 /* %endif */
 
-/* yy_get_next_buffer - try to read in a new buffer
+/* yy_get_next_buffer - try to readMem in a new buffer
  *
  * Returns a code representing an action:
  *	EOB_ACT_LAST_MATCH -
@@ -1518,7 +1518,7 @@ int yyFlexLexer::yy_get_next_buffer()
 			}
 		}
 
-	/* Try to read more data. */
+	/* Try to readMem more data. */
 
 	/* First move last chars to start of buffer. */
 	number_to_move = (int) ((yy_c_buf_p) - (yytext_ptr) - 1);
@@ -1527,7 +1527,7 @@ int yyFlexLexer::yy_get_next_buffer()
 		*(dest++) = *(source++);
 
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_buffer_status == YY_BUFFER_EOF_PENDING )
-		/* don't do the read, it's not guaranteed to return an EOF,
+		/* don't do the readMem, it's not guaranteed to return an EOF,
 		 * just force an EOF
 		 */
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = (yy_n_chars) = 0;

@@ -1,4 +1,5 @@
-#pragma once
+﻿#pragma once
+#include <string>
 namespace Loonguage {
 	class RunTimeConfig
 	{
@@ -14,7 +15,8 @@ namespace Loonguage {
 		Width width;
 		Endian endian;
 		int memorySize;
-
+		int inoutSize;
+		std::string stdIn;
 	};
 }
 

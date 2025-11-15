@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 namespace Loonguage {
 	class Register
 	{
@@ -12,8 +12,8 @@ namespace Loonguage {
 			rtm, //temporary value
 			ins, //next instruction
 			rbx, //parameter 1
-			rcx, //parameter 2
-			rdx  //parameter 3
+            rin, //parameter 2
+            rot  //parameter 3
 		};
 	};
 }

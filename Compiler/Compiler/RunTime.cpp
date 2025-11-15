@@ -1,8 +1,8 @@
 ﻿#include "RunTime.h"
 
 namespace Loonguage {
-	//read a number in x64 or x32 from memory
-	int RunTime::read(int pos) const
+	//readMem a number in x64 or x32 from memory
+	int RunTime::readMem(int pos) const
 	{
 		std::vector<int> bits(width * 8);
 		int res = 0;
@@ -21,8 +21,8 @@ namespace Loonguage {
         return bit2int(bits);
 	}
 
-	//write a number in x64 or x32 into memory
-	void RunTime::write(int pos, int dat)
+	//writeMem a number in x64 or x32 into memory
+	void RunTime::writeMem(int pos, int dat)
 	{
         std::vector<int> bits = int2bit(dat);
 		if (config.endian == config.BIG)
@@ -37,6 +37,20 @@ namespace Loonguage {
 				for (int j = 0; j < 8; j++)
 					memory[pos - width + 1 + i][j] = bits[8 * i + j];
 		}
+	}
+
+	int RunTime::readChar(int pos) const
+	{
+		int val = 0;
+		for (int j = 0; j < 8; j++)
+			val += inout[pos][8 - j] << j;
+		return val;
+	}
+
+	void RunTime::writeChar(int pos, int i)
+	{
+		for (int j = 0; j < 8; j++)
+			inout[pos][8 - j] = ((unsigned int)i >> j) & 1;
 	}
 
 	std::vector<int> RunTime::int2bit(int i) const
@@ -88,7 +102,7 @@ namespace Loonguage {
 		std::vector<int> vec;
 		for (int i = stackBegin; i > regs[Reg::rsp]; i -= width)
 		{
-			vec.push_back(read(i));
+			vec.push_back(readMem(i));
 		}
 		return vec;
 	}
@@ -98,12 +112,22 @@ namespace Loonguage {
 	{
         codes = co;
 		//initiate registers
-		for (Reg::Registers reg = Reg::rsp; reg <= Reg::rdx; reg = static_cast<Reg::Registers>(reg + 1))
+		for (Reg::Registers reg = Reg::rsp; reg <= Reg::rot; reg = static_cast<Reg::Registers>(reg + 1))
 		{
 			regs[reg] = 0;
 		}
 		//initiate memory
 		memory = std::vector<std::bitset<8>>(c.memorySize);
+		//initiate inout
+		inout = std::vector<std::bitset<8>>(c.inoutSize);
+		regs[Reg::rot] = 0;
+		regs[Reg::rin] = inout.size() - 1;
+		int rin = regs[Reg::rin];
+		for (auto ch : config.stdIn)
+		{
+			writeMem(rin, ch);
+			rin--;
+		}
 		//64 width = 64 bits = 8byte
 		//32 width = 32 bits = 4byte
 		if (c.width == RunTimeConfig::x64)
@@ -131,7 +155,7 @@ namespace Loonguage {
 		if (nextCode.codeType == Code::CALL)
 		{
 			//PUSH next instruction, which is %ins - width
-			write(regs[Reg::rsp], regs[Reg::ins] - width);
+			writeMem(regs[Reg::rsp], regs[Reg::ins] - width);
 			regs[Reg::rsp] -= width;
 			//%ins = label
 			regs[Reg::ins] = labels[nextCode.label.name];
@@ -142,8 +166,8 @@ namespace Loonguage {
 			//POP next instruction to %ins
 			//now both %rsp, %ins, %rbp should be the original (%rbp is manually set)
 			regs[Reg::rsp] += width;
-			//watch out always use read/write
-			int instruction = read(regs[Reg::rsp]);
+			//watch out always use readMem/writeMem
+			int instruction = readMem(regs[Reg::rsp]);
 			regs[Reg::ins] = instruction;
             Z = S = 0;
 		}
@@ -165,14 +189,14 @@ namespace Loonguage {
 			regs[Reg::ins] -= width;
 			if (nextCode.codeType == Code::PUSH)
 			{
-				write(regs[Reg::rsp], regs[nextCode.r1]);
+				writeMem(regs[Reg::rsp], regs[nextCode.r1]);
 				regs[Reg::rsp] -= width;
                 Z = S = 0;
 			}
 			else if (nextCode.codeType == Code::POP)
 			{
                 regs[Reg::rsp] += width;
-				regs[nextCode.r1] = read(regs[Reg::rsp]);
+				regs[nextCode.r1] = readMem(regs[Reg::rsp]);
                 Z = S = 0;
 			}
 			else if (nextCode.codeType == Code::MOVRI)
@@ -183,7 +207,7 @@ namespace Loonguage {
 			else if (nextCode.codeType == Code::MOVMR)
 			{
 				int target = regs[nextCode.address.reg] + nextCode.address.delta;
-				write(target, regs[nextCode.r1]);
+				writeMem(target, regs[nextCode.r1]);
                 Z = S = 0;
 			}
 			else if (nextCode.codeType == Code::MOVRR)
@@ -194,7 +218,7 @@ namespace Loonguage {
 			else if (nextCode.codeType == Code::MOVRM)
 			{
 				int target = regs[nextCode.address.reg] + nextCode.address.delta;
-				regs[nextCode.r1] = read(target);
+				regs[nextCode.r1] = readMem(target);
                 Z = S = 0;
 			}
 			else if (nextCode.codeType == Code::LEA)
@@ -321,6 +345,20 @@ namespace Loonguage {
 				else regs[nextCode.r2] = 1u;
 				Z = (i1 == 0); S = (i1 < 0);
 			}
+			//read from in, put inout[%rin] into %r1
+			else if (nextCode.codeType == Code::IN)
+			{
+				regs[Reg::rin]--;
+				int val = readChar(regs[Reg::rin]);
+				regs[nextCode.r1] = val;
+			}
+			//print from out, put %r1 into inout[%rot]
+			else if (nextCode.codeType == Code::OUT)
+			{
+				int val = regs[nextCode.r1];
+				writeChar(regs[Reg::rot], val);
+				regs[Reg::rot]++;
+			}
 			else if (nextCode.codeType == Code::NOP)
 			{
             }
@@ -330,4 +368,12 @@ namespace Loonguage {
         currentCode = (memory.size() - 1 - regs[Reg::ins]) / width;;
         return 0;
 	}
+	std::string RunTime::stdOut() const
+	{
+		std::string str;
+		for (int rot = 0; rot < regs.at(Reg::rot); rot++)
+			str.push_back(readChar(rot));
+		return str;
+	}
+
 }

@@ -15,6 +15,8 @@ namespace Loonguage {
 	class Compiler
 	{
 		using Symbol = SymbolTable<std::string>::Symbol;
+		//Phase 0 
+		//Preprocess, add some built-in function
 		//Phase 1 ~ 2
 		//for lexical and syntax analysis
 		LoonScanner::Scanner scanner;
@@ -54,6 +56,7 @@ namespace Loonguage {
 
         //cin of file path
 		Compiler(std::istream&, std::ostream&, std::ostream&, std::ostream&, std::ostream&);
+		Compiler(std::string, std::ostream&, std::ostream&, std::ostream&, std::ostream&);
 		//Phase 1 & 2
 		bool lexicalAndSyntaxAnalysis();
 		//Phase 3

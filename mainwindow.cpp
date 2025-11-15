@@ -43,6 +43,9 @@ void MainWindow::on_pushButton_clicked()
     file.write(QString::fromStdString(input).toUtf8());
     file.close();
 
+    input += "void out(int ch)@ ";
+    input += "void outInts(int n){ if (n) { outInts(n / 10); out(n - n / 10 * 10 + '0'); }}";
+    input += "void outInt(int n){ if (n == 0) out('0'); if (n < 0) { out('-'); n = 0 - n; } if(n) outInts(n); }";
     input += " @EOF";
     QMessageBox::about(NULL, "About", "Start Running!");
     std::stringstream in, infoOut, synOut, semOut, genOut;
@@ -78,6 +81,8 @@ void MainWindow::on_pushButton_6_clicked()
         config.endian = config.BIG;
         config.width = config.x64;
         config.memorySize = 2048;
+        config.inoutSize = 2048;
+        config.stdIn = ui->stdIn->toPlainText().toStdString();
         //if (runtime != nullptr)
         //    delete runtime;
         runtime = std::make_shared<Loonguage::RunTime>(config, (compiler->codes));
@@ -105,12 +110,13 @@ void MainWindow::updateData()
     ui->rfpVal->display(QString::number(runtime->regs[Reg::rfp]));
     ui->raxVal->display(QString::number(runtime->regs[Reg::rax]));
     ui->rbxVal->display(QString::number(runtime->regs[Reg::rbx]));
-    ui->rcxVal->display(QString::number(runtime->regs[Reg::rcx]));
-    ui->rdxVal->display(QString::number(runtime->regs[Reg::rdx]));
+    ui->rcxVal->display(QString::number(runtime->regs[Reg::rin]));
+    ui->rdxVal->display(QString::number(runtime->regs[Reg::rot]));
     ui->insVal->display(QString::number(runtime->regs[Reg::ins]));
     ui->rtmVal->display(QString::number(runtime->regs[Reg::rtm]));
     ui->zSign->display(QString::number(runtime->Z));
     ui->sSign->display(QString::number(runtime->S));
+    ui->stdOut->setPlainText(QString::fromStdString(runtime->stdOut()));
     QModelIndex index = model->index(runtime->currentCode, 0);
     ui->codeOut->setCurrentIndex(index);
     QStandardItemModel* stackModel = new QStandardItemModel;

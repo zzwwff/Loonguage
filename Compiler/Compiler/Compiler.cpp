@@ -3,6 +3,7 @@
 #include "location.hh"
 //#include "lex.Loon_.cc"
 namespace Loonguage {
+
 	void Compiler::registerDefaultTypes()
 	{
 		types[idenTable.addSymbol("int")] = 1;

@@ -13,8 +13,10 @@ namespace Loonguage {
 
 		int width;
 
-        int read(int) const;
-        void write(int, int);
+        int readMem(int) const;
+        void writeMem(int, int);
+		int readChar(int) const;
+		void writeChar(int, int);
         std::vector<int> int2bit(int) const;
         int bit2int(std::vector<int>) const;
 	public:
@@ -27,6 +29,9 @@ namespace Loonguage {
 		std::map<Register::Registers, int> regs;
 		//a byte unit
 		std::vector<std::bitset<8>> memory;
+		//a byte unit of inout space
+		//IN from top, OUT from bottom
+		std::vector<std::bitset<8>> inout;
 		//instructions
 		std::vector<Code> codes;
 		std::map<std::string, int> labels;
@@ -37,6 +42,7 @@ namespace Loonguage {
 		bool S;
 		//advance a step
         int tick();
+		std::string stdOut() const;
 	};
 
 

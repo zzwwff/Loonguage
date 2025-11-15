@@ -44,8 +44,8 @@ namespace Loonguage {
 		if (r == Register::Registers::rax) cout << "%rax ";
 		if (r == Register::Registers::rtm) cout << "%rtm ";
 		if (r == Register::Registers::rbx) cout << "%rbx ";
-		if (r == Register::Registers::rcx) cout << "%rcx ";
-		if (r == Register::Registers::rdx) cout << "%rdx ";
+		if (r == Register::Registers::rin) cout << "%rin ";
+		if (r == Register::Registers::rot) cout << "%rot ";
 
 	}
 
@@ -79,6 +79,8 @@ namespace Loonguage {
 		if (codeType == LES) cout << "LES ", dumpReg(cout, r1), dumpReg(cout, r2);
 		if (codeType == EQU) cout << "EQU ", dumpReg(cout, r1), dumpReg(cout, r2);
 		if (codeType == REV) cout << "REV ", dumpReg(cout, r1);
+		if (codeType == IN) cout << "IN", dumpReg(cout, r1);
+		if (codeType == OUT) cout << "OUT", dumpReg(cout, r1);
 		if (codeType == NOP) cout << "NOP ";
 		if (codeType == JMP) cout << "JMP " << label.name;
 		if (codeType == JMZ) cout << "JMZ " << label.name;
