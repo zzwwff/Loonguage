@@ -8,13 +8,14 @@ D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.3380
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(57,9): warning C4005: “UINT8_MAX”: 宏重定义
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(58,9): warning C4005: “UINT16_MAX”: 宏重定义
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(59,9): warning C4005: “UINT32_MAX”: 宏重定义
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1018,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1022,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   Compiler.cpp
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1018,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1022,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
 E:\source\repos\Loonguage\Compiler\Compiler\SymbolTable.h(97,33): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
   LoonParser.cpp
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1018,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1022,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   main.cpp
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1018,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1022,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+  Node.cpp
   正在生成代码...
   Compiler.vcxproj -> E:\source\repos\Loonguage\Compiler\x64\Debug\Compiler.exe

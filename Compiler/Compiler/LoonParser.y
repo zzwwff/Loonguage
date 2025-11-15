@@ -83,7 +83,7 @@
 %token <Loonguage::TokenInt> INT
 %token <Loonguage::TokenString> STR
 %token <Loonguage::TokenIden> IDEN
-%token <Loonguage::TokenSymbol> PLUS MINUS TIME DIVISION AND OR XOR REV LBRACKET RBRACKET LBRACE RBRACE SEMICOLON COMMA ASSIGN EQUAL LESS 
+%token <Loonguage::TokenSymbol> PLUS MINUS TIME DIVISION AND OR XOR REV LBRACKET RBRACKET LBRACE RBRACE SEMICOLON COMMA ASSIGN EQUAL LESS AT
 %token <std::string> ERROR
 %token END 0
 
@@ -142,6 +142,12 @@ IDEN IDEN LBRACKET RBRACKET sentence { $$ = std::make_shared<Loonguage::NodeFunc
 | IDEN IDEN LBRACKET formals RBRACKET sentence {
     $$ = std::make_shared<Loonguage::NodeFunction>($1, $2, $4, $6); }
 | IDEN IDEN LBRACKET error RBRACKET sentence {$$ = std::make_shared<Loonguage::NodeFunction>($1, $2, std::make_shared<Loonguage::NodeFormals>($1.line), $6);
+    }
+| IDEN IDEN LBRACKET formals RBRACKET AT{
+    $$ = std::make_shared<Loonguage::NodeNativeFunction>($1, $2, $4); 
+    }
+| IDEN IDEN LBRACKET RBRACKET AT { 
+    $$ = std::make_shared<Loonguage::NodeNativeFunction>($1, $2, std::make_shared<Loonguage::NodeFormals>($1.line));
     }
 
 sentence:

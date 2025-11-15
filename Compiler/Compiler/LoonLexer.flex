@@ -47,6 +47,10 @@ IDEN [a-zA-Z][a-zA-Z0-9]*
 NEW_LINE \n
 BLANK [ \f\r\t\v]+
 
+CHAR '.'
+ESCT '\\t'
+ESCN '\\n'
+
 
 
 %%
@@ -195,6 +199,22 @@ return Parser::make_RETURN(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::To
 <INITIAL>"<" {
                 return Parser::make_LESS(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
+
+<INITIAL>"@" {
+    return Parser::make_AT(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+}
+
+<INITIAL>{CHAR} {
+            return Parser::make_INT(Loonguage::TokenInt(loc.begin.line, (int)yytext[1]), loc); 
+          }
+
+<INITIAL>{ESCT} {
+            return Parser::make_INT(Loonguage::TokenInt(loc.begin.line, '\t'), loc); 
+          }
+          
+<INITIAL>{ESCN} {
+            return Parser::make_INT(Loonguage::TokenInt(loc.begin.line, '\n'), loc); 
+          }
 
 <<EOF>>   { return yyterminate(); }
 

@@ -128,4 +128,60 @@ namespace Loonguage {
 			function->codeGen(context, codes);
 	}
 
+	NodeNativeFunction::NodeNativeFunction(TokenIden r, TokenIden n, std::shared_ptr<NodeFormals> f) :
+		NodeFunction(r, n, f, nullptr)
+	{
+	}
+
+	void NodeNativeFunction::dumpAST(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeNativeFunction (Return Type: " << returnType.getString()
+			<< ", Name: " << name.getString() << ")" << std::endl;
+		formals->dumpAST(cout, indent + 2);
+	}
+
+	void NodeNativeFunction::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeNativeFunction (Return Type: " << returnType.getString()
+			<< ", NameDeco: " << nameDeco.getString() << ")" << std::endl;
+		formals->dumpSem(cout, indent + 2);
+	}
+
+	void NodeNativeFunction::annotateType(std::map<std::string, int>& numOfSymbol,
+										  std::map<Symbol, IdenDeco>& nameOfSymbol,
+										  const FunctionMapNameOrdered& functionMap,
+										  SemanticContext context, Errors& errs)
+	{
+		//copy from NodeFunction::annotateType
+		//some line will be annotated
+
+		std::map<Symbol, IdenDeco> currentNameOfSymbol = nameOfSymbol;
+		//add all the formals
+		for (auto formal : *formals)
+		{
+			//step 1: get name@type@id
+			//we can make sure that type is valid because it is checked in Compiler::functionDecoration
+			Symbol name = formal->name.value;
+			Symbol type = formal->type.value;
+			IdenDeco deco = IdenDeco(name, type, numOfSymbol);
+			//step 2: load nameDeco into formal and currentNameOfSymbol
+			formal->nameDeco = deco.nameDeco;
+			currentNameOfSymbol[name] = deco;
+		}
+		//update context
+		//note that pfunction is native pointer, because pfunction is not a path on AST tree
+		//context.pfunction = this;
+		context.returnType = returnType.value;
+		//call annotateType inside the function body
+		//sentence->annotateType(numOfSymbol, currentNameOfSymbol, functionMap, context, errs);
+	}
+
+	void NodeNativeFunction::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		//to be done...
+		
+	}
+
 }

@@ -34,4 +34,16 @@ namespace Loonguage {
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
 		void codeGen(CodeGenContext&, std::vector<Code>&);
 	};
+
+	//for built-in functions made by Loonguage designer
+	class NodeNativeFunction :
+		public NodeFunction
+	{
+	public:
+		NodeNativeFunction(TokenIden, TokenIden, std::shared_ptr<NodeFormals>);
+		void dumpAST(std::ostream&, int) const;
+		void dumpSem(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void codeGen(CodeGenContext&, std::vector<Code>&);
+	};
 }

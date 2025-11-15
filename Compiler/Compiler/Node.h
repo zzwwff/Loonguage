@@ -24,6 +24,7 @@ namespace Loonguage {
 			NdFormals,
 			NdSentences,
 			NdSentence,
+			NdNativeFunction,
 			NdSIf,
 			NdSWhile,
 			NdSBlock,
