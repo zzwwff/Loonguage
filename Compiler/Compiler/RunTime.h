@@ -6,19 +6,21 @@
 #include "RuntimeConfig.h"
 #include <array>
 #include <bitset>
+#include "SymbolTable.h"
 namespace Loonguage {
 	class RunTime
 	{
 		using Reg = Register;
-
+		using Symbol = SymbolTable<std::string>::Symbol;
 		int width;
 
         int readMem(int) const;
         void writeMem(int, int);
-		int readChar(int) const;
-		void writeChar(int, int);
+        int readChar(int, int) const;
+        void writeChar(int, int, int);
         std::vector<int> int2bit(int) const;
         int bit2int(std::vector<int>) const;
+		void allocateString(SymbolTable<std::string>&, std::map<Symbol, int>);
 	public:
 		//start pointer of stack and stack data, used for stack data display
 		int stackBegin;
@@ -36,7 +38,7 @@ namespace Loonguage {
 		std::vector<Code> codes;
 		std::map<std::string, int> labels;
 		RunTimeConfig config;
-        RunTime(RunTimeConfig, std::vector<Code>&);
+        RunTime(RunTimeConfig, std::vector<Code>&, SymbolTable<std::string>&, std::map<Symbol, int>);
 		//2 status signs
 		bool Z;
 		bool S;

@@ -22,8 +22,10 @@ namespace Loonguage {
 		LoonScanner::Scanner scanner;
 		LoonScanner::Parser parser;
 		LoonScanner::location loc;
+    public:
 		//syntax table
 		SymbolTable<std::string> strTable, idenTable;
+    private:
 		//root of AST tree
 		std::shared_ptr<NodeProgram> program;
 
@@ -53,6 +55,8 @@ namespace Loonguage {
         //Phase 4
         //code generation
         std::vector<Code> codes;
+		std::map<Symbol, int> strPosition;
+		void allocateString();
 
         //cin of file path
 		Compiler(std::istream&, std::ostream&, std::ostream&, std::ostream&, std::ostream&);

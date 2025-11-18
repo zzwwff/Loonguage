@@ -65,6 +65,7 @@ namespace Loonguage {
 		if (codeType == RET) cout << "RET ";
 		if (codeType == MOVRI) cout << "MOVRI ", dumpReg(cout, r1), cout << immediate;
 		if (codeType == MOVRM) cout << "MOVRM ", dumpReg(cout, r1), dumpAddress(cout, address);
+		if (codeType == MOVRMB) cout << "MOVRMB ", dumpReg(cout, r1), dumpAddress(cout, address);
 		if (codeType == MOVMR)
 			cout << "MOVMR ", dumpAddress(cout, address), dumpReg(cout, r1);
 		if (codeType == MOVRR) cout << "MOVRR ", dumpReg(cout, r1), dumpReg(cout, r2);

@@ -2,6 +2,7 @@
 #include <map>
 #include <cstring>
 #include <string>
+#include <iterator>
 #include "GeneralSetting.h"
 namespace Loonguage {
 	template<typename T> 
@@ -84,7 +85,8 @@ namespace Loonguage {
 		T getString(int) const;
 #endif // REAL_NAME
 
-
+		typename std::map<T, int>::iterator begin() { return m.begin(); }
+		typename std::map<T, int>::iterator end() { return m.end(); }
 	};
 
 	//template class SymbolTable<std::string>;

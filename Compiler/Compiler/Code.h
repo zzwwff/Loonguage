@@ -19,6 +19,7 @@ namespace Loonguage {
 			MOVRI,
 			MOVRM,
 			MOVMR,
+			MOVRMB,
 			MOVRR,
 			LEA,
 			ADD,

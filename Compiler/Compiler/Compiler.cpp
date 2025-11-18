@@ -68,6 +68,18 @@ namespace Loonguage {
 			functionDecoNameOrdered[iter->first.name].push_back(iter);
 	}
 
+	void Compiler::allocateString()
+	{
+		int pos = 0;
+		for (auto& pstr : strTable)
+		{
+			const std::string str = pstr.first;
+			int size = str.size() + 1;
+			pos += size;
+			strPosition[strTable[str]] = pos - 1;
+		}
+	}
+
 	Compiler::Compiler(std::istream& i, std::ostream& o1, std::ostream& o2, std::ostream& o3, std::ostream& o4):
 		scanner(),
 		loc(LoonScanner::location()),
@@ -155,10 +167,12 @@ namespace Loonguage {
 	//generate ASM code
 	bool Compiler::codeGeneration()
 	{
+		allocateString();
 		std::shared_ptr<LabelAllocator> alloc =  std::make_shared<LabelAllocator>();
 		CodeGenContext context;
         context.width = 8;
 		context.allocator = alloc;
+		context.strPosition = strPosition;
         codes.push_back(Code(Code::CALL, Label("call@main")));
         codes.push_back(Code(Code::HLT));
         program->codeGen(context, codes);
@@ -180,6 +194,7 @@ namespace Loonguage {
             return runable = false;
 		if (!codeGeneration())
             return runable = false;
+        infoOut << "Supported by Loonguage (development edition 0.1). \nMade By Zhouwufan.";
         return runable = true;
 	}
 

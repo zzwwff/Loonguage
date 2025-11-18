@@ -31,6 +31,32 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+//prime loader reference code
+/*int isPrime(int n)
+{
+    int sign; int test;
+    sign = test = 2;
+    while (test < n){
+        if (n / test * test == n)
+    {    sign = 0; break; }
+    test = test + 1;
+    }
+    return sign;
+}
+
+void main()
+{
+    int i;
+    i = 2;
+    outString("There are 25 primes less than 100\n");
+    while (i < 101){
+    if (isPrime(i)) { outInt(i); outString(" "); }
+    i = i + 1;
+    }
+}
+*/
+
 void MainWindow::on_pushButton_clicked()
 {
     compiler = nullptr;
@@ -43,9 +69,16 @@ void MainWindow::on_pushButton_clicked()
     file.write(QString::fromStdString(input).toUtf8());
     file.close();
 
-    input += "void out(int ch)@ ";
-    input += "void outInts(int n){ if (n) { outInts(n / 10); out(n - n / 10 * 10 + '0'); }}";
-    input += "void outInt(int n){ if (n == 0) out('0'); if (n < 0) { out('-'); n = 0 - n; } if(n) outInts(n); }";
+    input += "void out(int ch)@ \n";
+    input += "int getChar(string str, int pos)@ \n";
+    input += "int getSize(string str)@ \n";
+    input += "void outString(string str){\
+        int size; \
+        size = getSize(str); \
+        int i; i = 0; \
+        while(i < size) { out(getChar(str, i)); i = i + 1; }}\n";
+    input += "void outInts(int n){ if (n) { outInts(n / 10); out(n - n / 10 * 10 + '0'); }}\n";
+    input += "void outInt(int n){ if (n == 0) out('0'); if (n < 0) { out('-'); n = 0 - n; } if(n) outInts(n); }\n";
     input += " @EOF";
     QMessageBox::about(NULL, "About", "Start Running!");
     std::stringstream in, infoOut, synOut, semOut, genOut;
@@ -80,12 +113,12 @@ void MainWindow::on_pushButton_6_clicked()
     {
         config.endian = config.BIG;
         config.width = config.x64;
-        config.memorySize = 2048;
-        config.inoutSize = 2048;
+        config.memorySize = 16384;
+        config.inoutSize = 16384;
         config.stdIn = ui->stdIn->toPlainText().toStdString();
         //if (runtime != nullptr)
         //    delete runtime;
-        runtime = std::make_shared<Loonguage::RunTime>(config, (compiler->codes));
+        runtime = std::make_shared<Loonguage::RunTime>(config, compiler->codes, compiler->strTable, compiler->strPosition);
         updateData();
     }
     else

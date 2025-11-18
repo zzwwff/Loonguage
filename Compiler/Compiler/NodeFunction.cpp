@@ -220,5 +220,17 @@ namespace Loonguage {
             codes.push_back(Code(Code::MOVRM, Reg::rax, Address(Reg::rfp, 0)));
             codes.push_back(Code(Code::OUT, Reg::rax));
         }
+        if (nameDeco.getString() == "getChar@string@int")
+        {
+            codes.push_back(Code(Code::MOVRM, Reg::rax, Address(Reg::rfp, 0)));
+            codes.push_back(Code(Code::MOVRM, Reg::rtm, Address(Reg::rfp, -context.width)));
+            codes.push_back(Code(Code::SUB, Reg::rax, Reg::rtm));
+            codes.push_back(Code(Code::MOVRMB, Reg::rax, Address(Reg::rax, -1)));
+        }
+        if (nameDeco.getString() == "getSize@string")
+        {
+            codes.push_back(Code(Code::MOVRM, Reg::rax, Address(Reg::rfp, 0)));
+            codes.push_back(Code(Code::MOVRMB, Reg::rax, Address(Reg::rax, 0)));
+        }
     }
 }

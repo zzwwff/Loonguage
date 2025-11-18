@@ -39,18 +39,24 @@ namespace Loonguage {
 		}
 	}
 
-	int RunTime::readChar(int pos) const
+    int RunTime::readChar(int pos, int from = 0) const
 	{
 		int val = 0;
 		for (int j = 0; j < 8; j++)
-			val += inout[pos][8 - j] << j;
+            if (from)
+                val += memory[pos][8 - 1 - j] << j;
+            else
+                val += inout[pos][8 - 1 - j] << j;
 		return val;
 	}
 
-	void RunTime::writeChar(int pos, int i)
+    void RunTime::writeChar(int pos, int i, int from = 0)
 	{
 		for (int j = 0; j < 8; j++)
-			inout[pos][8 - j] = ((unsigned int)i >> j) & 1;
+            if (from)
+                memory[pos][8 - 1 - j] = ((unsigned int)i >> j) & 1;
+            else
+                inout[pos][8 - 1 - j] = ((unsigned int)i >> j) & 1;
 	}
 
 	std::vector<int> RunTime::int2bit(int i) const
@@ -97,6 +103,20 @@ namespace Loonguage {
 		return val;
 	}
 
+	void RunTime::allocateString(SymbolTable<std::string>& strTable, std::map<Symbol, int> strPosition)
+	{
+		for (auto& pstr : strTable)
+		{
+			const std::string& str = pstr.first;
+			int pos = strPosition[strTable[str]];
+            writeChar(pos, str.size(), 1);
+			for (int i = 0; i < str.size(); i++)
+			{
+                writeChar(pos - 1 - i, str[i], 1);
+			}
+		}
+	}
+
 	std::vector<int> RunTime::getStack()
 	{
 		std::vector<int> vec;
@@ -107,7 +127,7 @@ namespace Loonguage {
 		return vec;
 	}
 
-    RunTime::RunTime(RunTimeConfig c, std::vector<Code>& co) :
+    RunTime::RunTime(RunTimeConfig c, std::vector<Code>& co, SymbolTable<std::string>& strTable, std::map<Symbol, int> strPosition) :
 		config(c), Z(0), S(0)
 	{
         codes = co;
@@ -144,6 +164,7 @@ namespace Loonguage {
 				labels[codes[i].labelAttached[j].name] = regs[Reg::ins] - i * width;
 		}
         currentCode = 0;
+		allocateString(strTable, strPosition);
 	}
 	
 	//advance a step
@@ -209,6 +230,12 @@ namespace Loonguage {
 				int target = regs[nextCode.address.reg] + nextCode.address.delta;
 				writeMem(target, regs[nextCode.r1]);
                 Z = S = 0;
+			}
+			else if (nextCode.codeType == Code::MOVRMB)
+			{
+				int target = regs[nextCode.address.reg] + nextCode.address.delta;
+                regs[nextCode.r1] = readChar(target, 1);
+				Z = S = 0;
 			}
 			else if (nextCode.codeType == Code::MOVRR)
 			{

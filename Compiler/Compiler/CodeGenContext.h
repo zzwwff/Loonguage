@@ -10,6 +10,7 @@ namespace Loonguage {
 	public:
 		std::shared_ptr<LabelAllocator> allocator;
 		std::map<Symbol, int> delta;
+		std::map<Symbol, int> strPosition;
 		int width;
 		Label returnLabel;
 		Label continueLabel;

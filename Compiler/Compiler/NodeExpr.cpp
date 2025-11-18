@@ -448,4 +448,9 @@ namespace Loonguage {
 	{
 		type = context.idenTable["string"];
 	}
+
+	void NodeEStr::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		codes.push_back(Code(Code::MOVRI, Reg::rax, context.strPosition[str.value]));
+	}
 }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>742</width>
-    <height>640</height>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>20</y>
       <width>721</width>
-      <height>591</height>
+      <height>431</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -30,7 +30,7 @@
      <enum>QTabWidget::TabPosition::West</enum>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -529,7 +529,7 @@
          <item>
           <widget class="QLabel" name="label_20">
            <property name="text">
-            <string>内存预览</string>
+            <string>栈预览</string>
            </property>
           </widget>
          </item>
