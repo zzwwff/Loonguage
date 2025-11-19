@@ -204,6 +204,14 @@ return Parser::make_RETURN(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::To
     return Parser::make_AT(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
 }
 
+<INITIAL>"[" {
+    return Parser::make_LSQUARE(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+}
+
+<INITIAL>"]" {
+    return Parser::make_RSQUARE(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+}
+
 <INITIAL>{CHAR} {
             return Parser::make_INT(Loonguage::TokenInt(loc.begin.line, (int)yytext[1]), loc); 
           }

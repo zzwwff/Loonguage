@@ -173,8 +173,8 @@ namespace Loonguage
 			sentence->codeGen(context, codes);
 	}
 
-	NodeSDecl::NodeSDecl(TokenIden t, TokenIden n):
-		NodeSentence(t.line, Node::NdSDecl), type(t), name(n)
+	NodeSDecl::NodeSDecl(TokenIden t, TokenIden n, std::shared_ptr<NodeExpr> e):
+		NodeSentence(t.line, Node::NdSDecl), type(t), name(n), expr(e)
 	{
 	}
 
@@ -183,6 +183,8 @@ namespace Loonguage
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeSDecl (Type: " << type.getString()
 			<< ", Name: " << name.getString() << ")" << std::endl;
+		if (expr != nullptr)
+			expr->dumpAST(cout, indent + 2);
 	}
 
 	void NodeSDecl::dumpSem(std::ostream& cout, int indent) const
@@ -190,6 +192,8 @@ namespace Loonguage
 		Node::indent(cout, indent);
 		cout << "#" << line << ": NodeSDecl (Type: " << type.getString()
 			<< ", NameDeco: " << nameDeco.getString() << ")" << std::endl;
+		if (expr != nullptr)
+			expr->dumpSem(cout, indent + 2);
 	}
 
 	void NodeSDecl::annotateType(std::map<std::string, int>& numOfSymbol,
@@ -212,8 +216,27 @@ namespace Loonguage
 			nameDeco = deco.nameDeco;
 			nameOfSymbol[name] = deco;
 			context.pfunction->locals.push_back(nameDeco);
+			//step 3: check decl
+			if (expr != nullptr)
+			{
+				expr->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
+				if (!expr->type.same(type.getString()))
+				{
+					errs.push_back(Error("", getLine(),
+						"Types of value and object do not match."));
+				}
+			}
 		}
 
+	}
+
+	void NodeSDecl::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		if (expr != nullptr)
+		{
+			expr->codeGen(context, codes);
+			codes.push_back(Code(Code::MOVMR, Address(Reg::rfp, -context.width * context.delta[nameDeco]), Reg::rax));
+		}
 	}
 
 	void NodeSentences::dumpAST(std::ostream& cout, int indent) const

@@ -90,13 +90,14 @@ namespace Loonguage {
 		TokenIden type;
 		TokenIden name;
 		Symbol nameDeco;	
+		std::shared_ptr<NodeExpr> expr;
 	public:
-		NodeSDecl(TokenIden, TokenIden);
+		NodeSDecl(TokenIden, TokenIden, std::shared_ptr<NodeExpr>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
-		//no codeGen
+		void codeGen(CodeGenContext&, std::vector<Code>&);
 	};
 
 	class NodeSReturn :
