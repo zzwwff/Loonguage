@@ -50,8 +50,7 @@ namespace Loonguage
 		Label endIfLabel(context.allocator->addName(endIf));
 		predicate->codeGen(context, codes);
 		//test %rax
-		codes.push_back(Code(Code::AND, Reg::rax, Reg::rax));
-		codes.push_back(Code(Code::JMZ, endIfLabel));
+		codes.push_back(Code(Code::BEQ, Reg::rax, Reg::rze, endIfLabel));
 		sentence->codeGen(context, codes);
 		codes.push_back(Code(Code::NOP));
 		codes.back().addLabel(endIfLabel);
@@ -128,10 +127,9 @@ namespace Loonguage
 		codes[oldSize].addLabel(startOfWhileLabel);
 		//loop logic
 		//test %rax
-		codes.push_back(Code(Code::AND, Reg::rax, Reg::rax));
-		codes.push_back(Code(Code::JMZ, endOfWhileLabel));
+		codes.push_back(Code(Code::BEQ, Reg::rax, Reg::rze, endOfWhileLabel));
 		sentence->codeGen(context, codes);
-		codes.push_back(Code(Code::JMP, startOfWhileLabel));
+		codes.push_back(Code(Code::B, startOfWhileLabel));
 		codes.push_back(Code(Code::NOP));
 		codes.back().addLabel(endOfWhileLabel);
 	}
@@ -235,7 +233,7 @@ namespace Loonguage
 		if (expr != nullptr)
 		{
 			expr->codeGen(context, codes);
-			codes.push_back(Code(Code::MOVMR, Address(Reg::rfp, -context.width * context.delta[nameDeco]), Reg::rax));
+			codes.push_back(Code(Code::SW, Reg::rfp, Reg::rax, -context.width * context.delta[nameDeco]));
 		}
 	}
 
@@ -381,7 +379,7 @@ namespace Loonguage
 		if (expr != nullptr)
 		expr->codeGen(context, codes);
 		//return value are already store in %rax
-		codes.push_back(Code(Code::JMP, context.returnLabel));
+		codes.push_back(Code(Code::B, context.returnLabel));
 	}
 
 
@@ -416,7 +414,7 @@ namespace Loonguage
 
 	void NodeSContinue::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
-		codes.push_back(Code(Code::JMP, context.continueLabel));	
+		codes.push_back(Code(Code::B, context.continueLabel));	
 	}
 
 	NodeSBreak::NodeSBreak(int l) :
@@ -450,7 +448,7 @@ namespace Loonguage
 
 	void NodeSBreak::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
-		codes.push_back(Code(Code::JMP, context.breakLabel));
+		codes.push_back(Code(Code::B, context.breakLabel));
 	}
 }
 

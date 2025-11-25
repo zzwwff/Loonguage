@@ -14,8 +14,9 @@ namespace Loonguage {
 		using Symbol = SymbolTable<std::string>::Symbol;
 		int width;
 
-        int readMem(int) const;
-        void writeMem(int, int);
+		int read(int, int, bool) const;
+		void write(int, int, int);
+
         int readChar(int, int) const;
         void writeChar(int, int, int);
         std::vector<int> int2bit(int) const;
@@ -39,9 +40,6 @@ namespace Loonguage {
 		std::map<std::string, int> labels;
 		RunTimeConfig config;
         RunTime(RunTimeConfig, std::vector<Code>&, SymbolTable<std::string>&, std::map<Symbol, int>);
-		//2 status signs
-		bool Z;
-		bool S;
 		//advance a step
         int tick();
 		std::string stdOut() const;

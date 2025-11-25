@@ -55,29 +55,25 @@ namespace Loonguage {
 		Label callLabel(context.allocator->addName(callStr));
 		std::string returnStr = std::string("return@") + nameDeco.getString();
 		Label returnLabel(context.allocator->addName(returnStr));
-		context.returnLabel = returnLabel;
-		//initiate frame
-		codes.push_back(Code(Code::PUSH, Reg::rfp));
-		codes.back().addLabel(callLabel);
-		codes.push_back(Code(Code::MOVRR, Reg::rfp, Reg::rsp));
+
 		//offset of formals from %rfp
 		for (int i = 0; i < formals->size(); i++)
 			context.delta[(*formals)[i]->nameDeco] = i;
 		//offset of locals
 		for (int i = 0; i < locals.size(); i++)
 			context.delta[locals[i]] = i + formals->size();
-		//push back all parameters and locals
-		codes.push_back(Code(Code::MOVRI, Reg::rtm, (formals->size() + locals.size()) * context.width));
-		codes.push_back(Code(Code::SUB, Reg::rsp, Reg::rtm));
+
+		//update rsp
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -context.width * locals.size()));
+
 		sentence->codeGen(context, codes);
+
 		//pop back all parameters
 		//attach returnLabel to the first instruction, make sure that %rax is set at 'return'
-        codes.push_back(Code(Code::MOVRI, Reg::rtm, (formals->size() + locals.size()) * context.width));
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, context.width * locals.size()));
 		codes.back().addLabel(returnLabel);
-		codes.push_back(Code(Code::ADD, Reg::rsp, Reg::rtm));
-		//restore frame
-		codes.push_back(Code(Code::POP, Reg::rfp));
-		codes.push_back(Code(Code::RET));
+		//return
+		codes.push_back(Code(Code::JR, Reg::ret));
 	}
 
 
@@ -180,36 +176,29 @@ namespace Loonguage {
 
 	void NodeNativeFunction::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
-		//to be done...
-        std::string callStr = std::string("call@") + nameDeco.getString();
-        Label callLabel(context.allocator->addName(callStr));
-        std::string returnStr = std::string("return@") + nameDeco.getString();
-        Label returnLabel(context.allocator->addName(returnStr));
-        context.returnLabel = returnLabel;
-        //initiate frame
-        codes.push_back(Code(Code::PUSH, Reg::rfp));
-        codes.back().addLabel(callLabel);
-        codes.push_back(Code(Code::MOVRR, Reg::rfp, Reg::rsp));
-        //offset of formals from %rfp
-        for (int i = 0; i < formals->size(); i++)
-            context.delta[(*formals)[i]->nameDeco] = i;
-        //offset of locals
-        for (int i = 0; i < locals.size(); i++)
-            context.delta[locals[i]] = i + formals->size();
-        //push back all parameters and locals
-        codes.push_back(Code(Code::MOVRI, Reg::rtm, (formals->size() + locals.size()) * context.width));
-        codes.push_back(Code(Code::SUB, Reg::rsp, Reg::rtm));
-        //replaced by built-in instructions
-        //sentence->codeGen(context, codes);
-        builtInCodeGen(context, codes);
-        //pop back all parameters
-        //attach returnLabel to the first instruction, make sure that %rax is set at 'return'
-        codes.push_back(Code(Code::MOVRI, Reg::rtm, (formals->size() + locals.size()) * context.width));
-        codes.back().addLabel(returnLabel);
-        codes.push_back(Code(Code::ADD, Reg::rsp, Reg::rtm));
-        //restore frame
-        codes.push_back(Code(Code::POP, Reg::rfp));
-        codes.push_back(Code(Code::RET));
+		std::string callStr = std::string("call@") + nameDeco.getString();
+		Label callLabel(context.allocator->addName(callStr));
+		std::string returnStr = std::string("return@") + nameDeco.getString();
+		Label returnLabel(context.allocator->addName(returnStr));
+
+		//offset of formals from %rfp
+		for (int i = 0; i < formals->size(); i++)
+			context.delta[(*formals)[i]->nameDeco] = i;
+		//offset of locals
+		for (int i = 0; i < locals.size(); i++)
+			context.delta[locals[i]] = i + formals->size();
+
+		//update rsp
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -context.width * locals.size()));
+
+		builtInCodeGen(context, codes);
+
+		//pop back all parameters
+		//attach returnLabel to the first instruction, make sure that %rax is set at 'return'
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, context.width * locals.size()));
+		codes.back().addLabel(returnLabel);
+		//return
+		codes.push_back(Code(Code::JR, Reg::ret));
 	}
 
     void NodeNativeFunction::builtInCodeGen(CodeGenContext& context, std::vector<Code>& codes)

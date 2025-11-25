@@ -4,7 +4,7 @@ namespace Loonguage {
 	{
 	public:
 		//you have to always make sure that register list begins with rsp
-		//and ends with rdx, which will be dependedd by RunTime::RunTime()
+		//and ends with rot, which will be dependedd by RunTime::RunTime()
 		enum Registers {
 			rsp, //stack pointer
 			rfp, //frame pointer
@@ -12,8 +12,12 @@ namespace Loonguage {
 			rtm, //temporary value
 			ins, //next instruction
 			rbx, //parameter 1
-            rin, //parameter 2
-            rot  //parameter 3
+			rlo, //low, or division
+			rhi, //high, or remainder
+			ret, //return address
+            rin, //standard in
+			rze, //const zero
+            rot  //standard out
 		};
 	};
 }

@@ -58,7 +58,7 @@ namespace Loonguage {
 
 	void NodeEIden::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
-		codes.push_back(Code(Code::MOVRM, Reg::rax, Address(Reg::rfp, -context.width * context.delta[idenDeco])));
+		codes.push_back(Code(Code::LW, Reg::rfp, Reg::rax, -context.width * context.delta[idenDeco]));
 	}
 
 
@@ -155,14 +155,28 @@ namespace Loonguage {
 
 	void NodeEDispatch::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
+
+		std::string callLabel = std::string("call@") + idenDeco.getString();
+
+		//save %ret, save %rfp
+		codes.push_back(Code(Code::LW, Reg::rsp, Reg::ret, 0));
+		codes.push_back(Code(Code::LW, Reg::rsp, Reg::rfp, -context.width));
+
 		//load all parameters
 		for (int i = 0; i < actuals->size(); i++)
 		{
 			(*actuals)[i]->codeGen(context, codes);
-			codes.push_back(Code(Code::MOVMR, Address(Reg::rsp, -context.width * (i + 2)), Reg::rax));
+			codes.push_back(Code(Code::SW, Reg::rsp, Reg::rax, -context.width * (i + 2)));
 		}
-		std::string callLabel = std::string("call@") + idenDeco.getString();
-		codes.push_back(Code(Code::CALL, Label(callLabel)));
+
+		//set %rfp and %rsp
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rfp, -2 * context.width));
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -(actuals->size() + 2) * context.width));
+		codes.push_back(Code(Code::JAL, Label(callLabel)));
+		//reset %rfp and %rsp and %ret
+		codes.push_back(Code(Code::ADDI, Reg::rfp, Reg::rsp, 2 * context.width));
+		codes.push_back(Code(Code::LW, Reg::rsp, Reg::rfp, -context.width));
+		codes.push_back(Code(Code::LW, Reg::rsp, Reg::ret, 0));
 	}
 
 	NodeECalc::NodeECalc(std::shared_ptr<NodeExpr> e1, char c, std::shared_ptr<NodeExpr> e2):

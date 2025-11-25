@@ -2,9 +2,9 @@
 
 namespace Loonguage {
 	//readMem a number in x64 or x32 from memory
-	int RunTime::readMem(int pos) const
+	int RunTime::read(int pos, int width, bool sign) const
 	{
-		std::vector<int> bits(width * 8);
+		std::vector<int> bits(32);
 		int res = 0;
 		if (config.endian == config.BIG)
 		{
@@ -18,13 +18,19 @@ namespace Loonguage {
 				for (int j = 0; j < 8; j++)
 					bits[8 * i + j] = memory[pos - width + 1 + i][j];
 		}
-        return bit2int(bits);
+		//if sign = 1, extend bits[8 * width]
+		if (sign)
+		{
+			for (int i = 8 * width; i < bits.size(); i++)
+				bits[i] = bits[8 * width - 1];
+		}
+		return bit2int(bits);
 	}
 
 	//writeMem a number in x64 or x32 into memory
-	void RunTime::writeMem(int pos, int dat)
+	void RunTime::write(int pos, int dat, int width)
 	{
-        std::vector<int> bits = int2bit(dat);
+		std::vector<int> bits = int2bit(dat);
 		if (config.endian == config.BIG)
 		{
 			for (int i = 0; i < width; i++)
@@ -38,6 +44,7 @@ namespace Loonguage {
 					memory[pos - width + 1 + i][j] = bits[8 * i + j];
 		}
 	}
+
 
     int RunTime::readChar(int pos, int from = 0) const
 	{
@@ -64,20 +71,12 @@ namespace Loonguage {
 		bool signal = i < 0;
 		if (i < 0) i = -i - 1;
 		std::vector<int> vec;
-		if (config.width == config.x32)
-		{
-			vec = std::vector<int>(32);
-			for (int j = 0; j < 31; j++)
-                vec[31 - j] = ((long long)i >> j) & 1;
-		}
-		else{
-			vec = std::vector<int>(64);
-			for (int j = 0; j < 63; j++)
-                vec[63 - j] = ((long long)i >> j) & 1;
-		}
+		vec = std::vector<int>(32);
+		for (int j = 0; j < 31; j++)
+			vec[31 - j] = ((long long)i >> j) & 1;
 		if (signal)
 			for (auto& n : vec)
-                n = ~n;
+				n = ~n;
 		return vec;
 	}
 
@@ -86,18 +85,10 @@ namespace Loonguage {
 		bool signal = vec[0];
 		if (signal)
 			for (auto& j : vec)
-                j = ~j;
+				j = ~j;
 		int val = 0;
-		if (config.width == config.x32)
-		{
-			for (int j = 0; j < 31; j++)
-                val += vec[31 - j] << j;
-		}
-		else
-		{
-			for (int j = 0; j < 63; j++)
-                val += vec[63 - j] << j;
-		}
+		for (int j = 0; j < 31; j++)
+			val += vec[31 - j] << j;
 		if (signal)
 			val = -val - 1;
 		return val;
@@ -122,13 +113,13 @@ namespace Loonguage {
 		std::vector<int> vec;
 		for (int i = stackBegin; i > regs[Reg::rsp]; i -= width)
 		{
-			vec.push_back(readMem(i));
+			vec.push_back(read(i, 4, true));
 		}
 		return vec;
 	}
 
     RunTime::RunTime(RunTimeConfig c, std::vector<Code>& co, SymbolTable<std::string>& strTable, std::map<Symbol, int> strPosition) :
-		config(c), Z(0), S(0)
+		config(c)
 	{
         codes = co;
 		//initiate registers
@@ -145,14 +136,12 @@ namespace Loonguage {
 		int rin = regs[Reg::rin];
 		for (auto ch : config.stdIn)
 		{
-			writeMem(rin, ch);
+			write(rin, ch, 4);
 			rin--;
 		}
-		//64 width = 64 bits = 8byte
-		//32 width = 32 bits = 4byte
-		if (c.width == RunTimeConfig::x64)
-			width = 8;
-		else width = 4;
+		//64 width = 64 bits = 8 bytes
+		//32 width = 32 bits = 4 bytes
+		width = 4;
 		//width * codes.size() from top are reserved for codes, which will not be really used in RunTime simulator
         regs[Reg::ins] = memory.size() - 1;
 		regs[Reg::rsp] = regs[Reg::ins] - width * codes.size();
@@ -173,228 +162,164 @@ namespace Loonguage {
 		//real position of nextInstruction is (size() - 1 - %ins) / width
 		int nextInstruction = (memory.size() - 1 - regs[Reg::ins]) / width;
 		Code nextCode = codes[nextInstruction];
-		if (nextCode.codeType == Code::CALL)
+		if (nextCode.codeType == Code::B)
 		{
-			//PUSH next instruction, which is %ins - width
-			writeMem(regs[Reg::rsp], regs[Reg::ins] - width);
-			regs[Reg::rsp] -= width;
 			//%ins = label
 			regs[Reg::ins] = labels[nextCode.label.name];
-            Z = S = 0;
 		}
-		else if (nextCode.codeType == Code::RET)
+		else if (nextCode.codeType == Code::BEQ)
 		{
-			//POP next instruction to %ins
-			//now both %rsp, %ins, %rbp should be the original (%rbp is manually set)
-			regs[Reg::rsp] += width;
-			//watch out always use readMem/writeMem
-			int instruction = readMem(regs[Reg::rsp]);
-			regs[Reg::ins] = instruction;
-            Z = S = 0;
+			if (regs[nextCode.rs] == regs[nextCode.rt])
+			{
+				//%ins = label
+				regs[Reg::ins] = labels[nextCode.label.name];
+			}
+			else regs[Reg::ins] -= width;
+		}	
+		else if (nextCode.codeType == Code::JR)
+		{
+			regs[Reg::ins] = regs[nextCode.rs];
 		}
-		//unconditionally jump
-		else if (nextCode.codeType == Code::JMP)
+		else if (nextCode.codeType == Code::JAL)
 		{
+			//%ret points to next instruction
+			regs[Reg::ret] = regs[Reg::ins] - width;
+			//%ins = label
 			regs[Reg::ins] = labels[nextCode.label.name];
-            Z = S = 0;
-		}
-		//jump when Z, which means ALU returns 0
-        else if (nextCode.codeType == Code::JMZ && Z)
-		{
-            regs[Reg::ins] = labels[nextCode.label.name];
-            Z = S = 0;
 		}
 		else
 		{
 			//no control shift, %ins points to next instruction
 			regs[Reg::ins] -= width;
-			if (nextCode.codeType == Code::PUSH)
+			
+			if (nextCode.codeType == Code::AND)
 			{
-				writeMem(regs[Reg::rsp], regs[nextCode.r1]);
-				regs[Reg::rsp] -= width;
-                Z = S = 0;
+				regs[nextCode.rd] = regs[nextCode.rs] & regs[nextCode.rt];
 			}
-			else if (nextCode.codeType == Code::POP)
+			else if (nextCode.codeType == Code::ANDI)
 			{
-                regs[Reg::rsp] += width;
-				regs[nextCode.r1] = readMem(regs[Reg::rsp]);
-                Z = S = 0;
+				regs[nextCode.rt] = regs[nextCode.rs] & nextCode.immediate;
 			}
-			else if (nextCode.codeType == Code::MOVRI)
+			else if (nextCode.codeType == Code::OR)
 			{
-				regs[nextCode.r1] = nextCode.immediate;
-                Z = S = 0;
-            }
-			else if (nextCode.codeType == Code::MOVMR)
-			{
-				int target = regs[nextCode.address.reg] + nextCode.address.delta;
-				writeMem(target, regs[nextCode.r1]);
-                Z = S = 0;
+				regs[nextCode.rd] = regs[nextCode.rs] | regs[nextCode.rt];
 			}
-			else if (nextCode.codeType == Code::MOVRMB)
+			else if (nextCode.codeType == Code::ORI)
 			{
-				int target = regs[nextCode.address.reg] + nextCode.address.delta;
-                regs[nextCode.r1] = readChar(target, 1);
-				Z = S = 0;
-			}
-			else if (nextCode.codeType == Code::MOVRR)
+				regs[nextCode.rt] = regs[nextCode.rs] | nextCode.immediate;
+			}			
+			else if (nextCode.codeType == Code::XOR)
 			{
-				regs[nextCode.r1] = regs[nextCode.r2];
-                Z = S = 0;
+				regs[nextCode.rd] = regs[nextCode.rs] ^ regs[nextCode.rt];
 			}
-			else if (nextCode.codeType == Code::MOVRM)
+			else if (nextCode.codeType == Code::NOT)
 			{
-				int target = regs[nextCode.address.reg] + nextCode.address.delta;
-				regs[nextCode.r1] = readMem(target);
-                Z = S = 0;
+				regs[nextCode.rt] = ~(regs[nextCode.rs]);
 			}
-			else if (nextCode.codeType == Code::LEA)
+			else if (nextCode.codeType == Code::XORI)
 			{
-				int target = regs[nextCode.address.reg] + nextCode.address.delta;
-				regs[nextCode.r1] = target;
-                Z = S = 0;
+				regs[nextCode.rt] = regs[nextCode.rs] ^ nextCode.immediate;
 			}
-
-			//arithmatic computation, nothing interesting
-			//just remember to set Z
 			else if (nextCode.codeType == Code::ADD)
 			{
-				 int i1 = regs[nextCode.r1];
-				 int i2 = regs[nextCode.r2];
-				if (config.width == RunTimeConfig::x32)
-					i1 = ( short)(( short)i1 + ( short)i2);
-				else
-					i1 = i1 + i2;
-				regs[nextCode.r1] = i1;
-				Z = (i1 == 0); S = (i1 < 0);
-				
+				regs[nextCode.rd] = regs[nextCode.rs] + regs[nextCode.rt];
+			}
+			else if (nextCode.codeType == Code::ADDI)
+			{
+				regs[nextCode.rt] = regs[nextCode.rs] + nextCode.immediate;
 			}
 			else if (nextCode.codeType == Code::SUB)
 			{
-				 int i1 = regs[nextCode.r1];
-				 int i2 = regs[nextCode.r2];
-				if (config.width == RunTimeConfig::x32)
-					i1 = ( short)(( short)i1 - ( short)i2);
-				else
-                    i1 = i1 - i2;
-				regs[nextCode.r1] = i1;
-				Z = (i1 == 0); S = (i1 < 0);
+				regs[nextCode.rd] = regs[nextCode.rs] - regs[nextCode.rt];
 			}
-
 			else if (nextCode.codeType == Code::MUL)
 			{
-				 int i1 = regs[nextCode.r1];
-				 int i2 = regs[nextCode.r2];
-				if (config.width == RunTimeConfig::x32)
-					i1 = ( short)(( short)i1 * ( short)i2);
-				else
-                    i1 = i1 * i2;
-				regs[nextCode.r1] = i1;
-				Z = (i1 == 0); S = (i1 < 0);
+				regs[nextCode.rd] = regs[nextCode.rs] * regs[nextCode.rt];
 			}
-
 			else if (nextCode.codeType == Code::DIV)
 			{
-				 int i1 = regs[nextCode.r1];
-				 int i2 = regs[nextCode.r2];
-				if (config.width == RunTimeConfig::x32)
-					i1 = ( short)(( short)i1 / ( short)i2);
-				else
-                    i1 = i1 / i2;
-				regs[nextCode.r1] = i1;
-				Z = (i1 == 0); S = (i1 < 0);
+				regs[Reg::rlo] = regs[nextCode.rs] / regs[nextCode.rt];
+				regs[Reg::rhi] = regs[nextCode.rs] % regs[nextCode.rt];
 			}
-
-			else if (nextCode.codeType == Code::AND)
+			else if (nextCode.codeType == Code::SLT)
 			{
-				 int i1 = regs[nextCode.r1];
-				 int i2 = regs[nextCode.r2];
-				if (config.width == RunTimeConfig::x32)
-					i1 = ( short)(( short)i1 & ( short)i2);
-				else
-                    i1 = i1 & i2;
-				regs[nextCode.r1] = i1;
-				Z = (i1 == 0); S = (i1 < 0);
+				regs[nextCode.rd] = regs[nextCode.rs] < regs[nextCode.rt];
 			}
-
-			else if (nextCode.codeType == Code::OR)
+			else if (nextCode.codeType == Code::LB)
 			{
-				 int i1 = regs[nextCode.r1];
-				 int i2 = regs[nextCode.r2];
-				if (config.width == RunTimeConfig::x32)
-					i1 = ( short)(( short)i1 | ( short)i2);
-				else
-                    i1 = i1 | i2;
-				regs[nextCode.r1] = i1;
-				Z = (i1 == 0); S = (i1 < 0);
+				int target = regs[nextCode.rs] + nextCode.immediate;
+				regs[nextCode.rt] = read(target, 1, true);
 			}
-
-			else if (nextCode.codeType == Code::XOR)
+			else if (nextCode.codeType == Code::LBU)
 			{
-				 int i1 = regs[nextCode.r1];
-				 int i2 = regs[nextCode.r2];
-				if (config.width == RunTimeConfig::x32)
-					i1 = ( short)(( short)i1 ^ ( short)i2);
-				else
-                    i1 = i1 ^ i2;
-				regs[nextCode.r1] = i1;
-				Z = (i1 == 0); S = (i1 < 0);
+				int target = regs[nextCode.rs] + nextCode.immediate;
+				regs[nextCode.rt] = read(target, 1, false);
 			}
-			else if (nextCode.codeType == Code::LES)
+			else if (nextCode.codeType == Code::LH)
 			{
-				int i1 = regs[nextCode.r1];
-				int i2 = regs[nextCode.r2];
-				if (config.width == RunTimeConfig::x32)
-					i1 = (short)((short)i1 < (short)i2);
-				else
-					i1 = i1 < i2;
-				regs[nextCode.r1] = i1;
-				Z = (i1 == 0); S = (i1 < 0);
+				int target = regs[nextCode.rs] + nextCode.immediate;
+				regs[nextCode.rt] = read(target, 2, true);
 			}
-            else if (nextCode.codeType == Code::EQU)
+			else if (nextCode.codeType == Code::LHU)
 			{
-				int i1 = regs[nextCode.r1];
-				int i2 = regs[nextCode.r2];
-				if (config.width == RunTimeConfig::x32)
-					i1 = (short)((short)i1 == (short)i2);
-				else
-					i1 = i1 == i2;
-				regs[nextCode.r1] = i1;
-				Z = (i1 == 0); S = (i1 < 0);
-				}
-
-			else if (nextCode.codeType == Code::REV)
-			{
-
-				int i1 = regs[nextCode.r1];
-				if (i1)
-					regs[nextCode.r1] = 0u;
-				else regs[nextCode.r2] = 1u;
-				Z = (i1 == 0); S = (i1 < 0);
+				int target = regs[nextCode.rs] + nextCode.immediate;
+				regs[nextCode.rt] = read(target, 2, false);
 			}
-			//read from in, put inout[%rin] into %r1
-			else if (nextCode.codeType == Code::IN)
+			else if (nextCode.codeType == Code::LW)
 			{
-				regs[Reg::rin]--;
-				int val = readChar(regs[Reg::rin]);
-				regs[nextCode.r1] = val;
+				int target = regs[nextCode.rs] + nextCode.immediate;
+				regs[nextCode.rt] = read(target, 4, true);
 			}
-			//print from out, put %r1 into inout[%rot]
-			else if (nextCode.codeType == Code::OUT)
+			else if (nextCode.codeType == Code::SB)
 			{
-				int val = regs[nextCode.r1];
-				writeChar(regs[Reg::rot], val);
-				regs[Reg::rot]++;
+				int target = regs[nextCode.rs] + nextCode.immediate;
+				write(target, regs[nextCode.rt], 1);
+			}
+			else if (nextCode.codeType == Code::SH)
+			{
+				int target = regs[nextCode.rs] + nextCode.immediate;
+				write(target, regs[nextCode.rt], 2);
+			}
+			else if (nextCode.codeType == Code::SW)
+			{
+				int target = regs[nextCode.rs] + nextCode.immediate;
+				write(target, regs[nextCode.rt], 4);
 			}
 			else if (nextCode.codeType == Code::NOP)
 			{
-            }
-            else if (nextCode.codeType == Code::HLT)
-                return 1;
+				
+			}
+			else if (nextCode.codeType == Code::MOVZ)
+			{
+				if (regs[nextCode.rt] == 0)
+					regs[nextCode.rd] = regs[nextCode.rs];
+			}
+			else if (nextCode.codeType == Code::MFHI)
+			{
+				regs[nextCode.rd] = regs[Reg::rhi];
+			}
+			else if (nextCode.codeType == Code::MFLO)
+			{
+				regs[nextCode.rd] = regs[Reg::rlo];
+			}
+			else if (nextCode.codeType == Code::MTHI)
+			{
+				regs[Reg::rhi] = regs[nextCode.rs];
+			}
+			else if (nextCode.codeType == Code::MTLO)
+			{
+				regs[Reg::rlo] = regs[nextCode.rs];
+			}
+			else if (nextCode.codeType == Code::HLT)
+			{
+				return 1;
+			}
 		}
+		//set index of current code, so current code will be highlighted in QT
         currentCode = (memory.size() - 1 - regs[Reg::ins]) / width;;
         return 0;
 	}
+
 	std::string RunTime::stdOut() const
 	{
 		std::string str;
