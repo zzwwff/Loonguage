@@ -1,5 +1,5 @@
 ﻿#include "Code.h"
-
+#include <sstream>
 namespace Loonguage {
 	//specifically for beq
 	Code::Code(CodeType c, Register::Registers r1, Register::Registers r2, Label l) :
@@ -11,6 +11,196 @@ namespace Loonguage {
 	Code::Code(CodeType c, Label r) :
 		codeType(c), label(r)
 	{
+	}
+
+
+    std::istream& operator >> (std::istream& cin, Register::Registers& r)
+    {
+        std::string str;
+        cin >> str;
+        if (str == "$ins") r = Register::Registers::ins;
+        if (str == "$rsp") r = Register::Registers::rsp;
+        if (str == "$rfp") r = Register::Registers::rfp;
+        if (str == "$rax") r = Register::Registers::rax;
+        if (str == "$rtm") r = Register::Registers::rtm;
+        if (str == "$rbx") r = Register::Registers::rbx;
+        if (str == "$rcx") r = Register::Registers::rcx;
+        if (str == "$rdx") r = Register::Registers::rdx;
+
+        if (str == "$rin") r = Register::Registers::rin;
+        if (str == "$rot") r = Register::Registers::rot;
+        if (str == "$rlo") r = Register::Registers::rlo;
+        if (str == "$rhi") r = Register::Registers::rhi;
+        if (str == "$rze") r = Register::Registers::rze;
+        if (str == "$ret") r = Register::Registers::ret;
+        return cin;
+    }
+
+
+	Code::Code(std::string stro, bool& signal) 
+	{
+		std::string str;
+		for (auto c : stro)
+			if (c != '(' && c != ')')
+				str.push_back(c);
+        std::string ct;
+        std::stringstream stream(str);
+        stream >> ct;
+		if (ct == "and")
+		{
+			codeType = AND;
+			stream >> rd >> rs >> rt;
+		}
+		else if (ct == "andi")
+		{
+			codeType = ANDI;
+			stream >> rt >> rs >> immediate;
+		}
+		else if (ct == "or")
+		{
+			codeType = OR;
+			stream >> rd >> rs >> rt;
+		}
+		else if (ct == "ori")
+		{
+			codeType = ORI;
+			stream >> rt >> rs >> immediate;
+		}
+		else if (ct == "xor")
+		{
+			codeType = XOR;
+			stream >> rd >> rs >> rt;
+		}
+		else if (ct == "xori")
+		{
+			codeType = XORI;
+			stream >> rt >> rs >> immediate;
+		}
+		else if (ct == "not")
+		{
+			codeType = NOT;
+			stream >> rt >> rs;
+		}
+		else if (ct == "add")
+		{
+			codeType = ADD;
+			stream >> rd >> rs >> rt;
+		}
+		else if (ct == "addi")
+		{
+			codeType = ADDI;
+			stream >> rt >> rs >> immediate;
+		}
+		else if (ct == "sub")
+		{
+			codeType = SUB;
+			stream >> rd >> rs >> rt;
+		}
+		else if (ct == "mul")
+		{
+			codeType = MUL;
+			stream >> rd >> rs >> rt;
+		}
+		else if (ct == "div")
+		{
+			codeType = DIV;
+			stream >> rs >> rt;
+		}
+		else if (ct == "slt")
+		{
+			codeType = SLT;
+			stream >> rd >> rs >> rt;
+		}
+		else if (ct == "b")
+		{
+			codeType = B;
+			stream >> immediate;
+		}
+		else if (ct == "beq")
+		{
+			codeType = BEQ;
+			stream >> rs >> rt >> immediate;
+		}
+		else if (ct == "jr")
+		{
+			codeType = JR;
+			stream >> rs;
+		}
+		else if (ct == "jal")
+		{
+			codeType = JAL;
+			stream >> immediate;
+		}
+		else if (ct == "lb")
+		{
+			codeType = LB;
+			stream >> rt >> immediate >> rs;
+		}
+		else if (ct == "lbu")
+		{
+			codeType = LBU;
+			stream >> rt >> immediate >> rs;
+		}
+		else if (ct == "lh")
+		{
+			codeType = LH;
+			stream >> rt >> immediate >> rs;
+		}
+		else if (ct == "lhu")
+		{
+			codeType = LHU;
+			stream >> rt >> immediate >> rs;
+		}
+		else if (ct == "lw")
+		{
+			codeType = LW;
+			stream >> rt >> immediate >> rs;
+		}
+		else if (ct == "sb")
+		{
+			codeType = SB;
+			stream >> rt >> immediate >> rs;
+		}
+		else if (ct == "sh")
+		{
+			codeType = SH;
+			stream >> rt >> immediate >> rs;
+		}
+		else if (ct == "sw")
+		{
+			codeType = SW;
+			stream >> rt >> immediate >> rs;
+		}
+		else if (ct == "nop")
+			codeType = NOP;
+		else if (ct == "movz")
+		{
+			codeType = MOVZ;
+			stream >> rd >> rs >> rt;
+		}
+		else if (ct == "mfhi")
+		{
+			codeType = MFHI;
+			stream >> rd;
+		}
+		else if (ct == "mflo")
+		{
+			codeType = MFLO;
+			stream >> rd;
+		}
+		else if (ct == "mthi")
+		{
+			codeType = MTHI;
+			stream >> rs;
+			}
+		else if (ct == "mtlo")
+		{
+			codeType = MTLO;
+			stream >> rs;
+		}
+		else if (ct == "hlt")
+			codeType = HLT;
+		else signal = false;
 	}
 
 	Code::Code(CodeType c) :
@@ -117,7 +307,6 @@ namespace Loonguage {
 
 		if (codeType == HLT) cout << "hlt ";
 
-		cout;
 	}
 
 

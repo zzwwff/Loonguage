@@ -2,9 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListView>
 #include "Compiler/Compiler/RunTime.h"
 #include "Compiler/Compiler/Compiler.h"
 #include <QStandardItemModel>
+#include "Compiler/Compiler/BitStream.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -29,12 +31,29 @@ private slots:
 
     void on_allStep_clicked();
 
+    void on_generateTestBenchCodes_clicked();
+
+    void on_radioButton_clicked();
+
+    void on_radioButton_2_clicked();
+
 private:
+
+    enum CodeSource{
+        MANUAL,
+        AUTO
+    } codeSource = AUTO;
+
     Ui::MainWindow *ui;
     void updateData();
     Loonguage::RunTimeConfig config;
     std::shared_ptr<Loonguage::RunTime> runtime;
     std::shared_ptr<Loonguage::Compiler> compiler;
-    QStandardItemModel* model;
+    std::shared_ptr<Loonguage::BitStream> bitstream;
+
+    QStandardItemModel* codeShowView;
+    QStandardItemModel* codeOutView;
+
+    QStandardItemModel* setListView(QListView*, std::vector<Loonguage::Code>);
 };
 #endif // MAINWINDOW_H

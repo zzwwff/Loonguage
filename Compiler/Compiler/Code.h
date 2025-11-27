@@ -52,6 +52,7 @@ namespace Loonguage {
 		//label as its parameter
 		Label label;
 		int immediate;
+        Code(std::string, bool&);
 		Code(CodeType c);
 		Code(CodeType c, Label);
 		Code(CodeType c, Register::Registers, Register::Registers, Label);

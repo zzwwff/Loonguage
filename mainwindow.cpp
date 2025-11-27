@@ -31,6 +31,22 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+QStandardItemModel* MainWindow::setListView(QListView* view, std::vector<Loonguage::Code> codes)
+{
+    QStandardItemModel* model = new QStandardItemModel();
+    for (const auto& code : codes)
+    {
+        std::stringstream stream;
+        code.dump(stream);
+        std::string str = stream.str();
+        if (str.back() == '\n') str.pop_back();
+        QStandardItem *item = new QStandardItem(QString::fromStdString(str));
+        model->appendRow(item);
+    }
+
+    view->setModel(model);
+    return model;
+}
 
 //prime loader reference code
 /*int isPrime(int n)
@@ -92,18 +108,12 @@ void MainWindow::on_pushButton_clicked()
     ui->infoOut->setPlainText(qinfoOut);
     ui->lexSynOut->setPlainText(qsynOut);
     ui->semOut->setPlainText(qsemOut);
-    model = new QStandardItemModel();
-    for (const auto& code : compiler->codes)
+    codeOutView = setListView(ui->codeOut, compiler->codes);
+    if (codeSource == AUTO)
     {
-        std::stringstream stream;
-        code.dump(stream);
-        std::string str = stream.str();
-        if (str.back() == '\n') str.pop_back();
-        QStandardItem *item = new QStandardItem(QString::fromStdString(str));
-        model->appendRow(item);
+        setListView(ui->codeShow, compiler->codes);
+        bitstream = std::make_shared<Loonguage::BitStream>(*compiler);
     }
-
-    ui->codeOut->setModel(model);
 }
 
 
@@ -151,7 +161,7 @@ void MainWindow::updateData()
     ui->insVal->display(QString::number(runtime->regs[Reg::ins]));
     ui->rtmVal->display(QString::number(runtime->regs[Reg::rtm]));
     ui->stdOut->setPlainText(QString::fromStdString(runtime->stdOut()));
-    QModelIndex index = model->index(runtime->currentCode, 0);
+    QModelIndex index = codeOutView->index(runtime->currentCode, 0);
     ui->codeOut->setCurrentIndex(index);
     QStandardItemModel* stackModel = new QStandardItemModel;
     std::vector<int> stack = runtime->getStack();
@@ -177,5 +187,63 @@ void MainWindow::on_allStep_clicked()
         QMessageBox::about(NULL, "About", mes);
         updateData();
     }
+}
+
+
+void MainWindow::on_generateTestBenchCodes_clicked()
+{
+    if (codeSource == MANUAL)
+    {
+        std::string input = ui->codeInput->toPlainText().toStdString();
+        std::stringstream stream(input);
+        bool signal = true;
+        bitstream = std::make_shared<Loonguage::BitStream>(stream, signal);
+        if (!signal)
+        {
+            bitstream = nullptr;
+            ui->testBenchCodes->setPlainText("汇编代码解析错误");
+            return;
+        }
+        setListView(ui->codeShow, bitstream->codes);
+    }
+    if (bitstream == nullptr)
+    {
+        QMessageBox::about(NULL, "About", "No available codes!");
+        return;
+    }
+    QString pattern = ui->pattern->toPlainText();
+    QStandardItemModel* model = new QStandardItemModel();
+    std::string output;
+    for (int i = 0; i < bitstream->codes.size(); i++)
+    {
+        std::stringstream stream;
+        bitstream->generateTestBench(stream, pattern.toStdString(), i);
+        std::string str = stream.str();
+        output += str;
+    }
+    ui->testBenchCodes->setPlainText(QString::fromStdString(output));
+}
+
+
+void MainWindow::on_radioButton_clicked()
+{
+    codeSource = MANUAL;
+    ui->generateTestBenchCodes->setText("解析输入并生成TestBench测试代码");
+    ui->codeInput->setPlainText("hlt");
+    ui->codeInput->setReadOnly(false);
+}
+
+
+void MainWindow::on_radioButton_2_clicked()
+{
+    codeSource = AUTO;
+    ui->generateTestBenchCodes->setText("生成TestBench测试代码");
+    ui->codeInput->setPlainText("已关闭手动输入");
+    ui->codeInput->setReadOnly(true);
+    if (compiler != nullptr)
+        bitstream = std::make_shared<Loonguage::BitStream>(*compiler);
+    else bitstream = nullptr;
+    if (compiler != nullptr)
+        setListView(ui->codeShow, compiler->codes);
 }
 
