@@ -1,9 +1,23 @@
 ﻿  Compiler.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\Compiler.cpp(77,13): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1022,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1026,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
 E:\source\repos\Loonguage\Compiler\Compiler\SymbolTable.h(99,33): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
   LoonParser.cpp
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1022,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1026,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+  NodeExpr.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\NodeExpr.cpp(174,56): warning C4146: 一元负运算符应用于无符号类型，结果仍为无符号类型
+E:\source\repos\Loonguage\Compiler\Compiler\NodeExpr.cpp(174,79): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  NodeFunction.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\NodeFunction.cpp(65,33): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\NodeFunction.cpp(68,71): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\NodeFunction.cpp(75,70): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\NodeFunction.cpp(191,33): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\NodeFunction.cpp(194,71): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\NodeFunction.cpp(201,70): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  RunTime.cpp
+E:\source\repos\Loonguage\Compiler\Compiler\RunTime.cpp(103,36): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\RunTime.cpp(135,33): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1026,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   lex.Loon_.cc
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(49,9): warning C4005: “INT8_MIN”: 宏重定义
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(50,9): warning C4005: “INT16_MIN”: 宏重定义
@@ -14,8 +28,8 @@ D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.3380
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(57,9): warning C4005: “UINT8_MAX”: 宏重定义
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(58,9): warning C4005: “UINT16_MAX”: 宏重定义
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(59,9): warning C4005: “UINT32_MAX”: 宏重定义
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1022,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1026,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   main.cpp
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1022,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1026,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   正在生成代码...
   Compiler.vcxproj -> E:\source\repos\Loonguage\Compiler\x64\Debug\Compiler.exe

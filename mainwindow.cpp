@@ -112,13 +112,12 @@ void MainWindow::on_pushButton_6_clicked()
     if (compiler != nullptr && compiler->runable)
     {
         config.endian = config.BIG;
-        config.width = config.x64;
         config.memorySize = 16384;
         config.inoutSize = 16384;
         config.stdIn = ui->stdIn->toPlainText().toStdString();
         //if (runtime != nullptr)
         //    delete runtime;
-        runtime = std::make_shared<Loonguage::RunTime>(config, compiler->codes, compiler->strTable, compiler->strPosition);
+        runtime = std::make_shared<Loonguage::RunTime>(config, *compiler);
         updateData();
     }
     else
@@ -143,12 +142,14 @@ void MainWindow::updateData()
     ui->rfpVal->display(QString::number(runtime->regs[Reg::rfp]));
     ui->raxVal->display(QString::number(runtime->regs[Reg::rax]));
     ui->rbxVal->display(QString::number(runtime->regs[Reg::rbx]));
-    ui->rcxVal->display(QString::number(runtime->regs[Reg::rin]));
-    ui->rdxVal->display(QString::number(runtime->regs[Reg::rot]));
+    ui->rcxVal->display(QString::number(runtime->regs[Reg::rcx]));
+    ui->rdxVal->display(QString::number(runtime->regs[Reg::rdx]));
+    ui->rinVal->display(QString::number(runtime->regs[Reg::rin]));
+    ui->rotVal->display(QString::number(runtime->regs[Reg::rot]));
+    ui->rhiVal->display(QString::number(runtime->regs[Reg::rhi]));
+    ui->rloVal->display(QString::number(runtime->regs[Reg::rlo]));
     ui->insVal->display(QString::number(runtime->regs[Reg::ins]));
     ui->rtmVal->display(QString::number(runtime->regs[Reg::rtm]));
-    ui->zSign->display(QString::number(runtime->Z));
-    ui->sSign->display(QString::number(runtime->S));
     ui->stdOut->setPlainText(QString::fromStdString(runtime->stdOut()));
     QModelIndex index = model->index(runtime->currentCode, 0);
     ui->codeOut->setCurrentIndex(index);

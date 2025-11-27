@@ -264,6 +264,7 @@ namespace LoonScanner {
       case symbol_kind::S_EQUAL: // EQUAL
       case symbol_kind::S_LESS: // LESS
       case symbol_kind::S_AT: // AT
+      case symbol_kind::S_MOD: // MOD
         value.YY_MOVE_OR_COPY< Loonguage::TokenSymbol > (YY_MOVE (that.value));
         break;
 
@@ -364,6 +365,7 @@ namespace LoonScanner {
       case symbol_kind::S_EQUAL: // EQUAL
       case symbol_kind::S_LESS: // LESS
       case symbol_kind::S_AT: // AT
+      case symbol_kind::S_MOD: // MOD
         value.move< Loonguage::TokenSymbol > (YY_MOVE (that.value));
         break;
 
@@ -464,6 +466,7 @@ namespace LoonScanner {
       case symbol_kind::S_EQUAL: // EQUAL
       case symbol_kind::S_LESS: // LESS
       case symbol_kind::S_AT: // AT
+      case symbol_kind::S_MOD: // MOD
         value.copy< Loonguage::TokenSymbol > (that.value);
         break;
 
@@ -563,6 +566,7 @@ namespace LoonScanner {
       case symbol_kind::S_EQUAL: // EQUAL
       case symbol_kind::S_LESS: // LESS
       case symbol_kind::S_AT: // AT
+      case symbol_kind::S_MOD: // MOD
         value.move< Loonguage::TokenSymbol > (that.value);
         break;
 
@@ -907,6 +911,7 @@ namespace LoonScanner {
       case symbol_kind::S_EQUAL: // EQUAL
       case symbol_kind::S_LESS: // LESS
       case symbol_kind::S_AT: // AT
+      case symbol_kind::S_MOD: // MOD
         yylhs.value.emplace< Loonguage::TokenSymbol > ();
         break;
 
@@ -979,20 +984,20 @@ namespace LoonScanner {
 { yylhs.value.as < std::shared_ptr<Loonguage::NodeProgram> > () = std::make_shared<Loonguage::NodeProgram>(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeFunctions> > ()); 
   program = yylhs.value.as < std::shared_ptr<Loonguage::NodeProgram> > ();
   }
-#line 983 "LoonParser.cpp"
+#line 988 "LoonParser.cpp"
     break;
 
   case 3: // functions: function
 #line 121 "LoonParser.y"
          { yylhs.value.as < std::shared_ptr<Loonguage::NodeFunctions> > () = std::make_shared<Loonguage::NodeFunctions>(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeFunction> > ()); }
-#line 989 "LoonParser.cpp"
+#line 994 "LoonParser.cpp"
     break;
 
   case 4: // functions: functions function
 #line 122 "LoonParser.y"
                      {yylhs.value.as < std::shared_ptr<Loonguage::NodeFunctions> > () = yystack_[1].value.as < std::shared_ptr<Loonguage::NodeFunctions> > ();
                       yylhs.value.as < std::shared_ptr<Loonguage::NodeFunctions> > ()->push_back(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeFunction> > ());}
-#line 996 "LoonParser.cpp"
+#line 1001 "LoonParser.cpp"
     break;
 
   case 5: // functions: functions error
@@ -1001,26 +1006,26 @@ namespace LoonScanner {
                 //$$ = std::make_shared<Loonguage::NodeFunctions>($1);
                 yylhs.value.as < std::shared_ptr<Loonguage::NodeFunctions> > () = yystack_[1].value.as < std::shared_ptr<Loonguage::NodeFunctions> > ();
 }
-#line 1005 "LoonParser.cpp"
+#line 1010 "LoonParser.cpp"
     break;
 
   case 6: // formal: IDEN IDEN
 #line 130 "LoonParser.y"
           { yylhs.value.as < std::shared_ptr<Loonguage::NodeFormal> > () = std::make_shared<Loonguage::NodeFormal>(yystack_[1].value.as < Loonguage::TokenIden > (), yystack_[0].value.as < Loonguage::TokenIden > ()); }
-#line 1011 "LoonParser.cpp"
+#line 1016 "LoonParser.cpp"
     break;
 
   case 7: // formals: formals COMMA formal
 #line 133 "LoonParser.y"
                      { yylhs.value.as < std::shared_ptr<Loonguage::NodeFormals> > () = yystack_[2].value.as < std::shared_ptr<Loonguage::NodeFormals> > ();
                       yylhs.value.as < std::shared_ptr<Loonguage::NodeFormals> > ()->push_back(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeFormal> > ());  }
-#line 1018 "LoonParser.cpp"
+#line 1023 "LoonParser.cpp"
     break;
 
   case 8: // formals: formal
 #line 135 "LoonParser.y"
          { yylhs.value.as < std::shared_ptr<Loonguage::NodeFormals> > () = std::make_shared<Loonguage::NodeFormals>(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeFormal> > ()); }
-#line 1024 "LoonParser.cpp"
+#line 1029 "LoonParser.cpp"
     break;
 
   case 9: // formals: error COMMA formal
@@ -1028,27 +1033,27 @@ namespace LoonScanner {
                      {
     yylhs.value.as < std::shared_ptr<Loonguage::NodeFormals> > () = std::make_shared<Loonguage::NodeFormals>(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeFormal> > ());
 }
-#line 1032 "LoonParser.cpp"
+#line 1037 "LoonParser.cpp"
     break;
 
   case 10: // function: IDEN IDEN LBRACKET RBRACKET sentence
 #line 141 "LoonParser.y"
                                      { yylhs.value.as < std::shared_ptr<Loonguage::NodeFunction> > () = std::make_shared<Loonguage::NodeFunction>(yystack_[4].value.as < Loonguage::TokenIden > (), yystack_[3].value.as < Loonguage::TokenIden > (), std::make_shared<Loonguage::NodeFormals>(yystack_[4].value.as < Loonguage::TokenIden > ().line), yystack_[0].value.as < std::shared_ptr<Loonguage::NodeSentence> > ()); }
-#line 1038 "LoonParser.cpp"
+#line 1043 "LoonParser.cpp"
     break;
 
   case 11: // function: IDEN IDEN LBRACKET formals RBRACKET sentence
 #line 142 "LoonParser.y"
                                                {
     yylhs.value.as < std::shared_ptr<Loonguage::NodeFunction> > () = std::make_shared<Loonguage::NodeFunction>(yystack_[5].value.as < Loonguage::TokenIden > (), yystack_[4].value.as < Loonguage::TokenIden > (), yystack_[2].value.as < std::shared_ptr<Loonguage::NodeFormals> > (), yystack_[0].value.as < std::shared_ptr<Loonguage::NodeSentence> > ()); }
-#line 1045 "LoonParser.cpp"
+#line 1050 "LoonParser.cpp"
     break;
 
   case 12: // function: IDEN IDEN LBRACKET error RBRACKET sentence
 #line 144 "LoonParser.y"
                                              {yylhs.value.as < std::shared_ptr<Loonguage::NodeFunction> > () = std::make_shared<Loonguage::NodeFunction>(yystack_[5].value.as < Loonguage::TokenIden > (), yystack_[4].value.as < Loonguage::TokenIden > (), std::make_shared<Loonguage::NodeFormals>(yystack_[5].value.as < Loonguage::TokenIden > ().line), yystack_[0].value.as < std::shared_ptr<Loonguage::NodeSentence> > ());
     }
-#line 1052 "LoonParser.cpp"
+#line 1057 "LoonParser.cpp"
     break;
 
   case 13: // function: IDEN IDEN LBRACKET formals RBRACKET AT
@@ -1056,7 +1061,7 @@ namespace LoonScanner {
                                         {
     yylhs.value.as < std::shared_ptr<Loonguage::NodeFunction> > () = std::make_shared<Loonguage::NodeNativeFunction>(yystack_[5].value.as < Loonguage::TokenIden > (), yystack_[4].value.as < Loonguage::TokenIden > (), yystack_[2].value.as < std::shared_ptr<Loonguage::NodeFormals> > ()); 
     }
-#line 1060 "LoonParser.cpp"
+#line 1065 "LoonParser.cpp"
     break;
 
   case 14: // function: IDEN IDEN LBRACKET RBRACKET AT
@@ -1064,231 +1069,237 @@ namespace LoonScanner {
                                  { 
     yylhs.value.as < std::shared_ptr<Loonguage::NodeFunction> > () = std::make_shared<Loonguage::NodeNativeFunction>(yystack_[4].value.as < Loonguage::TokenIden > (), yystack_[3].value.as < Loonguage::TokenIden > (), std::make_shared<Loonguage::NodeFormals>(yystack_[4].value.as < Loonguage::TokenIden > ().line));
     }
-#line 1068 "LoonParser.cpp"
+#line 1073 "LoonParser.cpp"
     break;
 
   case 15: // sentence: expr SEMICOLON
 #line 154 "LoonParser.y"
                { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSExpr>(yystack_[1].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1074 "LoonParser.cpp"
+#line 1079 "LoonParser.cpp"
     break;
 
   case 16: // sentence: IF LBRACKET expr RBRACKET sentence
 #line 155 "LoonParser.y"
                                      { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSIf>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), yystack_[0].value.as < std::shared_ptr<Loonguage::NodeSentence> > ()); }
-#line 1080 "LoonParser.cpp"
+#line 1085 "LoonParser.cpp"
     break;
 
   case 17: // sentence: WHILE LBRACKET expr RBRACKET sentence
 #line 156 "LoonParser.y"
                                         { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSWhile>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), yystack_[0].value.as < std::shared_ptr<Loonguage::NodeSentence> > ()); }
-#line 1086 "LoonParser.cpp"
+#line 1091 "LoonParser.cpp"
     break;
 
   case 18: // sentence: LBRACE sentences RBRACE
 #line 157 "LoonParser.y"
                           { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSBlock>(yystack_[1].value.as < std::shared_ptr<Loonguage::NodeSentences> > ()); }
-#line 1092 "LoonParser.cpp"
+#line 1097 "LoonParser.cpp"
     break;
 
   case 19: // sentence: LBRACE RBRACE
 #line 158 "LoonParser.y"
                 { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSBlock>(std::make_shared<Loonguage::NodeSentences>(yystack_[1].value.as < Loonguage::TokenSymbol > ().line)); }
-#line 1098 "LoonParser.cpp"
+#line 1103 "LoonParser.cpp"
     break;
 
   case 20: // sentence: IDEN IDEN SEMICOLON
 #line 159 "LoonParser.y"
                         { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSDecl>(yystack_[2].value.as < Loonguage::TokenIden > (), yystack_[1].value.as < Loonguage::TokenIden > (), nullptr);}
-#line 1104 "LoonParser.cpp"
+#line 1109 "LoonParser.cpp"
     break;
 
   case 21: // sentence: IDEN IDEN ASSIGN expr SEMICOLON
 #line 160 "LoonParser.y"
                                   { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSDecl>(yystack_[4].value.as < Loonguage::TokenIden > (), yystack_[3].value.as < Loonguage::TokenIden > (), yystack_[1].value.as < std::shared_ptr<Loonguage::NodeExpr> > ());}
-#line 1110 "LoonParser.cpp"
+#line 1115 "LoonParser.cpp"
     break;
 
   case 22: // sentence: BREAK SEMICOLON
 #line 161 "LoonParser.y"
                   { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSBreak>(yystack_[0].value.as < Loonguage::TokenSymbol > ().line);}
-#line 1116 "LoonParser.cpp"
+#line 1121 "LoonParser.cpp"
     break;
 
   case 23: // sentence: CONTINUE SEMICOLON
 #line 162 "LoonParser.y"
                      { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSContinue>(yystack_[0].value.as < Loonguage::TokenSymbol > ().line);}
-#line 1122 "LoonParser.cpp"
+#line 1127 "LoonParser.cpp"
     break;
 
   case 24: // sentence: RETURN expr SEMICOLON
 #line 163 "LoonParser.y"
                         { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSReturn>(yystack_[1].value.as < std::shared_ptr<Loonguage::NodeExpr> > ());}
-#line 1128 "LoonParser.cpp"
+#line 1133 "LoonParser.cpp"
     break;
 
   case 25: // sentence: RETURN SEMICOLON
 #line 164 "LoonParser.y"
                    { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSReturn>(nullptr);}
-#line 1134 "LoonParser.cpp"
+#line 1139 "LoonParser.cpp"
     break;
 
   case 26: // sentence: error SEMICOLON
 #line 165 "LoonParser.y"
                   { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSentence>(yystack_[0].value.as < Loonguage::TokenSymbol > ().line);}
-#line 1140 "LoonParser.cpp"
+#line 1145 "LoonParser.cpp"
     break;
 
   case 27: // sentence: LBRACE error RBRACE
 #line 166 "LoonParser.y"
                       { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentence> > () = std::make_shared<Loonguage::NodeSentence>(yystack_[2].value.as < Loonguage::TokenSymbol > ().line); }
-#line 1146 "LoonParser.cpp"
+#line 1151 "LoonParser.cpp"
     break;
 
   case 28: // sentences: sentence
 #line 169 "LoonParser.y"
          { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentences> > () = std::make_shared<Loonguage::NodeSentences>(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeSentence> > ()); }
-#line 1152 "LoonParser.cpp"
+#line 1157 "LoonParser.cpp"
     break;
 
   case 29: // sentences: sentences sentence
 #line 170 "LoonParser.y"
                      { yylhs.value.as < std::shared_ptr<Loonguage::NodeSentences> > () = yystack_[1].value.as < std::shared_ptr<Loonguage::NodeSentences> > ();
                       yylhs.value.as < std::shared_ptr<Loonguage::NodeSentences> > ()->push_back(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeSentence> > ()); }
-#line 1159 "LoonParser.cpp"
+#line 1164 "LoonParser.cpp"
     break;
 
   case 30: // expr: IDEN
 #line 174 "LoonParser.y"
      { yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeEIden>(yystack_[0].value.as < Loonguage::TokenIden > ()); }
-#line 1165 "LoonParser.cpp"
+#line 1170 "LoonParser.cpp"
     break;
 
   case 31: // expr: LBRACKET expr RBRACKET
 #line 175 "LoonParser.y"
                          {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeEBracket>(yystack_[1].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1171 "LoonParser.cpp"
+#line 1176 "LoonParser.cpp"
     break;
 
   case 32: // expr: IDEN LBRACKET actuals RBRACKET
 #line 176 "LoonParser.y"
                                  {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeEDispatch>(yystack_[3].value.as < Loonguage::TokenIden > (), yystack_[1].value.as < std::shared_ptr<Loonguage::NodeActuals> > ()); }
-#line 1177 "LoonParser.cpp"
+#line 1182 "LoonParser.cpp"
     break;
 
   case 33: // expr: IDEN LBRACKET RBRACKET
 #line 177 "LoonParser.y"
                          {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeEDispatch>(yystack_[2].value.as < Loonguage::TokenIden > (), std::make_shared<Loonguage::NodeActuals>(yystack_[2].value.as < Loonguage::TokenIden > ().line)); }
-#line 1183 "LoonParser.cpp"
+#line 1188 "LoonParser.cpp"
     break;
 
   case 34: // expr: expr PLUS expr
 #line 178 "LoonParser.y"
                  {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeECalc>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), '+', yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1189 "LoonParser.cpp"
+#line 1194 "LoonParser.cpp"
     break;
 
   case 35: // expr: expr MINUS expr
 #line 179 "LoonParser.y"
                   {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeECalc>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), '-', yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1195 "LoonParser.cpp"
+#line 1200 "LoonParser.cpp"
     break;
 
   case 36: // expr: expr TIME expr
 #line 180 "LoonParser.y"
                  {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeECalc>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), '*', yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1201 "LoonParser.cpp"
+#line 1206 "LoonParser.cpp"
     break;
 
   case 37: // expr: expr DIVISION expr
 #line 181 "LoonParser.y"
                      {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeECalc>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), '/', yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1207 "LoonParser.cpp"
+#line 1212 "LoonParser.cpp"
     break;
 
   case 38: // expr: expr AND expr
 #line 182 "LoonParser.y"
                 {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeECalc>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), '&', yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1213 "LoonParser.cpp"
+#line 1218 "LoonParser.cpp"
     break;
 
   case 39: // expr: expr OR expr
 #line 183 "LoonParser.y"
                {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeECalc>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), '|', yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1219 "LoonParser.cpp"
+#line 1224 "LoonParser.cpp"
     break;
 
   case 40: // expr: expr XOR expr
 #line 184 "LoonParser.y"
                 {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeECalc>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), '^', yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1225 "LoonParser.cpp"
+#line 1230 "LoonParser.cpp"
     break;
 
-  case 41: // expr: expr EQUAL expr
+  case 41: // expr: expr MOD expr
 #line 185 "LoonParser.y"
-                  {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeEEqua>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1231 "LoonParser.cpp"
+                {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeECalc>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), '%', yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
+#line 1236 "LoonParser.cpp"
     break;
 
-  case 42: // expr: expr LESS expr
+  case 42: // expr: expr EQUAL expr
 #line 186 "LoonParser.y"
-                 {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeELess>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1237 "LoonParser.cpp"
+                  {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeEEqua>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
+#line 1242 "LoonParser.cpp"
     break;
 
-  case 43: // expr: REV expr
+  case 43: // expr: expr LESS expr
 #line 187 "LoonParser.y"
-           {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeERev>(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1243 "LoonParser.cpp"
+                 {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeELess>(yystack_[2].value.as < std::shared_ptr<Loonguage::NodeExpr> > (), yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
+#line 1248 "LoonParser.cpp"
     break;
 
-  case 44: // expr: IDEN ASSIGN expr
+  case 44: // expr: REV expr
 #line 188 "LoonParser.y"
-                   {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeEAssign>(yystack_[2].value.as < Loonguage::TokenIden > (), yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1249 "LoonParser.cpp"
+           {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeERev>(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
+#line 1254 "LoonParser.cpp"
     break;
 
-  case 45: // expr: INT
+  case 45: // expr: IDEN ASSIGN expr
 #line 189 "LoonParser.y"
-      {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeEInt>(yystack_[0].value.as < Loonguage::TokenInt > ()); }
-#line 1255 "LoonParser.cpp"
+                   {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeEAssign>(yystack_[2].value.as < Loonguage::TokenIden > (), yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
+#line 1260 "LoonParser.cpp"
     break;
 
-  case 46: // expr: STR
+  case 46: // expr: INT
 #line 190 "LoonParser.y"
+      {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeEInt>(yystack_[0].value.as < Loonguage::TokenInt > ()); }
+#line 1266 "LoonParser.cpp"
+    break;
+
+  case 47: // expr: STR
+#line 191 "LoonParser.y"
       {  yylhs.value.as < std::shared_ptr<Loonguage::NodeExpr> > () = std::make_shared<Loonguage::NodeEStr>(yystack_[0].value.as < Loonguage::TokenString > ()); }
-#line 1261 "LoonParser.cpp"
+#line 1272 "LoonParser.cpp"
     break;
 
-  case 47: // actual: expr
-#line 193 "LoonParser.y"
+  case 48: // actual: expr
+#line 194 "LoonParser.y"
      { yylhs.value.as < std::shared_ptr<Loonguage::NodeActual> > () = std::make_shared<Loonguage::NodeActual>(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeExpr> > ()); }
-#line 1267 "LoonParser.cpp"
+#line 1278 "LoonParser.cpp"
     break;
 
-  case 48: // actuals: actual
-#line 196 "LoonParser.y"
-       { yylhs.value.as < std::shared_ptr<Loonguage::NodeActuals> > () = std::make_shared<Loonguage::NodeActuals>(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeActual> > ()); }
-#line 1273 "LoonParser.cpp"
-    break;
-
-  case 49: // actuals: actuals COMMA actual
+  case 49: // actuals: actual
 #line 197 "LoonParser.y"
+       { yylhs.value.as < std::shared_ptr<Loonguage::NodeActuals> > () = std::make_shared<Loonguage::NodeActuals>(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeActual> > ()); }
+#line 1284 "LoonParser.cpp"
+    break;
+
+  case 50: // actuals: actuals COMMA actual
+#line 198 "LoonParser.y"
                        {  yylhs.value.as < std::shared_ptr<Loonguage::NodeActuals> > () = yystack_[2].value.as < std::shared_ptr<Loonguage::NodeActuals> > ();
                       yylhs.value.as < std::shared_ptr<Loonguage::NodeActuals> > ()->push_back(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeActual> > ()); }
-#line 1280 "LoonParser.cpp"
+#line 1291 "LoonParser.cpp"
     break;
 
-  case 50: // actuals: error COMMA actual
-#line 199 "LoonParser.y"
+  case 51: // actuals: error COMMA actual
+#line 200 "LoonParser.y"
                     {
     yylhs.value.as < std::shared_ptr<Loonguage::NodeActuals> > () = std::make_shared<Loonguage::NodeActuals>(yystack_[0].value.as < std::shared_ptr<Loonguage::NodeActual> > ());
 }
-#line 1288 "LoonParser.cpp"
+#line 1299 "LoonParser.cpp"
     break;
 
 
-#line 1292 "LoonParser.cpp"
+#line 1303 "LoonParser.cpp"
 
             default:
               break;
@@ -1640,24 +1651,24 @@ namespace LoonScanner {
   }
 
 
-  const signed char  Parser ::yypact_ninf_ = -43;
+  const signed char  Parser ::yypact_ninf_ = -35;
 
   const signed char  Parser ::yytable_ninf_ = -3;
 
   const short
    Parser ::yypact_[] =
   {
-      -8,     0,    22,     7,   -43,     6,   -43,   -43,   -43,     3,
-     -19,    26,    60,   -43,     8,   156,    43,   -43,    35,    41,
-      52,    39,    57,   289,   -43,   -43,    30,    90,    90,   112,
-     -43,   -43,   167,    86,    43,   -43,   -43,   -43,    90,    90,
-     -43,   -43,   -16,   -43,   184,    16,    11,    90,   -43,   201,
-      34,   -43,   -43,   134,    90,    90,    90,    90,    90,    90,
-      90,   -43,    90,    90,   -43,   -43,   -43,   218,   235,   -43,
-     -43,    90,    59,   -43,   269,   -43,    13,   269,   -43,   -43,
-     -43,   -43,    72,    72,   -43,   -43,    61,   174,    61,   276,
-     276,   156,   156,   252,    90,   -43,    90,   -43,   -43,   -43,
-     -43,   -43
+       7,    15,    22,    39,   -35,    34,   -35,   -35,   -35,     3,
+     -19,    31,    62,   -35,    12,   158,    64,   -35,    81,    35,
+      66,    82,    90,   305,   -35,   -35,    89,    92,    92,   114,
+     -35,   -35,   169,    88,    64,   -35,   -35,   -35,    92,    92,
+     -35,   -35,    57,   -35,   188,    52,    11,    92,   -35,   207,
+     -20,   -35,   -35,   136,    92,    92,    92,    92,    92,    92,
+      92,   -35,    92,    92,    92,   -35,   -35,   -35,   226,   245,
+     -35,   -35,    92,   101,   -35,   283,   -35,    13,   283,   -35,
+     -35,   -35,   -35,    74,    74,   -35,   -35,    -5,    44,    -5,
+     290,   290,   -35,   158,   158,   264,    92,   -35,    92,   -35,
+     -35,   -35,   -35,   -35
   };
 
   const signed char
@@ -1665,130 +1676,132 @@ namespace LoonScanner {
   {
        0,     0,     0,     0,     3,     0,     1,     5,     4,     0,
        0,     0,     0,     8,     0,     0,     0,     6,     0,     0,
-       0,     0,     0,     0,    45,    46,    30,     0,     0,     0,
+       0,     0,     0,     0,    46,    47,    30,     0,     0,     0,
       14,    10,     0,     0,     0,    12,     9,    26,     0,     0,
-      23,    22,    30,    25,     0,     0,     0,     0,    43,     0,
+      23,    22,    30,    25,     0,     0,     0,     0,    44,     0,
        0,    19,    28,     0,     0,     0,     0,     0,     0,     0,
-       0,    15,     0,     0,    13,    11,     7,     0,     0,    24,
-      20,     0,     0,    33,    47,    48,     0,    44,    31,    27,
-      18,    29,    34,    35,    36,    37,    38,    39,    40,    41,
-      42,     0,     0,     0,     0,    32,     0,    16,    17,    21,
-      50,    49
+       0,    15,     0,     0,     0,    13,    11,     7,     0,     0,
+      24,    20,     0,     0,    33,    48,    49,     0,    45,    31,
+      27,    18,    29,    34,    35,    36,    37,    38,    39,    40,
+      42,    43,    41,     0,     0,     0,     0,    32,     0,    16,
+      17,    21,    51,    50
   };
 
   const signed char
    Parser ::yypgoto_[] =
   {
-     -43,   -43,   -43,   -10,   -43,    94,   -15,   -43,   -12,   -42,
-     -43
+     -35,   -35,   -35,    -6,   -35,   109,   -15,   -35,   -12,   -34,
+     -35
   };
 
   const signed char
    Parser ::yydefgoto_[] =
   {
-       0,     2,     3,    13,    14,     4,    31,    53,    32,    75,
-      76
+       0,     2,     3,    13,    14,     4,    31,    53,    32,    76,
+      77
   };
 
   const signed char
    Parser ::yytable_[] =
   {
-      35,    15,     1,    46,    10,    16,    36,    -2,     7,    47,
-       5,    44,    72,    11,    52,    48,    49,     1,    65,    24,
-      25,    42,     6,    12,    66,     9,    67,    68,    33,    27,
-      28,    73,    34,    95,    74,    77,    17,    96,    81,    70,
-      45,    71,    82,    83,    84,    85,    86,    87,    88,    46,
-      89,    90,   100,    11,   101,    47,    79,    37,    37,    93,
-      38,    18,    40,    19,    20,    21,    22,    23,    24,    25,
-      26,    39,    54,    55,    56,    57,    97,    98,    27,    28,
-      41,    29,    74,    94,    74,    56,    57,    18,    30,    19,
-      20,    21,    22,    23,    24,    25,    26,     8,    24,    25,
-      42,     0,     0,     0,    27,    28,     0,    29,    27,    28,
-       0,     0,     0,    50,    64,    19,    20,    21,    22,    23,
-      24,    25,    26,     0,     0,     0,     0,     0,     0,     0,
-      27,    28,     0,    29,    51,    18,     0,    19,    20,    21,
-      22,    23,    24,    25,    26,     0,     0,     0,     0,     0,
-       0,     0,    27,    28,     0,    29,    80,    18,     0,    19,
+      35,    15,    80,    37,    10,    16,    54,    55,    56,    57,
+      36,    44,    73,    11,    52,    48,    49,     1,    66,    24,
+      25,    42,     6,    12,    64,     5,    68,    69,    67,    27,
+      28,    74,    33,    97,    75,    78,    34,    98,    82,    -2,
+       7,    17,    83,    84,    85,    86,    87,    88,    89,     1,
+      90,    91,    92,     9,    38,    54,    55,    56,    57,    58,
+      95,    60,   102,    18,   103,    19,    20,    21,    22,    23,
+      24,    25,    26,    64,    11,    71,    46,    72,    99,   100,
+      27,    28,    47,    29,    75,    39,    75,    56,    57,    18,
+      30,    19,    20,    21,    22,    23,    24,    25,    26,    45,
+      24,    25,    42,    64,    37,    40,    27,    28,    46,    29,
+      27,    28,     8,    41,    47,    50,    65,    19,    20,    21,
+      22,    23,    24,    25,    26,    96,     0,     0,     0,     0,
+       0,     0,    27,    28,     0,    29,    51,    18,     0,    19,
       20,    21,    22,    23,    24,    25,    26,     0,     0,     0,
-       0,     0,     0,     0,    27,    28,     0,    29,    54,    55,
-      56,    57,    58,    59,    60,    54,    55,    56,    57,    58,
-      61,    60,     0,    62,    63,    54,    55,    56,    57,    58,
-      59,    60,     0,     0,     0,     0,     0,    69,     0,     0,
-      62,    63,    54,    55,    56,    57,    58,    59,    60,     0,
-       0,    78,     0,     0,     0,     0,     0,    62,    63,    54,
-      55,    56,    57,    58,    59,    60,     0,     0,    91,     0,
-       0,     0,     0,     0,    62,    63,    54,    55,    56,    57,
-      58,    59,    60,     0,     0,    92,     0,     0,     0,     0,
-       0,    62,    63,    54,    55,    56,    57,    58,    59,    60,
-       0,     0,     0,     0,     0,    99,     0,     0,    62,    63,
-      54,    55,    56,    57,    58,    59,    60,    54,    55,    56,
-      57,    58,    59,    60,     0,    62,    63,    24,    25,    42,
-       0,     0,    -3,    -3,     0,     0,     0,    27,    28,     0,
-       0,     0,    43
+       0,     0,     0,     0,    27,    28,     0,    29,    81,    18,
+       0,    19,    20,    21,    22,    23,    24,    25,    26,     0,
+       0,     0,     0,     0,     0,     0,    27,    28,     0,    29,
+      54,    55,    56,    57,    58,    59,    60,     0,     0,     0,
+       0,     0,    61,     0,     0,    62,    63,     0,    64,    54,
+      55,    56,    57,    58,    59,    60,     0,     0,     0,     0,
+       0,    70,     0,     0,    62,    63,     0,    64,    54,    55,
+      56,    57,    58,    59,    60,     0,     0,    79,     0,     0,
+       0,     0,     0,    62,    63,     0,    64,    54,    55,    56,
+      57,    58,    59,    60,     0,     0,    93,     0,     0,     0,
+       0,     0,    62,    63,     0,    64,    54,    55,    56,    57,
+      58,    59,    60,     0,     0,    94,     0,     0,     0,     0,
+       0,    62,    63,     0,    64,    54,    55,    56,    57,    58,
+      59,    60,     0,     0,     0,     0,     0,   101,     0,     0,
+      62,    63,     0,    64,    54,    55,    56,    57,    58,    59,
+      60,    54,    55,    56,    57,    58,    59,    60,     0,    62,
+      63,     0,    64,    24,    25,    42,    -3,    -3,     0,    64,
+       0,     0,     0,    27,    28,     0,     0,     0,    43
   };
 
   const signed char
    Parser ::yycheck_[] =
   {
-      15,    20,    10,    19,     1,    24,    16,     0,     1,    25,
-      10,    23,     1,    10,    29,    27,    28,    10,    33,     8,
-       9,    10,     0,    20,    34,    19,    38,    39,    20,    18,
-      19,    20,    24,    20,    46,    47,    10,    24,    53,    23,
-      10,    25,    54,    55,    56,    57,    58,    59,    60,    19,
-      62,    63,    94,    10,    96,    25,    22,    23,    23,    71,
-      19,     1,    23,     3,     4,     5,     6,     7,     8,     9,
-      10,    19,    11,    12,    13,    14,    91,    92,    18,    19,
-      23,    21,    94,    24,    96,    13,    14,     1,    28,     3,
-       4,     5,     6,     7,     8,     9,    10,     3,     8,     9,
-      10,    -1,    -1,    -1,    18,    19,    -1,    21,    18,    19,
-      -1,    -1,    -1,     1,    28,     3,     4,     5,     6,     7,
-       8,     9,    10,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      18,    19,    -1,    21,    22,     1,    -1,     3,     4,     5,
-       6,     7,     8,     9,    10,    -1,    -1,    -1,    -1,    -1,
+      15,    20,    22,    23,     1,    24,    11,    12,    13,    14,
+      16,    23,     1,    10,    29,    27,    28,    10,    33,     8,
+       9,    10,     0,    20,    29,    10,    38,    39,    34,    18,
+      19,    20,    20,    20,    46,    47,    24,    24,    53,     0,
+       1,    10,    54,    55,    56,    57,    58,    59,    60,    10,
+      62,    63,    64,    19,    19,    11,    12,    13,    14,    15,
+      72,    17,    96,     1,    98,     3,     4,     5,     6,     7,
+       8,     9,    10,    29,    10,    23,    19,    25,    93,    94,
+      18,    19,    25,    21,    96,    19,    98,    13,    14,     1,
+      28,     3,     4,     5,     6,     7,     8,     9,    10,    10,
+       8,     9,    10,    29,    23,    23,    18,    19,    19,    21,
+      18,    19,     3,    23,    25,     1,    28,     3,     4,     5,
+       6,     7,     8,     9,    10,    24,    -1,    -1,    -1,    -1,
       -1,    -1,    18,    19,    -1,    21,    22,     1,    -1,     3,
        4,     5,     6,     7,     8,     9,    10,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    18,    19,    -1,    21,    11,    12,
-      13,    14,    15,    16,    17,    11,    12,    13,    14,    15,
-      23,    17,    -1,    26,    27,    11,    12,    13,    14,    15,
-      16,    17,    -1,    -1,    -1,    -1,    -1,    23,    -1,    -1,
-      26,    27,    11,    12,    13,    14,    15,    16,    17,    -1,
-      -1,    20,    -1,    -1,    -1,    -1,    -1,    26,    27,    11,
-      12,    13,    14,    15,    16,    17,    -1,    -1,    20,    -1,
-      -1,    -1,    -1,    -1,    26,    27,    11,    12,    13,    14,
+      -1,    -1,    -1,    -1,    18,    19,    -1,    21,    22,     1,
+      -1,     3,     4,     5,     6,     7,     8,     9,    10,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    18,    19,    -1,    21,
+      11,    12,    13,    14,    15,    16,    17,    -1,    -1,    -1,
+      -1,    -1,    23,    -1,    -1,    26,    27,    -1,    29,    11,
+      12,    13,    14,    15,    16,    17,    -1,    -1,    -1,    -1,
+      -1,    23,    -1,    -1,    26,    27,    -1,    29,    11,    12,
+      13,    14,    15,    16,    17,    -1,    -1,    20,    -1,    -1,
+      -1,    -1,    -1,    26,    27,    -1,    29,    11,    12,    13,
+      14,    15,    16,    17,    -1,    -1,    20,    -1,    -1,    -1,
+      -1,    -1,    26,    27,    -1,    29,    11,    12,    13,    14,
       15,    16,    17,    -1,    -1,    20,    -1,    -1,    -1,    -1,
-      -1,    26,    27,    11,    12,    13,    14,    15,    16,    17,
-      -1,    -1,    -1,    -1,    -1,    23,    -1,    -1,    26,    27,
-      11,    12,    13,    14,    15,    16,    17,    11,    12,    13,
-      14,    15,    16,    17,    -1,    26,    27,     8,     9,    10,
-      -1,    -1,    26,    27,    -1,    -1,    -1,    18,    19,    -1,
-      -1,    -1,    23
+      -1,    26,    27,    -1,    29,    11,    12,    13,    14,    15,
+      16,    17,    -1,    -1,    -1,    -1,    -1,    23,    -1,    -1,
+      26,    27,    -1,    29,    11,    12,    13,    14,    15,    16,
+      17,    11,    12,    13,    14,    15,    16,    17,    -1,    26,
+      27,    -1,    29,     8,     9,    10,    26,    27,    -1,    29,
+      -1,    -1,    -1,    18,    19,    -1,    -1,    -1,    23
   };
 
   const signed char
    Parser ::yystos_[] =
   {
-       0,    10,    31,    32,    35,    10,     0,     1,    35,    19,
-       1,    10,    20,    33,    34,    20,    24,    10,     1,     3,
+       0,    10,    32,    33,    36,    10,     0,     1,    36,    19,
+       1,    10,    20,    34,    35,    20,    24,    10,     1,     3,
        4,     5,     6,     7,     8,     9,    10,    18,    19,    21,
-      28,    36,    38,    20,    24,    36,    33,    23,    19,    19,
-      23,    23,    10,    23,    38,    10,    19,    25,    38,    38,
-       1,    22,    36,    37,    11,    12,    13,    14,    15,    16,
-      17,    23,    26,    27,    28,    36,    33,    38,    38,    23,
-      23,    25,     1,    20,    38,    39,    40,    38,    20,    22,
-      22,    36,    38,    38,    38,    38,    38,    38,    38,    38,
-      38,    20,    20,    38,    24,    20,    24,    36,    36,    23,
-      39,    39
+      28,    37,    39,    20,    24,    37,    34,    23,    19,    19,
+      23,    23,    10,    23,    39,    10,    19,    25,    39,    39,
+       1,    22,    37,    38,    11,    12,    13,    14,    15,    16,
+      17,    23,    26,    27,    29,    28,    37,    34,    39,    39,
+      23,    23,    25,     1,    20,    39,    40,    41,    39,    20,
+      22,    22,    37,    39,    39,    39,    39,    39,    39,    39,
+      39,    39,    39,    20,    20,    39,    24,    20,    24,    37,
+      37,    23,    40,    40
   };
 
   const signed char
    Parser ::yyr1_[] =
   {
-       0,    30,    31,    32,    32,    32,    33,    34,    34,    34,
-      35,    35,    35,    35,    35,    36,    36,    36,    36,    36,
-      36,    36,    36,    36,    36,    36,    36,    36,    37,    37,
-      38,    38,    38,    38,    38,    38,    38,    38,    38,    38,
-      38,    38,    38,    38,    38,    38,    38,    39,    40,    40,
-      40
+       0,    31,    32,    33,    33,    33,    34,    35,    35,    35,
+      36,    36,    36,    36,    36,    37,    37,    37,    37,    37,
+      37,    37,    37,    37,    37,    37,    37,    37,    38,    38,
+      39,    39,    39,    39,    39,    39,    39,    39,    39,    39,
+      39,    39,    39,    39,    39,    39,    39,    39,    40,    41,
+      41,    41
   };
 
   const signed char
@@ -1798,8 +1811,8 @@ namespace LoonScanner {
        5,     6,     6,     6,     5,     2,     5,     5,     3,     2,
        3,     5,     2,     2,     3,     2,     2,     3,     1,     2,
        1,     3,     4,     3,     3,     3,     3,     3,     3,     3,
-       3,     3,     3,     2,     3,     1,     1,     1,     1,     3,
-       3
+       3,     3,     3,     3,     2,     3,     1,     1,     1,     1,
+       3,     3
   };
 
 
@@ -1812,7 +1825,7 @@ namespace LoonScanner {
   "END", "error", "\"invalid token\"", "IF", "WHILE", "CONTINUE", "BREAK",
   "RETURN", "INT", "STR", "IDEN", "PLUS", "MINUS", "TIME", "DIVISION",
   "AND", "OR", "XOR", "REV", "LBRACKET", "RBRACKET", "LBRACE", "RBRACE",
-  "SEMICOLON", "COMMA", "ASSIGN", "EQUAL", "LESS", "AT", "ERROR",
+  "SEMICOLON", "COMMA", "ASSIGN", "EQUAL", "LESS", "AT", "MOD", "ERROR",
   "$accept", "program", "functions", "formal", "formals", "function",
   "sentence", "sentences", "expr", "actual", "actuals", YY_NULLPTR
   };
@@ -1827,8 +1840,8 @@ namespace LoonScanner {
      141,   142,   144,   146,   149,   154,   155,   156,   157,   158,
      159,   160,   161,   162,   163,   164,   165,   166,   169,   170,
      174,   175,   176,   177,   178,   179,   180,   181,   182,   183,
-     184,   185,   186,   187,   188,   189,   190,   193,   196,   197,
-     199
+     184,   185,   186,   187,   188,   189,   190,   191,   194,   197,
+     198,   200
   };
 
   void
@@ -1861,9 +1874,9 @@ namespace LoonScanner {
 
 #line 9 "LoonParser.y"
 } // LoonScanner
-#line 1865 "LoonParser.cpp"
+#line 1878 "LoonParser.cpp"
 
-#line 203 "LoonParser.y"
+#line 204 "LoonParser.y"
 
 /*Parser实现错误处理接口*/
 void LoonScanner::Parser::error(const LoonScanner::location& location,const std::string& message){

@@ -1,5 +1,5 @@
 ﻿#include "RunTime.h"
-
+#include "Compiler.h"
 namespace Loonguage {
 	//readMem a number in x64 or x32 from memory
 	int RunTime::read(int pos, int width, bool sign) const
@@ -8,15 +8,15 @@ namespace Loonguage {
 		int res = 0;
 		if (config.endian == config.BIG)
 		{
-			for (int i = 0; i < width; i++)
+            for (int i = 0; i < width; i++)
 				for (int j = 0; j < 8; j++)
-					bits[8 * i + j] = memory[pos - i][j];
+                    bits[8 * i + j] = memory[pos + i][j];
 		}
 		else
 		{
 			for (int i = 0; i < width; i++)
 				for (int j = 0; j < 8; j++)
-					bits[8 * i + j] = memory[pos - width + 1 + i][j];
+                    bits[8 * i + j] = memory[pos + i][j];
 		}
 		//if sign = 1, extend bits[8 * width]
 		if (sign)
@@ -35,13 +35,13 @@ namespace Loonguage {
 		{
 			for (int i = 0; i < width; i++)
 				for (int j = 0; j < 8; j++)
-					memory[pos - i][j] = bits[8 * i + j];
+                    memory[pos + i][j] = bits[8 * i + j];
 		}
 		else
 		{
 			for (int i = 0; i < width; i++)
 				for (int j = 0; j < 8; j++)
-					memory[pos - width + 1 + i][j] = bits[8 * i + j];
+                    memory[pos + i][j] = bits[8 * i + j];
 		}
 	}
 
@@ -51,9 +51,9 @@ namespace Loonguage {
 		int val = 0;
 		for (int j = 0; j < 8; j++)
             if (from)
-                val += memory[pos][8 - 1 - j] << j;
+                val += memory[pos][j] << j;
             else
-                val += inout[pos][8 - 1 - j] << j;
+                val += inout[pos][j] << j;
 		return val;
 	}
 
@@ -61,9 +61,9 @@ namespace Loonguage {
 	{
 		for (int j = 0; j < 8; j++)
             if (from)
-                memory[pos][8 - 1 - j] = ((unsigned int)i >> j) & 1;
+                memory[pos][j] = ((unsigned int)i >> j) & 1;
             else
-                inout[pos][8 - 1 - j] = ((unsigned int)i >> j) & 1;
+                inout[pos][j] = ((unsigned int)i >> j) & 1;
 	}
 
 	std::vector<int> RunTime::int2bit(int i) const
@@ -73,22 +73,22 @@ namespace Loonguage {
 		std::vector<int> vec;
 		vec = std::vector<int>(32);
 		for (int j = 0; j < 31; j++)
-			vec[31 - j] = ((long long)i >> j) & 1;
+            vec[j] = ((long long)i >> j) & 1;
 		if (signal)
 			for (auto& n : vec)
-				n = ~n;
+                n = 1 - n;
 		return vec;
 	}
 
 	int RunTime::bit2int(std::vector<int> vec) const
 	{
-		bool signal = vec[0];
+        bool signal = vec[31];
 		if (signal)
 			for (auto& j : vec)
-				j = ~j;
+                j = 1 - j;
 		int val = 0;
 		for (int j = 0; j < 31; j++)
-			val += vec[31 - j] << j;
+            val += vec[j] << j;
 		if (signal)
 			val = -val - 1;
 		return val;
@@ -118,10 +118,10 @@ namespace Loonguage {
 		return vec;
 	}
 
-    RunTime::RunTime(RunTimeConfig c, std::vector<Code>& co, SymbolTable<std::string>& strTable, std::map<Symbol, int> strPosition) :
-		config(c)
+    RunTime::RunTime(RunTimeConfig c, Compiler& compiler) :
+		config(c), codeBegin(compiler.codeBegin)
 	{
-        codes = co;
+        codes = compiler.codes;
 		//initiate registers
 		for (Reg::Registers reg = Reg::rsp; reg <= Reg::rot; reg = static_cast<Reg::Registers>(reg + 1))
 		{
@@ -142,25 +142,26 @@ namespace Loonguage {
 		//64 width = 64 bits = 8 bytes
 		//32 width = 32 bits = 4 bytes
 		width = 4;
-		//width * codes.size() from top are reserved for codes, which will not be really used in RunTime simulator
-        regs[Reg::ins] = memory.size() - 1;
-		regs[Reg::rsp] = regs[Reg::ins] - width * codes.size();
+		//0 ~ codeBegin - 1 are reserved for strings
+        regs[Reg::ins] = codeBegin;
+        regs[Reg::rsp] = config.memorySize - width;
 		stackBegin = regs[Reg::rsp];
-		//initiate label lists, for easy jump, labels points to memory position, which is %ins - i * width
+		regs[Reg::rfp] = regs[Reg::rsp];
+		//initiate label lists, for easy jump, labels points to memory position, which is $ins + i * width
 		for (int i = 0; i < codes.size(); i++)
 		{
 			for (int j = 0; j < codes[i].labelAttached.size(); j++)
-				labels[codes[i].labelAttached[j].name] = regs[Reg::ins] - i * width;
+                labels[codes[i].labelAttached[j].name] = regs[Reg::ins] + i * width;
 		}
         currentCode = 0;
-		allocateString(strTable, strPosition);
+		allocateString(compiler.strTable, compiler.strPosition);
 	}
 	
 	//advance a step
     int RunTime::tick()
 	{
-		//real position of nextInstruction is (size() - 1 - %ins) / width
-		int nextInstruction = (memory.size() - 1 - regs[Reg::ins]) / width;
+		//real position of nextInstruction is ($ins - codeBegin) / width
+        int nextInstruction = (regs[Reg::ins] - codeBegin) / width;
 		Code nextCode = codes[nextInstruction];
 		if (nextCode.codeType == Code::B)
 		{
@@ -174,7 +175,7 @@ namespace Loonguage {
 				//%ins = label
 				regs[Reg::ins] = labels[nextCode.label.name];
 			}
-			else regs[Reg::ins] -= width;
+            else regs[Reg::ins] += width;
 		}	
 		else if (nextCode.codeType == Code::JR)
 		{
@@ -183,14 +184,14 @@ namespace Loonguage {
 		else if (nextCode.codeType == Code::JAL)
 		{
 			//%ret points to next instruction
-			regs[Reg::ret] = regs[Reg::ins] - width;
+            regs[Reg::ret] = regs[Reg::ins] + width;
 			//%ins = label
 			regs[Reg::ins] = labels[nextCode.label.name];
 		}
 		else
 		{
 			//no control shift, %ins points to next instruction
-			regs[Reg::ins] -= width;
+            regs[Reg::ins] += width;
 			
 			if (nextCode.codeType == Code::AND)
 			{
@@ -314,9 +315,15 @@ namespace Loonguage {
 			{
 				return 1;
 			}
+			else if (nextCode.codeType == Code::OUT)
+			{
+				int val = regs[nextCode.rs];
+				writeChar(regs[Reg::rot], val);
+				regs[Reg::rot]++;
+			}
 		}
 		//set index of current code, so current code will be highlighted in QT
-        currentCode = (memory.size() - 1 - regs[Reg::ins]) / width;;
+        currentCode = (regs[Reg::ins] - codeBegin) / width;;
         return 0;
 	}
 

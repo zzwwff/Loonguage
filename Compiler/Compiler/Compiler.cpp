@@ -68,9 +68,9 @@ namespace Loonguage {
 			functionDecoNameOrdered[iter->first.name].push_back(iter);
 	}
 
-	void Compiler::allocateString()
+	int Compiler::allocateString()
 	{
-		int pos = 0;
+        int pos = 0;
 		for (auto& pstr : strTable)
 		{
 			const std::string str = pstr.first;
@@ -78,6 +78,7 @@ namespace Loonguage {
 			pos += size;
 			strPosition[strTable[str]] = pos - 1;
 		}
+		return pos;
 	}
 
 	Compiler::Compiler(std::istream& i, std::ostream& o1, std::ostream& o2, std::ostream& o3, std::ostream& o4):
@@ -167,15 +168,20 @@ namespace Loonguage {
 	//generate ASM code
 	bool Compiler::codeGeneration()
 	{
-		allocateString();
+		//string allocation must be put before code generation
+		//because address of string is used in codes
+		codeBegin = allocateString();
+		if (codeBegin % 4)
+			codeBegin = codeBegin + 4 - codeBegin % 4;
 		std::shared_ptr<LabelAllocator> alloc =  std::make_shared<LabelAllocator>();
 		CodeGenContext context;
-        context.width = 8;
+        context.width = 4;
 		context.allocator = alloc;
 		context.strPosition = strPosition;
-        codes.push_back(Code(Code::CALL, Label("call@main")));
+        codes.push_back(Code(Code::JAL, Label("call@main")));
         codes.push_back(Code(Code::HLT));
         program->codeGen(context, codes);
+
 		//no bug will be reported in code generation
 		for (auto code : codes)
 			code.dump(genOut);

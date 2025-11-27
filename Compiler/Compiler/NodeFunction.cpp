@@ -55,6 +55,7 @@ namespace Loonguage {
 		Label callLabel(context.allocator->addName(callStr));
 		std::string returnStr = std::string("return@") + nameDeco.getString();
 		Label returnLabel(context.allocator->addName(returnStr));
+		context.returnLabel = returnLabel;
 
 		//offset of formals from %rfp
 		for (int i = 0; i < formals->size(); i++)
@@ -65,6 +66,7 @@ namespace Loonguage {
 
 		//update rsp
 		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -context.width * locals.size()));
+		codes.back().addLabel(callLabel);
 
 		sentence->codeGen(context, codes);
 
@@ -190,6 +192,7 @@ namespace Loonguage {
 
 		//update rsp
 		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -context.width * locals.size()));
+		codes.back().addLabel(callLabel);
 
 		builtInCodeGen(context, codes);
 
@@ -206,20 +209,20 @@ namespace Loonguage {
     {
         if (nameDeco.getString() == "out@int")
         {
-            codes.push_back(Code(Code::MOVRM, Reg::rax, Address(Reg::rfp, 0)));
+            codes.push_back(Code(Code::LW, Reg::rfp, Reg::rax, 0));
             codes.push_back(Code(Code::OUT, Reg::rax));
         }
         if (nameDeco.getString() == "getChar@string@int")
         {
-            codes.push_back(Code(Code::MOVRM, Reg::rax, Address(Reg::rfp, 0)));
-            codes.push_back(Code(Code::MOVRM, Reg::rtm, Address(Reg::rfp, -context.width)));
-            codes.push_back(Code(Code::SUB, Reg::rax, Reg::rtm));
-            codes.push_back(Code(Code::MOVRMB, Reg::rax, Address(Reg::rax, -1)));
+			codes.push_back(Code(Code::LW, Reg::rfp, Reg::rax, 0));
+			codes.push_back(Code(Code::LW, Reg::rfp, Reg::rtm, -context.width));
+            codes.push_back(Code(Code::SUB, Reg::rax, Reg::rtm, Reg::rax));
+			codes.push_back(Code(Code::LBU, Reg::rax, Reg::rax, -1));
         }
         if (nameDeco.getString() == "getSize@string")
         {
-            codes.push_back(Code(Code::MOVRM, Reg::rax, Address(Reg::rfp, 0)));
-            codes.push_back(Code(Code::MOVRMB, Reg::rax, Address(Reg::rax, 0)));
+			codes.push_back(Code(Code::LW, Reg::rfp, Reg::rax, 0));
+			codes.push_back(Code(Code::LBU, Reg::rax, Reg::rax, 0));
         }
     }
 }

@@ -56,7 +56,8 @@ namespace Loonguage {
         //code generation
         std::vector<Code> codes;
 		std::map<Symbol, int> strPosition;
-		void allocateString();
+		int codeBegin;
+		int allocateString();
 
         //cin of file path
 		Compiler(std::istream&, std::ostream&, std::ostream&, std::ostream&, std::ostream&);

@@ -8,6 +8,9 @@
 #include <bitset>
 #include "SymbolTable.h"
 namespace Loonguage {
+
+	class Compiler;
+
 	class RunTime
 	{
 		using Reg = Register;
@@ -25,6 +28,8 @@ namespace Loonguage {
 	public:
 		//start pointer of stack and stack data, used for stack data display
 		int stackBegin;
+		//start pointer of code
+		int codeBegin;
 		std::vector<int> getStack();
 		//index of next instruction to be executed, used for codeOut
         int currentCode;
@@ -39,7 +44,7 @@ namespace Loonguage {
 		std::vector<Code> codes;
 		std::map<std::string, int> labels;
 		RunTimeConfig config;
-        RunTime(RunTimeConfig, std::vector<Code>&, SymbolTable<std::string>&, std::map<Symbol, int>);
+        RunTime(RunTimeConfig, Compiler& compiler);
 		//advance a step
         int tick();
 		std::string stdOut() const;

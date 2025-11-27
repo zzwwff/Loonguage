@@ -460,6 +460,7 @@ namespace LoonScanner {
       // EQUAL
       // LESS
       // AT
+      // MOD
       char dummy5[sizeof (Loonguage::TokenSymbol)];
 
       // actual
@@ -572,7 +573,8 @@ namespace LoonScanner {
     TOKEN_EQUAL = 281,             // EQUAL
     TOKEN_LESS = 282,              // LESS
     TOKEN_AT = 283,                // AT
-    TOKEN_ERROR = 284              // ERROR
+    TOKEN_MOD = 284,               // MOD
+    TOKEN_ERROR = 285              // ERROR
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -589,7 +591,7 @@ namespace LoonScanner {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 30, ///< Number of tokens.
+        YYNTOKENS = 31, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // END
         S_YYerror = 1,                           // error
@@ -620,18 +622,19 @@ namespace LoonScanner {
         S_EQUAL = 26,                            // EQUAL
         S_LESS = 27,                             // LESS
         S_AT = 28,                               // AT
-        S_ERROR = 29,                            // ERROR
-        S_YYACCEPT = 30,                         // $accept
-        S_program = 31,                          // program
-        S_functions = 32,                        // functions
-        S_formal = 33,                           // formal
-        S_formals = 34,                          // formals
-        S_function = 35,                         // function
-        S_sentence = 36,                         // sentence
-        S_sentences = 37,                        // sentences
-        S_expr = 38,                             // expr
-        S_actual = 39,                           // actual
-        S_actuals = 40                           // actuals
+        S_MOD = 29,                              // MOD
+        S_ERROR = 30,                            // ERROR
+        S_YYACCEPT = 31,                         // $accept
+        S_program = 32,                          // program
+        S_functions = 33,                        // functions
+        S_formal = 34,                           // formal
+        S_formals = 35,                          // formals
+        S_function = 36,                         // function
+        S_sentence = 37,                         // sentence
+        S_sentences = 38,                        // sentences
+        S_expr = 39,                             // expr
+        S_actual = 40,                           // actual
+        S_actuals = 41                           // actuals
       };
     };
 
@@ -706,6 +709,7 @@ namespace LoonScanner {
       case symbol_kind::S_EQUAL: // EQUAL
       case symbol_kind::S_LESS: // LESS
       case symbol_kind::S_AT: // AT
+      case symbol_kind::S_MOD: // MOD
         value.move< Loonguage::TokenSymbol > (std::move (that.value));
         break;
 
@@ -1062,6 +1066,7 @@ switch (yykind)
       case symbol_kind::S_EQUAL: // EQUAL
       case symbol_kind::S_LESS: // LESS
       case symbol_kind::S_AT: // AT
+      case symbol_kind::S_MOD: // MOD
         value.template destroy< Loonguage::TokenSymbol > ();
         break;
 
@@ -1267,7 +1272,7 @@ switch (yykind)
 #endif
       {
 #if !defined _MSC_VER || defined __clang__
-        YY_ASSERT ((token::TOKEN_PLUS <= tok && tok <= token::TOKEN_AT));
+        YY_ASSERT ((token::TOKEN_PLUS <= tok && tok <= token::TOKEN_MOD));
 #endif
       }
 #if 201103L <= YY_CPLUSPLUS
@@ -1768,6 +1773,21 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
+      make_MOD (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_MOD, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_MOD (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_MOD, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
       make_ERROR (std::string v, location_type l)
       {
         return symbol_type (token::TOKEN_ERROR, std::move (v), std::move (l));
@@ -2110,7 +2130,7 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 312,     ///< Last index in yytable_.
+      yylast_ = 328,     ///< Last index in yytable_.
       yynnts_ = 11,  ///< Number of nonterminal symbols.
       yyfinal_ = 6 ///< Termination state number.
     };
@@ -2164,10 +2184,10 @@ switch (yykind)
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29
+      25,    26,    27,    28,    29,    30
     };
     // Last valid token kind.
-    const int code_max = 284;
+    const int code_max = 285;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -2224,6 +2244,7 @@ switch (yykind)
       case symbol_kind::S_EQUAL: // EQUAL
       case symbol_kind::S_LESS: // LESS
       case symbol_kind::S_AT: // AT
+      case symbol_kind::S_MOD: // MOD
         value.copy< Loonguage::TokenSymbol > (YY_MOVE (that.value));
         break;
 
@@ -2340,6 +2361,7 @@ switch (yykind)
       case symbol_kind::S_EQUAL: // EQUAL
       case symbol_kind::S_LESS: // LESS
       case symbol_kind::S_AT: // AT
+      case symbol_kind::S_MOD: // MOD
         value.move< Loonguage::TokenSymbol > (YY_MOVE (s.value));
         break;
 
@@ -2454,7 +2476,7 @@ switch (yykind)
 
 #line 9 "LoonParser.y"
 } // LoonScanner
-#line 2458 "LoonParser.hpp"
+#line 2480 "LoonParser.hpp"
 
 
 

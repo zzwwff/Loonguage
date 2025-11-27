@@ -158,16 +158,16 @@ namespace Loonguage {
 
 		std::string callLabel = std::string("call@") + idenDeco.getString();
 
-		//save %ret, save %rfp
-		codes.push_back(Code(Code::LW, Reg::rsp, Reg::ret, 0));
-		codes.push_back(Code(Code::LW, Reg::rsp, Reg::rfp, -context.width));
-
 		//load all parameters
 		for (int i = 0; i < actuals->size(); i++)
 		{
 			(*actuals)[i]->codeGen(context, codes);
 			codes.push_back(Code(Code::SW, Reg::rsp, Reg::rax, -context.width * (i + 2)));
 		}
+
+		//save %ret, save %rfp
+		codes.push_back(Code(Code::SW, Reg::rsp, Reg::ret, 0));
+		codes.push_back(Code(Code::SW, Reg::rsp, Reg::rfp, -context.width));
 
 		//set %rfp and %rsp
 		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rfp, -2 * context.width));
@@ -218,18 +218,24 @@ namespace Loonguage {
 	void NodeECalc::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
 		expr2->codeGen(context, codes);
-        codes.push_back(Code(Code::PUSH, Reg::rax));
+        codes.push_back(Code(Code::SW, Reg::rsp, Reg::rax, 0));
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -context.width));
 		expr1->codeGen(context, codes);
-		codes.push_back(Code(Code::POP, Reg::rtm));
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, context.width));
+		codes.push_back(Code(Code::LW, Reg::rsp, Reg::rtm, 0));
 		Code::CodeType type;
 		if (op == '+') type = Code::ADD;
 		else if (op == '-') type = Code::SUB;
 		else if (op == '*') type = Code::MUL;
-		else if (op == '/') type = Code::DIV;
+        else if (op == '/' || op == '%') type = Code::DIV;
 		else if (op == '&') type = Code::AND;
 		else if (op == '|') type = Code::OR;
 		else if (op == '^') type = Code::XOR;
-        codes.push_back(Code(type, Reg::rax, Reg::rtm));
+        codes.push_back(Code(type, Reg::rax, Reg::rtm, Reg::rax));
+		if (op == '/')
+			codes.push_back(Code(Code::MFLO, Reg::rax));
+		else if (op == '%')
+			codes.push_back(Code(Code::MFHI, Reg::rax));
     }
 
 	NodeEEqua::NodeEEqua(std::shared_ptr<NodeExpr> e1, std::shared_ptr<NodeExpr> e2):
@@ -262,7 +268,7 @@ namespace Loonguage {
 		expr2->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
 		if ((!expr1->type.same("int")) || (!expr2->type.same("int")))
 		{
-			errs.push_back(Error("", getLine(), std::string("At operator \"=\": Only type \"int\" can be compared.")));
+			errs.push_back(Error("", getLine(), std::string("At operator \"==\": Only type \"int\" can be compared.")));
 			type = expr1->getType().getWrongType();
 		}
 		else type = (*(expr1->getType().getPointer()))["int"];
@@ -271,10 +277,19 @@ namespace Loonguage {
 	void NodeEEqua::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
 		expr2->codeGen(context, codes);
-		codes.push_back(Code(Code::PUSH, Reg::rax));
+		codes.push_back(Code(Code::SW, Reg::rsp, Reg::rax, 0));
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -context.width));
 		expr1->codeGen(context, codes);
-		codes.push_back(Code(Code::POP, Reg::rtm));
-		codes.push_back(Code(Code::EQU, Reg::rax, Reg::rtm));
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, context.width));
+		codes.push_back(Code(Code::LW, Reg::rsp, Reg::rtm, 0));
+		//$rbx = $rax - $rtm = expr1 - expr2
+		codes.push_back(Code(Code::SUB, Reg::rax, Reg::rtm, Reg::rbx));
+		//make $rax = 0
+		codes.push_back(Code(Code::ORI, Reg::rze, Reg::rax, 0));
+		//make $rcx = 1
+		codes.push_back(Code(Code::ORI, Reg::rze, Reg::rcx, 1));
+		//if ($rbx == 0) which means expr1 == expr2 then set $rax = 1
+		codes.push_back(Code(Code::MOVZ, Reg::rcx, Reg::rbx, Reg::rax));
 	}
 
 	NodeELess::NodeELess(std::shared_ptr<NodeExpr> e1, std::shared_ptr<NodeExpr> e2) :
@@ -317,10 +332,12 @@ namespace Loonguage {
 	void NodeELess::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
 		expr2->codeGen(context, codes);
-		codes.push_back(Code(Code::PUSH, Reg::rax));
+		codes.push_back(Code(Code::SW, Reg::rsp, Reg::rax, 0));
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -context.width));
 		expr1->codeGen(context, codes);
-		codes.push_back(Code(Code::POP, Reg::rtm));
-        codes.push_back(Code(Code::LES, Reg::rax, Reg::rtm));
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, context.width));
+		codes.push_back(Code(Code::LW, Reg::rsp, Reg::rtm, 0));
+		codes.push_back(Code(Code::SLT, Reg::rax, Reg::rtm, Reg::rax));
 	}
 
 	NodeERev::NodeERev(std::shared_ptr<NodeExpr> e):
@@ -358,7 +375,7 @@ namespace Loonguage {
 	void NodeERev::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
 		expr->codeGen(context, codes);
-		codes.push_back(Code(Code::REV, Reg::rax));
+		codes.push_back(Code(Code::NOT, Reg::rax, Reg::rax));
 	}
 
 	NodeEAssign::NodeEAssign(TokenIden i, std::shared_ptr<NodeExpr> e):
@@ -388,7 +405,7 @@ namespace Loonguage {
 		if (nameOfSymbol.find(iden.value) == nameOfSymbol.end())
 		{
 			errs.push_back(Error("", getLine(), std::string("Unknown identifier \"") + iden.value.getString() + "\"."));
-			type = expr->getType().getWrongType();
+            type = iden.value.getWrongType();
 			return;
 		}
 		Symbol idenType = nameOfSymbol[iden.value].type;
@@ -405,7 +422,7 @@ namespace Loonguage {
 	void NodeEAssign::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
 		expr->codeGen(context, codes);
-		codes.push_back(Code(Code::MOVMR, Address(Reg::rfp, -context.width * context.delta[idenDeco]), Reg::rax));
+		codes.push_back(Code(Code::SW, Reg::rfp, Reg::rax, -context.width * context.delta[idenDeco]));
 	}
 
 
@@ -434,9 +451,10 @@ namespace Loonguage {
 		type = context.idenTable["int"];
 	}
 
+	
 	void NodeEInt::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
-		codes.push_back(Code(Code::MOVRI, Reg::rax, int_.getValue()));
+		codes.push_back(Code(Code::ORI, Reg::rze, Reg::rax, int_.getValue()));
 	}
 
 	NodeEStr::NodeEStr(TokenString s):
@@ -465,6 +483,6 @@ namespace Loonguage {
 
 	void NodeEStr::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
-		codes.push_back(Code(Code::MOVRI, Reg::rax, context.strPosition[str.value]));
+		codes.push_back(Code(Code::ORI, Reg::rze, Reg::rax, context.strPosition[str.value]));
 	}
 }

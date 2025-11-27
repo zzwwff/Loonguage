@@ -12,6 +12,8 @@ namespace Loonguage {
 			rtm, //temporary value
 			ins, //next instruction
 			rbx, //parameter 1
+			rcx, //parameter 2
+			rdx,
 			rlo, //low, or division
 			rhi, //high, or remainder
 			ret, //return address

@@ -83,7 +83,7 @@
 %token <Loonguage::TokenInt> INT
 %token <Loonguage::TokenString> STR
 %token <Loonguage::TokenIden> IDEN
-%token <Loonguage::TokenSymbol> PLUS MINUS TIME DIVISION AND OR XOR REV LBRACKET RBRACKET LBRACE RBRACE SEMICOLON COMMA ASSIGN EQUAL LESS AT
+%token <Loonguage::TokenSymbol> PLUS MINUS TIME DIVISION AND OR XOR REV LBRACKET RBRACKET LBRACE RBRACE SEMICOLON COMMA ASSIGN EQUAL LESS AT MOD
 %token <std::string> ERROR
 %token END 0
 
@@ -92,7 +92,7 @@
 %left OR
 %left AND XOR
 %left PLUS MINUS
-%left TIME DIVISION
+%left TIME DIVISION MOD
 %right REV
 
 %type <std::shared_ptr<Loonguage::NodeProgram>> program
@@ -182,6 +182,7 @@ IDEN { $$ = std::make_shared<Loonguage::NodeEIden>($1); }
 | expr AND expr {  $$ = std::make_shared<Loonguage::NodeECalc>($1, '&', $3); }
 | expr OR expr {  $$ = std::make_shared<Loonguage::NodeECalc>($1, '|', $3); }
 | expr XOR expr {  $$ = std::make_shared<Loonguage::NodeECalc>($1, '^', $3); }
+| expr MOD expr {  $$ = std::make_shared<Loonguage::NodeECalc>($1, '%', $3); }
 | expr EQUAL expr {  $$ = std::make_shared<Loonguage::NodeEEqua>($1, $3); }
 | expr LESS expr {  $$ = std::make_shared<Loonguage::NodeELess>($1, $3); }
 | REV expr {  $$ = std::make_shared<Loonguage::NodeERev>($2); }
