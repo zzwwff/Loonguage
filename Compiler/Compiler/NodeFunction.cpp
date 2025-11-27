@@ -51,6 +51,9 @@ namespace Loonguage {
 
 	void NodeFunction::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
+		/*
+			Warning: Changes here should be updated to NodeNativeFunction::codeGen()
+		*/
 		std::string callStr = std::string("call@") + nameDeco.getString();
 		Label callLabel(context.allocator->addName(callStr));
 		std::string returnStr = std::string("return@") + nameDeco.getString();
@@ -60,19 +63,23 @@ namespace Loonguage {
 		//offset of formals from %rfp
 		for (int i = 0; i < formals->size(); i++)
 			context.delta[(*formals)[i]->nameDeco] = i;
+		int localSize = 0;
 		//offset of locals
 		for (int i = 0; i < locals.size(); i++)
-			context.delta[locals[i]] = i + formals->size();
+		{
+			context.delta[locals[i].first] = localSize + formals->size();
+			localSize += locals[i].second;
+		}
 
 		//update rsp
-		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -context.width * locals.size()));
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -context.width * localSize));
 		codes.back().addLabel(callLabel);
 
 		sentence->codeGen(context, codes);
 
 		//pop back all parameters
 		//attach returnLabel to the first instruction, make sure that %rax is set at 'return'
-		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, context.width * locals.size()));
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, context.width * localSize));
 		codes.back().addLabel(returnLabel);
 		//return
 		codes.push_back(Code(Code::JR, Reg::ret));
@@ -182,16 +189,21 @@ namespace Loonguage {
 		Label callLabel(context.allocator->addName(callStr));
 		std::string returnStr = std::string("return@") + nameDeco.getString();
 		Label returnLabel(context.allocator->addName(returnStr));
+		context.returnLabel = returnLabel;
 
 		//offset of formals from %rfp
 		for (int i = 0; i < formals->size(); i++)
 			context.delta[(*formals)[i]->nameDeco] = i;
+		int localSize = 0;
 		//offset of locals
 		for (int i = 0; i < locals.size(); i++)
-			context.delta[locals[i]] = i + formals->size();
+		{
+			context.delta[locals[i].first] = locals[i].second + formals->size();
+			localSize += locals[i].second;
+		}
 
 		//update rsp
-		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -context.width * locals.size()));
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -context.width * localSize));
 		codes.back().addLabel(callLabel);
 
 		builtInCodeGen(context, codes);

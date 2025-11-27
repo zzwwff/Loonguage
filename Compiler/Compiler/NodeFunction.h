@@ -14,7 +14,7 @@ namespace Loonguage {
 		Symbol nameDeco;
 		std::shared_ptr<NodeFormals> formals;
 		std::shared_ptr<NodeSentence> sentence;
-		std::vector<Symbol> locals;
+		std::vector<std::pair<Symbol, int>> locals;
 		NodeFunction(TokenIden, TokenIden, std::shared_ptr<NodeFormals>, std::shared_ptr<NodeSentence>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;

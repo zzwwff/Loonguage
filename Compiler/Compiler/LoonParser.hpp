@@ -454,6 +454,8 @@ namespace LoonScanner {
       // RBRACKET
       // LBRACE
       // RBRACE
+      // LSQUARE
+      // RSQUARE
       // SEMICOLON
       // COMMA
       // ASSIGN
@@ -567,14 +569,16 @@ namespace LoonScanner {
     TOKEN_RBRACKET = 275,          // RBRACKET
     TOKEN_LBRACE = 276,            // LBRACE
     TOKEN_RBRACE = 277,            // RBRACE
-    TOKEN_SEMICOLON = 278,         // SEMICOLON
-    TOKEN_COMMA = 279,             // COMMA
-    TOKEN_ASSIGN = 280,            // ASSIGN
-    TOKEN_EQUAL = 281,             // EQUAL
-    TOKEN_LESS = 282,              // LESS
-    TOKEN_AT = 283,                // AT
-    TOKEN_MOD = 284,               // MOD
-    TOKEN_ERROR = 285              // ERROR
+    TOKEN_LSQUARE = 278,           // LSQUARE
+    TOKEN_RSQUARE = 279,           // RSQUARE
+    TOKEN_SEMICOLON = 280,         // SEMICOLON
+    TOKEN_COMMA = 281,             // COMMA
+    TOKEN_ASSIGN = 282,            // ASSIGN
+    TOKEN_EQUAL = 283,             // EQUAL
+    TOKEN_LESS = 284,              // LESS
+    TOKEN_AT = 285,                // AT
+    TOKEN_MOD = 286,               // MOD
+    TOKEN_ERROR = 287              // ERROR
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -591,7 +595,7 @@ namespace LoonScanner {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 31, ///< Number of tokens.
+        YYNTOKENS = 33, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // END
         S_YYerror = 1,                           // error
@@ -616,25 +620,27 @@ namespace LoonScanner {
         S_RBRACKET = 20,                         // RBRACKET
         S_LBRACE = 21,                           // LBRACE
         S_RBRACE = 22,                           // RBRACE
-        S_SEMICOLON = 23,                        // SEMICOLON
-        S_COMMA = 24,                            // COMMA
-        S_ASSIGN = 25,                           // ASSIGN
-        S_EQUAL = 26,                            // EQUAL
-        S_LESS = 27,                             // LESS
-        S_AT = 28,                               // AT
-        S_MOD = 29,                              // MOD
-        S_ERROR = 30,                            // ERROR
-        S_YYACCEPT = 31,                         // $accept
-        S_program = 32,                          // program
-        S_functions = 33,                        // functions
-        S_formal = 34,                           // formal
-        S_formals = 35,                          // formals
-        S_function = 36,                         // function
-        S_sentence = 37,                         // sentence
-        S_sentences = 38,                        // sentences
-        S_expr = 39,                             // expr
-        S_actual = 40,                           // actual
-        S_actuals = 41                           // actuals
+        S_LSQUARE = 23,                          // LSQUARE
+        S_RSQUARE = 24,                          // RSQUARE
+        S_SEMICOLON = 25,                        // SEMICOLON
+        S_COMMA = 26,                            // COMMA
+        S_ASSIGN = 27,                           // ASSIGN
+        S_EQUAL = 28,                            // EQUAL
+        S_LESS = 29,                             // LESS
+        S_AT = 30,                               // AT
+        S_MOD = 31,                              // MOD
+        S_ERROR = 32,                            // ERROR
+        S_YYACCEPT = 33,                         // $accept
+        S_program = 34,                          // program
+        S_functions = 35,                        // functions
+        S_formal = 36,                           // formal
+        S_formals = 37,                          // formals
+        S_function = 38,                         // function
+        S_sentence = 39,                         // sentence
+        S_sentences = 40,                        // sentences
+        S_expr = 41,                             // expr
+        S_actual = 42,                           // actual
+        S_actuals = 43                           // actuals
       };
     };
 
@@ -703,6 +709,8 @@ namespace LoonScanner {
       case symbol_kind::S_RBRACKET: // RBRACKET
       case symbol_kind::S_LBRACE: // LBRACE
       case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_LSQUARE: // LSQUARE
+      case symbol_kind::S_RSQUARE: // RSQUARE
       case symbol_kind::S_SEMICOLON: // SEMICOLON
       case symbol_kind::S_COMMA: // COMMA
       case symbol_kind::S_ASSIGN: // ASSIGN
@@ -1060,6 +1068,8 @@ switch (yykind)
       case symbol_kind::S_RBRACKET: // RBRACKET
       case symbol_kind::S_LBRACE: // LBRACE
       case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_LSQUARE: // LSQUARE
+      case symbol_kind::S_RSQUARE: // RSQUARE
       case symbol_kind::S_SEMICOLON: // SEMICOLON
       case symbol_kind::S_COMMA: // COMMA
       case symbol_kind::S_ASSIGN: // ASSIGN
@@ -1683,6 +1693,36 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
+      make_LSQUARE (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_LSQUARE, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_LSQUARE (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_LSQUARE, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_RSQUARE (Loonguage::TokenSymbol v, location_type l)
+      {
+        return symbol_type (token::TOKEN_RSQUARE, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_RSQUARE (const Loonguage::TokenSymbol& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_RSQUARE, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
       make_SEMICOLON (Loonguage::TokenSymbol v, location_type l)
       {
         return symbol_type (token::TOKEN_SEMICOLON, std::move (v), std::move (l));
@@ -2130,7 +2170,7 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 328,     ///< Last index in yytable_.
+      yylast_ = 320,     ///< Last index in yytable_.
       yynnts_ = 11,  ///< Number of nonterminal symbols.
       yyfinal_ = 6 ///< Termination state number.
     };
@@ -2184,10 +2224,10 @@ switch (yykind)
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30
+      25,    26,    27,    28,    29,    30,    31,    32
     };
     // Last valid token kind.
-    const int code_max = 285;
+    const int code_max = 287;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -2238,6 +2278,8 @@ switch (yykind)
       case symbol_kind::S_RBRACKET: // RBRACKET
       case symbol_kind::S_LBRACE: // LBRACE
       case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_LSQUARE: // LSQUARE
+      case symbol_kind::S_RSQUARE: // RSQUARE
       case symbol_kind::S_SEMICOLON: // SEMICOLON
       case symbol_kind::S_COMMA: // COMMA
       case symbol_kind::S_ASSIGN: // ASSIGN
@@ -2355,6 +2397,8 @@ switch (yykind)
       case symbol_kind::S_RBRACKET: // RBRACKET
       case symbol_kind::S_LBRACE: // LBRACE
       case symbol_kind::S_RBRACE: // RBRACE
+      case symbol_kind::S_LSQUARE: // LSQUARE
+      case symbol_kind::S_RSQUARE: // RSQUARE
       case symbol_kind::S_SEMICOLON: // SEMICOLON
       case symbol_kind::S_COMMA: // COMMA
       case symbol_kind::S_ASSIGN: // ASSIGN
@@ -2476,7 +2520,7 @@ switch (yykind)
 
 #line 9 "LoonParser.y"
 } // LoonScanner
-#line 2480 "LoonParser.hpp"
+#line 2524 "LoonParser.hpp"
 
 
 

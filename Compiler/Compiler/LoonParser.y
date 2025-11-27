@@ -83,7 +83,7 @@
 %token <Loonguage::TokenInt> INT
 %token <Loonguage::TokenString> STR
 %token <Loonguage::TokenIden> IDEN
-%token <Loonguage::TokenSymbol> PLUS MINUS TIME DIVISION AND OR XOR REV LBRACKET RBRACKET LBRACE RBRACE SEMICOLON COMMA ASSIGN EQUAL LESS AT MOD
+%token <Loonguage::TokenSymbol> PLUS MINUS TIME DIVISION AND OR XOR REV LBRACKET RBRACKET LBRACE RBRACE LSQUARE RSQUARE SEMICOLON COMMA ASSIGN EQUAL LESS AT MOD
 %token <std::string> ERROR
 %token END 0
 
@@ -158,6 +158,7 @@ expr SEMICOLON { $$ = std::make_shared<Loonguage::NodeSExpr>($1); }
 | LBRACE RBRACE { $$ = std::make_shared<Loonguage::NodeSBlock>(std::make_shared<Loonguage::NodeSentences>($1.line)); }
 | IDEN IDEN SEMICOLON   { $$ = std::make_shared<Loonguage::NodeSDecl>($1, $2, nullptr);}
 | IDEN IDEN ASSIGN expr SEMICOLON { $$ = std::make_shared<Loonguage::NodeSDecl>($1, $2, $4);}
+| IDEN IDEN LSQUARE INT RSQUARE SEMICOLON { $$ = std::make_shared<Loonguage::NodeSDeclArray>($1, $2, $4); }
 | BREAK SEMICOLON { $$ = std::make_shared<Loonguage::NodeSBreak>($2.line);}
 | CONTINUE SEMICOLON { $$ = std::make_shared<Loonguage::NodeSContinue>($2.line);}
 | RETURN expr SEMICOLON { $$ = std::make_shared<Loonguage::NodeSReturn>($2);}
@@ -172,6 +173,7 @@ sentence { $$ = std::make_shared<Loonguage::NodeSentences>($1); }
 
 expr:
 IDEN { $$ = std::make_shared<Loonguage::NodeEIden>($1); }
+| IDEN LSQUARE expr RSQUARE { $$ = std::make_shared<Loonguage::NodeEIdenArray>($1, $3); }
 | LBRACKET expr RBRACKET {  $$ = std::make_shared<Loonguage::NodeEBracket>($2); }
 | IDEN LBRACKET actuals RBRACKET {  $$ = std::make_shared<Loonguage::NodeEDispatch>($1, $3); }
 | IDEN LBRACKET RBRACKET {  $$ = std::make_shared<Loonguage::NodeEDispatch>($1, std::make_shared<Loonguage::NodeActuals>($1.line)); }
@@ -187,6 +189,7 @@ IDEN { $$ = std::make_shared<Loonguage::NodeEIden>($1); }
 | expr LESS expr {  $$ = std::make_shared<Loonguage::NodeELess>($1, $3); }
 | REV expr {  $$ = std::make_shared<Loonguage::NodeERev>($2); }
 | IDEN ASSIGN expr {  $$ = std::make_shared<Loonguage::NodeEAssign>($1, $3); }
+| IDEN LSQUARE expr RSQUARE ASSIGN expr {  $$ = std::make_shared<Loonguage::NodeEAssignArray>($1, $3, $6); }
 | INT {  $$ = std::make_shared<Loonguage::NodeEInt>($1); }
 | STR {  $$ = std::make_shared<Loonguage::NodeEStr>($1); }
 

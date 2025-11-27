@@ -61,6 +61,68 @@ namespace Loonguage {
 		codes.push_back(Code(Code::LW, Reg::rfp, Reg::rax, -context.width * context.delta[idenDeco]));
 	}
 
+	NodeEIdenArray::NodeEIdenArray(TokenIden i, std::shared_ptr<NodeExpr> o) :
+		NodeExpr(i.line, Node::NdEIdenArray), iden(i), offset(o)
+	{
+	}
+
+	void NodeEIdenArray::dumpAST(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeEIdenArray (Name:" << iden.getString()
+			<< ")" << std::endl;
+		offset->dumpAST(cout, indent + 2);
+	}
+
+	void NodeEIdenArray::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeEIdenArray (idenDeco:" << idenDeco.getString()
+			<< ")" << std::endl;
+		offset->dumpSem(cout, indent);
+	}
+
+	void NodeEIdenArray::annotateType(std::map<std::string, int>& numOfSymbol,
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
+		const FunctionMapNameOrdered& functionMap,
+		SemanticContext context, Errors& errs)
+	{
+		offset->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
+		if (!offset->type.same("int"))
+		{
+			errs.push_back(Error("", getLine(),
+				std::string("Type of index must be \"int\".")));
+			idenDeco = type = iden.value.getWrongType();
+		}
+		else if (nameOfSymbol.find(iden.value) == nameOfSymbol.end())
+		{
+			errs.push_back(Error("", getLine(),
+				std::string("Unknown identifier \"" + iden.value.getString() + "\".")));
+			idenDeco = type = iden.value.getWrongType();
+		}
+		else if (nameOfSymbol.find(iden.value)->second.type.same("ints"))
+		{
+			idenDeco = nameOfSymbol[iden.value].nameDeco;
+            type = idenDeco.getPointer()->operator[]("int");
+		}
+		else 
+			errs.push_back(Error("", getLine(),
+				std::string("Operator \"[]\" can only be used on array.")));
+	}
+
+	void NodeEIdenArray::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		//get offset in $rax
+		offset->codeGen(context, codes);
+		//get base in $rtm
+		codes.push_back(Code(Code::ADDI, Reg::rfp, Reg::rtm, -context.width * context.delta[idenDeco]));
+		//target is $rtm - 4 * $rax, saved in $rax
+		codes.push_back(Code(Code::ORI, Reg::rze, Reg::rbx, 4));
+		codes.push_back(Code(Code::MUL, Reg::rax, Reg::rbx, Reg::rax));
+		codes.push_back(Code(Code::SUB, Reg::rtm, Reg::rax, Reg::rax));
+		codes.push_back(Code(Code::LW, Reg::rax, Reg::rax, 0));
+	}
+
 
 	NodeEBracket::NodeEBracket(std::shared_ptr<NodeExpr> e):
 		NodeExpr(e->getLine(), Node::NdEBracket), expr(e)
@@ -425,6 +487,88 @@ namespace Loonguage {
 		codes.push_back(Code(Code::SW, Reg::rfp, Reg::rax, -context.width * context.delta[idenDeco]));
 	}
 
+	NodeEAssignArray::NodeEAssignArray(TokenIden i, std::shared_ptr<NodeExpr> o, std::shared_ptr<NodeExpr> e):
+		NodeExpr(i.line, Node::NdEAssignArray), iden(i), offset(o), expr(e)
+	{
+	}
+
+	void NodeEAssignArray::dumpAST(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeEAssignArray (Iden: " << iden.getString()
+			 << ")" << std::endl;
+		expr->dumpAST(cout, indent + 2);
+		offset->dumpAST(cout, indent + 2);
+	}
+
+	void NodeEAssignArray::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeEAssignArray (IdenDeco: " << idenDeco.getString() << ", Type: " << type.getString()
+			 << ")" << std::endl;
+		expr->dumpSem(cout, indent + 2);
+		offset->dumpSem(cout, indent + 2);
+	}
+
+	void NodeEAssignArray::annotateType(std::map<std::string, int>& numOfSymbol,
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
+		const FunctionMapNameOrdered& functionMap,
+		SemanticContext context, Errors& errs)
+	{
+		offset->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
+		if (!offset->type.same("int"))
+		{
+			errs.push_back(Error("", getLine(),
+				std::string("Type of index must be \"int\".")));
+			idenDeco = type = iden.value.getWrongType();
+			return;
+		}
+		else if (nameOfSymbol.find(iden.value) == nameOfSymbol.end())
+		{
+			errs.push_back(Error("", getLine(), std::string("Unknown identifier \"") + iden.value.getString() + "\"."));
+			type = iden.value.getWrongType();
+			return;
+		}
+		Symbol idenType = nameOfSymbol[iden.value].type;
+		idenDeco = nameOfSymbol[iden.value].nameDeco;
+		expr->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
+		if (!expr->type.same("int"))
+		{
+			errs.push_back(Error("", getLine(), std::string("Types of value and object do not match.")));
+			type = expr->getType().getWrongType();
+		}
+		else if (nameOfSymbol.find(iden.value)->second.type.same("ints"))
+		{
+			type = expr->getType();
+		}
+		else
+			errs.push_back(Error("", getLine(),
+				std::string("Operator \"[]\" can only be used on array.")));
+	}
+
+	void NodeEAssignArray::codeGen(CodeGenContext& context, std::vector<Code>& codes)
+	{
+		//value in stack
+		expr->codeGen(context, codes);
+		codes.push_back(Code(Code::SW, Reg::rsp, Reg::rax, 0));
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, -context.width));
+
+		//get offset in $rcx
+		offset->codeGen(context, codes);
+		codes.push_back(Code(Code::MOVZ, Reg::rax, Reg::rze, Reg::rcx));
+		//get base in $rtm
+		codes.push_back(Code(Code::ADDI, Reg::rfp, Reg::rtm, -context.width * context.delta[idenDeco]));
+		//target is $rtm - 4 * $rax, saved in $rbx
+		codes.push_back(Code(Code::ORI, Reg::rze, Reg::rbx, 4));
+		codes.push_back(Code(Code::MUL, Reg::rax, Reg::rbx, Reg::rax));
+		codes.push_back(Code(Code::SUB, Reg::rtm, Reg::rax, Reg::rbx));
+		//get value from stack into $rax
+		codes.push_back(Code(Code::ADDI, Reg::rsp, Reg::rsp, context.width));
+		codes.push_back(Code(Code::LW, Reg::rsp, Reg::rax, 0));
+		
+		codes.push_back(Code(Code::SW, Reg::rbx, Reg::rax, 0));
+	}
+
 
 	NodeEInt::NodeEInt(TokenInt i):
 		NodeExpr(i.line, Node::NdEInt), int_(i)
@@ -451,7 +595,6 @@ namespace Loonguage {
 		type = context.idenTable["int"];
 	}
 
-	
 	void NodeEInt::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
 		codes.push_back(Code(Code::ORI, Reg::rze, Reg::rax, int_.getValue()));
@@ -485,4 +628,5 @@ namespace Loonguage {
 	{
 		codes.push_back(Code(Code::ORI, Reg::rze, Reg::rax, context.strPosition[str.value]));
 	}
+
 }

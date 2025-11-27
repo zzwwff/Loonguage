@@ -121,6 +121,10 @@ ESCN '\\n'
             return Parser::make_INT(Loonguage::TokenInt(loc.begin.line, std::stoi(yytext)), loc); 
           }
 
+<INITIAL>-{DIGIT}    {
+            return Parser::make_INT(Loonguage::TokenInt(loc.begin.line, std::stoi(yytext)), loc); 
+          }
+
 <INITIAL>if        {
             return Parser::make_IF(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::TokenKeyWord::KeyWordType::KeyWordIf), loc); 
             }
@@ -168,6 +172,14 @@ return Parser::make_RETURN(Loonguage::TokenKeyWord(loc.begin.line, Loonguage::To
 <INITIAL>"}" {
                 return Parser::make_RBRACE(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }
+
+<INITIAL>"[" {
+                return Parser::make_LSQUARE(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+<INITIAL>"]" {
+                return Parser::make_RSQUARE(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
+            }
+
 <INITIAL>"(" {
                 return Parser::make_LBRACKET(Loonguage::TokenSymbol(loc.begin.line, yytext[0]), loc); 
             }

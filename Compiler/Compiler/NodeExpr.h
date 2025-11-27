@@ -32,6 +32,21 @@ namespace Loonguage {
 
 	};
 
+	class NodeEIdenArray :
+		public NodeExpr
+	{
+		TokenIden iden;
+		std::shared_ptr<NodeExpr> offset;
+		Symbol idenDeco;
+	public:
+		NodeEIdenArray(TokenIden, std::shared_ptr<NodeExpr>);
+		void dumpAST(std::ostream&, int) const;
+		void dumpSem(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void codeGen(CodeGenContext&, std::vector<Code>&);
+
+	};
+
 	class NodeEBracket :
 		public NodeExpr
 	{
@@ -121,6 +136,21 @@ namespace Loonguage {
 		std::shared_ptr<NodeExpr> expr;
 	public:
 		NodeEAssign(TokenIden, std::shared_ptr<NodeExpr>);
+		void dumpAST(std::ostream&, int) const;
+		void dumpSem(std::ostream&, int) const;
+		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);
+		void codeGen(CodeGenContext&, std::vector<Code>&);
+	};
+
+	class NodeEAssignArray :
+		public NodeExpr
+	{
+		TokenIden iden;
+		Symbol idenDeco;
+		std::shared_ptr<NodeExpr> offset;
+		std::shared_ptr<NodeExpr> expr;
+	public:
+		NodeEAssignArray(TokenIden, std::shared_ptr<NodeExpr>, std::shared_ptr<NodeExpr>);
 		void dumpAST(std::ostream&, int) const;
 		void dumpSem(std::ostream&, int) const;
 		void annotateType(std::map<std::string, int>&, std::map<Symbol, IdenDeco>&, const FunctionMapNameOrdered&, SemanticContext, Errors&);

@@ -2,19 +2,19 @@
 #include "NodeFunction.h"
 namespace Loonguage
 {
-	NodeSentence::NodeSentence(int i):
+	NodeSentence::NodeSentence(int i) :
 		Node(i, Node::NdSentence)
 	{
 	}
-	NodeSentence::NodeSentence(int i, Node::NodeType t):
+	NodeSentence::NodeSentence(int i, Node::NodeType t) :
 		Node(i, t)
 	{
 	}
 
 	void NodeSentence::annotateType(std::map<std::string, int>& numOfSymbol,
-									std::map<Symbol, IdenDeco>& nameOfSymbol,
-									const FunctionMapNameOrdered& functionMap,
-									SemanticContext context, Errors& errs)
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
+		const FunctionMapNameOrdered& functionMap,
+		SemanticContext context, Errors& errs)
 	{
 
 	}
@@ -29,9 +29,9 @@ namespace Loonguage
 	}
 
 	void NodeSIf::annotateType(std::map<std::string, int>& numOfSymbol,
-							   std::map<Symbol, IdenDeco>& nameOfSymbol,
-							   const FunctionMapNameOrdered& functionMap,
-							   SemanticContext context, Errors& errs)
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
+		const FunctionMapNameOrdered& functionMap,
+		SemanticContext context, Errors& errs)
 	{
 		predicate->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
 		//if will start a new scope even though there's no block
@@ -40,8 +40,8 @@ namespace Loonguage
 		Symbol pt = predicate->getType();
 		if (!pt.same("int"))
 			errs.push_back(Error("Semantic Analysis",
-								getLine(),
-								"Return type of the predicate in \"if\" shou be \"int\", not \"" + pt.getString() + "\"."));
+				getLine(),
+				"Return type of the predicate in \"if\" shou be \"int\", not \"" + pt.getString() + "\"."));
 	}
 
 	void NodeSIf::codeGen(CodeGenContext& context, std::vector<Code>& codes)
@@ -96,11 +96,11 @@ namespace Loonguage
 	}
 
 	void NodeSWhile::annotateType(std::map<std::string, int>& numOfSymbol,
-								  std::map<Symbol, IdenDeco>& nameOfSymbol,
-								  const FunctionMapNameOrdered& functionMap,
-								  SemanticContext context, Errors& errs)
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
+		const FunctionMapNameOrdered& functionMap,
+		SemanticContext context, Errors& errs)
 	{
-		predicate->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);	
+		predicate->annotateType(numOfSymbol, nameOfSymbol, functionMap, context, errs);
 		//note that pwhile is native pointer, because pwhile is not a path on AST tree
 		context.pwhile = this;
 		//if will start a new scope even though there's no block
@@ -115,9 +115,9 @@ namespace Loonguage
 
 	void NodeSWhile::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
-        std::string startOfWhile = std::string("startOfWhile");
+		std::string startOfWhile = std::string("startOfWhile");
 		Label startOfWhileLabel(context.allocator->addName(startOfWhile));
-        std::string endOfWhile = std::string("endOfWhile");
+		std::string endOfWhile = std::string("endOfWhile");
 		Label endOfWhileLabel(context.allocator->addName(endOfWhile));
 		context.continueLabel = startOfWhileLabel;
 		context.breakLabel = endOfWhileLabel;
@@ -135,7 +135,7 @@ namespace Loonguage
 	}
 
 
-	NodeSBlock::NodeSBlock(std::shared_ptr<NodeSentences> s):
+	NodeSBlock::NodeSBlock(std::shared_ptr<NodeSentences> s) :
 		NodeSentence(s->getLine(), Node::NdSBlock), sentences(s)
 	{
 	}
@@ -155,9 +155,9 @@ namespace Loonguage
 	}
 
 	void NodeSBlock::annotateType(std::map<std::string, int>& numOfSymbol,
-								  std::map<Symbol, IdenDeco>& nameOfSymbol,
-								  const FunctionMapNameOrdered& functionMap,
-								  SemanticContext context, Errors& errs)
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
+		const FunctionMapNameOrdered& functionMap,
+		SemanticContext context, Errors& errs)
 	{
 		//inside a block is a new scope
 		//so have to set new nameOfSymbol context
@@ -171,7 +171,7 @@ namespace Loonguage
 			sentence->codeGen(context, codes);
 	}
 
-	NodeSDecl::NodeSDecl(TokenIden t, TokenIden n, std::shared_ptr<NodeExpr> e):
+	NodeSDecl::NodeSDecl(TokenIden t, TokenIden n, std::shared_ptr<NodeExpr> e) :
 		NodeSentence(t.line, Node::NdSDecl), type(t), name(n), expr(e)
 	{
 	}
@@ -195,9 +195,9 @@ namespace Loonguage
 	}
 
 	void NodeSDecl::annotateType(std::map<std::string, int>& numOfSymbol,
-								 std::map<Symbol, IdenDeco>& nameOfSymbol,
-								 const FunctionMapNameOrdered& functionMap,
-								 SemanticContext context, Errors& errs)
+		std::map<Symbol, IdenDeco>& nameOfSymbol,
+		const FunctionMapNameOrdered& functionMap,
+		SemanticContext context, Errors& errs)
 	{
 		//step 1: get name@type@id
 		Symbol name = this->name.value;
@@ -213,7 +213,7 @@ namespace Loonguage
 			//step 2: load nameDeco into nameOfSymbol
 			nameDeco = deco.nameDeco;
 			nameOfSymbol[name] = deco;
-			context.pfunction->locals.push_back(nameDeco);
+			context.pfunction->locals.push_back({ nameDeco, 1 });
 			//step 3: check decl
 			if (expr != nullptr)
 			{
@@ -235,6 +235,62 @@ namespace Loonguage
 			expr->codeGen(context, codes);
 			codes.push_back(Code(Code::SW, Reg::rfp, Reg::rax, -context.width * context.delta[nameDeco]));
 		}
+	}
+
+
+	NodeSDeclArray::NodeSDeclArray(TokenIden t, TokenIden n, TokenInt s) :
+		NodeSentence(t.line, Node::NdSDeclArray), type(t), name(n), size(s)
+	{
+
+	}
+
+	void NodeSDeclArray::dumpAST(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSDecl (Type: " << type.getString()
+			<< ", Name: " << name.getString()
+			<< ", Size: " << size.getValue() << ")" << std::endl;
+	}
+
+	void NodeSDeclArray::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeSDecl (Type: " << type.getString()
+			<< ", NameDeco: " << nameDeco.getString()
+			<< ", Size: " << size.getValue() << ")" << std::endl;
+	}
+
+	void NodeSDeclArray::annotateType(std::map<std::string, int>& numOfSymbol,
+										std::map<Symbol, IdenDeco>& nameOfSymbol,
+										const FunctionMapNameOrdered& functionMap,
+										SemanticContext context, Errors& errs)
+	{
+		//step 1: get name@type@id
+		Symbol name = this->name.value;
+		Symbol type = this->type.value;
+		//decide whether type is valid
+		if (!(type == (*type.getPointer())["int"]))
+			errs.push_back(Error("", getLine(),
+				"Type of arrays must be \"int\"."));
+		else if (size.getValue() <= 0)
+			errs.push_back(Error("", getLine(),
+				"Size of an array must be a positive integer."));
+		else
+		{
+			type = (*type.getPointer())["ints"];
+			//if type is valid...
+			IdenDeco deco = IdenDeco(name, type, numOfSymbol);
+			//step 2: load nameDeco into nameOfSymbol
+			nameDeco = deco.nameDeco;
+			nameOfSymbol[name] = deco;
+			context.pfunction->locals.push_back({ nameDeco, size.getValue()});
+			//step 3: no expr
+		}
+	}
+
+	void NodeSDeclArray::codeGen(CodeGenContext&, std::vector<Code>&)
+	{
+		//no code
 	}
 
 	void NodeSentences::dumpAST(std::ostream& cout, int indent) const
@@ -450,5 +506,6 @@ namespace Loonguage
 	{
 		codes.push_back(Code(Code::B, context.breakLabel));
 	}
+
 }
 

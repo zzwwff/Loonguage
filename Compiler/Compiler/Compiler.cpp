@@ -8,6 +8,7 @@ namespace Loonguage {
 	{
 		types[idenTable.addSymbol("int")] = 1;
 		types[idenTable.addSymbol("string")] = 1;
+		types[idenTable.addSymbol("ints")] = 1;
 		//symbol 'void' will be used
 		//but void is not a kind of type
 		idenTable.addSymbol("void");

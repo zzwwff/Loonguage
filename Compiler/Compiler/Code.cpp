@@ -57,6 +57,9 @@ namespace Loonguage {
 		if (r == Register::Registers::rax) cout << "$rax ";
 		if (r == Register::Registers::rtm) cout << "$rtm ";
 		if (r == Register::Registers::rbx) cout << "$rbx ";
+		if (r == Register::Registers::rcx) cout << "$rcx ";
+		if (r == Register::Registers::rdx) cout << "$rdx ";
+
 		if (r == Register::Registers::rin) cout << "$rin ";
 		if (r == Register::Registers::rot) cout << "$rot ";
 		if (r == Register::Registers::rlo) cout << "$rlo ";
@@ -71,47 +74,50 @@ namespace Loonguage {
 	void Code::dump(std::ostream& cout) const
 	{
 		for (auto label : labelAttached)
-			cout << label.name << ":" << std::endl << std::endl;
-		if (codeType == ADD) cout << "add " << rd << rs << rt << std::endl;
-		if (codeType == ADDI) cout << "addi" << rt << rs << immediate << std::endl;
-		if (codeType == OR) cout << "or " << rd << rs << rt << std::endl;
-		if (codeType == ORI) cout << "ori" << rt << rs << immediate << std::endl;
-		if (codeType == NOT) cout << "not " << rs << rt << std::endl;
-		if (codeType == XOR) cout << "xor " << rd << rs << rt << std::endl;
-		if (codeType == XORI) cout << "xori" << rt << rs << immediate << std::endl;
-		if (codeType == AND) cout << "and " << rd << rs << rt << std::endl;
-		if (codeType == ANDI) cout << "andi" << rt << rs << immediate << std::endl;
-		if (codeType == SUB) cout << "sub " << rd << rs << rt << std::endl;
-		if (codeType == MUL) cout << "mul " << rd << rs << rt << std::endl;
-		if (codeType == SUB) cout << "sub " << rd << rs << rt << std::endl;
-		if (codeType == DIV) cout << "div " << rs << rt << std::endl;
-		if (codeType == SLT) cout << "slt " << rd << rs << rt << std::endl;
+			cout << label.name << ":" << std::endl;
+		if (codeType == ADD) cout << "add " << rd << rs << rt;
+        if (codeType == ADDI) cout << "addi " << rt << rs << immediate;
+		if (codeType == OR) cout << "or " << rd << rs << rt;
+        if (codeType == ORI) cout << "ori " << rt << rs << immediate;
+		if (codeType == NOT) cout << "not " << rs << rt;
+		if (codeType == XOR) cout << "xor " << rd << rs << rt;
+        if (codeType == XORI) cout << "xori " << rt << rs << immediate;
+		if (codeType == AND) cout << "and " << rd << rs << rt;
+        if (codeType == ANDI) cout << "andi " << rt << rs << immediate;
+		if (codeType == SUB) cout << "sub " << rd << rs << rt;
+		if (codeType == MUL) cout << "mul " << rd << rs << rt;
+		if (codeType == DIV) cout << "div " << rs << rt;
+		if (codeType == SLT) cout << "slt " << rd << rs << rt;
 		
 		if (codeType == B) cout << "b " << label;
 		if (codeType == BEQ) cout << "beq " << rs << rt << label;
 		if (codeType == JR) cout << "jr " << rs;
 		if (codeType == JAL) cout << "jal " << label;
 
-		if (codeType == LB) cout << "lb " << rt << immediate << "(" << rs << ")" << std::endl;
-		if (codeType == LBU) cout << "lbu " << rt << immediate << "(" << rs << ")" << std::endl;
-		if (codeType == LH) cout << "lh " << rt << immediate << "(" << rs << ")" << std::endl;
-		if (codeType == LHU) cout << "lhu " << rt << immediate << "(" << rs << ")" << std::endl;
-		if (codeType == LW) cout << "lw " << rt << immediate << "(" << rs << ")" << std::endl;
-		if (codeType == SB) cout << "sb " << rt << immediate << "(" << rs << ")" << std::endl;
-		if (codeType == SH) cout << "sh " << rt << immediate << "(" << rs << ")" << std::endl;
-		if (codeType == SW) cout << "sw " << rt << immediate << "(" << rs << ")" << std::endl;
+		if (codeType == LB) cout << "lb " << rt << immediate << "(" << rs << ")";
+		if (codeType == LBU) cout << "lbu " << rt << immediate << "(" << rs << ")";
+		if (codeType == LH) cout << "lh " << rt << immediate << "(" << rs << ")";
+		if (codeType == LHU) cout << "lhu " << rt << immediate << "(" << rs << ")";
+        if (codeType == LW)
+            cout << "lw " << rt << immediate << "(" << rs << ")";
+		if (codeType == SB) cout << "sb " << rt << immediate << "(" << rs << ")";
+		if (codeType == SH) cout << "sh " << rt << immediate << "(" << rs << ")";
+        if (codeType == SW)
+            cout << "sw " << rt << immediate << "(" << rs << ")";
 		
-		if (codeType == NOP) cout << "nop " << std::endl;
+		if (codeType == NOP) cout << "nop ";
 
-		if (codeType == MOVZ) cout << "movz  " << rd << rs << rt << std::endl;
-		if (codeType == MFHI) cout << "mfhi " << rd << std::endl;
-		if (codeType == MFLO) cout << "mflo " << rd << std::endl;
-		if (codeType == MTHI) cout << "mthi " << rs << std::endl;
-		if (codeType == MTLO) cout << "mtlo " << rs << std::endl;	
+		if (codeType == MOVZ) cout << "movz  " << rd << rs << rt;
+		if (codeType == MFHI) cout << "mfhi " << rd;
+		if (codeType == MFLO) cout << "mflo " << rd;
+		if (codeType == MTHI) cout << "mthi " << rs;
+		if (codeType == MTLO) cout << "mtlo " << rs;	
 
-		if (codeType == HLT) cout << "hlt " << std::endl;
+        if (codeType == OUT) cout << "out " << rs;
 
-		cout << std::endl;
+		if (codeType == HLT) cout << "hlt ";
+
+		cout;
 	}
 
 
