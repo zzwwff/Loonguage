@@ -9,7 +9,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::Loonguage)
 {
     ui->setupUi(this);
     if (QFile::exists("input.in"))
@@ -48,59 +48,38 @@ QStandardItemModel* MainWindow::setListView(QListView* view, std::vector<Loongua
     return model;
 }
 
-//prime loader reference code
-/*int isPrime(int n)
-{
-    int sign; int test;
-    sign = test = 2;
-    while (test < n){
-        if (n / test * test == n)
-    {    sign = 0; break; }
-    test = test + 1;
-    }
-    return sign;
-}
-
-void main()
-{
-    int i;
-    i = 2;
-    outString("There are 25 primes less than 100\n");
-    while (i < 101){
-    if (isPrime(i)) { outInt(i); outString(" "); }
-    i = i + 1;
-    }
-}
-*/
 
 void MainWindow::on_pushButton_clicked()
 {
+    //clear existed resources
     compiler = nullptr;
     runtime = nullptr;
+    if (codeSource == AUTO)
+    {
+        setListView(ui->codeShow, std::vector<Loonguage::Code>());
+        bitstream = nullptr;
+    }
+    codeOutView = setListView(ui->codeOut, std::vector<Loonguage::Code>());
+
     QString qinput = ui->input->toPlainText();
     std::string input = qinput.toStdString();
+    if (input.find('@') != std::string::npos)
+    {
+        QMessageBox::about(NULL, "About", "禁止输入\"@\"!");
+        return;
+    }
     //save input
     QFile file("input.in");
     file.open(QIODevice::WriteOnly | QIODevice::Text);
     file.write(QString::fromStdString(input).toUtf8());
     file.close();
 
-    input += "void out(int ch)@ \n";
-    input += "int getChar(string str, int pos)@ \n";
-    input += "int getSize(string str)@ \n";
-    input += "void outString(string str){\
-        int size; \
-        size = getSize(str); \
-        int i; i = 0; \
-        while(i < size) { out(getChar(str, i)); i = i + 1; }}\n";
-    input += "void outInts(int n){ if (n) { outInts(n / 10); out(n - n / 10 * 10 + '0'); }}\n";
-    input += "void outInt(int n){ if (n == 0) out('0'); if (n < 0) { out('-'); n = 0 - n; } if(n) outInts(n); }\n";
-    input += " @EOF";
+    input += ui->input2->toPlainText().toStdString();
     QMessageBox::about(NULL, "About", "Start Running!");
     std::stringstream in, infoOut, synOut, semOut, genOut;
     in << input;
     compiler = std::make_shared<Loonguage::Compiler>(in, infoOut, synOut, semOut, genOut);
-    compiler->parse();
+    bool sign = compiler->parse();
     QString qinfoOut = QString::fromStdString(infoOut.str());
     QString qsynOut = QString::fromStdString(synOut.str());
     QString qsemOut = QString::fromStdString(semOut.str());
@@ -108,11 +87,14 @@ void MainWindow::on_pushButton_clicked()
     ui->infoOut->setPlainText(qinfoOut);
     ui->lexSynOut->setPlainText(qsynOut);
     ui->semOut->setPlainText(qsemOut);
-    codeOutView = setListView(ui->codeOut, compiler->codes);
-    if (codeSource == AUTO)
+    if (sign)
     {
-        setListView(ui->codeShow, compiler->codes);
-        bitstream = std::make_shared<Loonguage::BitStream>(*compiler);
+        codeOutView = setListView(ui->codeOut, compiler->codes);
+        if (codeSource == AUTO)
+        {
+            setListView(ui->codeShow, compiler->codes);
+            bitstream = std::make_shared<Loonguage::BitStream>(*compiler);
+        }
     }
 }
 
@@ -214,7 +196,7 @@ void MainWindow::on_generateTestBenchCodes_clicked()
     QString pattern = ui->pattern->toPlainText();
     QStandardItemModel* model = new QStandardItemModel();
     std::string output;
-    for (int i = 0; i < bitstream->codes.size(); i++)
+    for (int i = -1; i < (int)bitstream->codes.size(); i++)
     {
         std::stringstream stream;
         bitstream->generateTestBench(stream, pattern.toStdString(), i);
@@ -231,6 +213,7 @@ void MainWindow::on_radioButton_clicked()
     ui->generateTestBenchCodes->setText("解析输入并生成TestBench测试代码");
     ui->codeInput->setPlainText("hlt");
     ui->codeInput->setReadOnly(false);
+    ui->testBenchCodes->setPlainText("由于手动汇编代码可能会有复杂的格式问题，您应当认真检查预览窗口中的汇编代码是否与预期相符再复制输出!");
 }
 
 
@@ -245,5 +228,6 @@ void MainWindow::on_radioButton_2_clicked()
     else bitstream = nullptr;
     if (compiler != nullptr)
         setListView(ui->codeShow, compiler->codes);
+    ui->testBenchCodes->setPlainText("自动汇编代码由源码编译生成，请确认代码在最新修改后进行过编译!");
 }
 

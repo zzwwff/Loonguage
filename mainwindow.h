@@ -10,7 +10,7 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class Loonguage;
 }
 QT_END_NAMESPACE
 
@@ -44,7 +44,7 @@ private:
         AUTO
     } codeSource = AUTO;
 
-    Ui::MainWindow *ui;
+    Ui::Loonguage *ui;
     void updateData();
     Loonguage::RunTimeConfig config;
     std::shared_ptr<Loonguage::RunTime> runtime;

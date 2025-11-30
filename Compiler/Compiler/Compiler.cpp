@@ -169,25 +169,67 @@ namespace Loonguage {
 	//generate ASM code
 	bool Compiler::codeGeneration()
 	{
-		//string allocation must be put before code generation
-		//because address of string is used in codes
-		codeBegin = allocateString();
-		if (codeBegin % 4)
-			codeBegin = codeBegin + 4 - codeBegin % 4;
-		std::shared_ptr<LabelAllocator> alloc =  std::make_shared<LabelAllocator>();
-		CodeGenContext context;
-        context.width = 4;
-		context.allocator = alloc;
-		context.strPosition = strPosition;
-        codes.push_back(Code(Code::JAL, Label("call@main")));
-        codes.push_back(Code(Code::HLT));
-        program->codeGen(context, codes);
+		//find start function
+		std::shared_ptr<NodeFunction> pmain = nullptr;
+		for (auto pf : *(program->functions))
+			if (pf->nameDeco.same("main"))
+				pmain = pf;
+		if (pmain != nullptr)
+		{
+			pmain->call();
+			//string allocation must be put before code generation
+			//because address of string is used in codes
+			codeBegin = allocateString();
+			if (codeBegin % 4)
+				codeBegin = codeBegin + 4 - codeBegin % 4;
+			std::shared_ptr<LabelAllocator> alloc = std::make_shared<LabelAllocator>();
+			CodeGenContext context;
+			context.width = 4;
+			context.allocator = alloc;
+			context.strPosition = strPosition;
+			codes.push_back(Code(Code::JAL, Label("call@main")));
+			codes.push_back(Code(Code::HLT));
+			program->codeGen(context, codes);
 
-		//no bug will be reported in code generation
-		for (auto code : codes)
-			code.dump(genOut);
-		infoOut << "Code generation is implemented successfully." << std::endl;
-		return true;
+			//link jal, b and beq
+			//load all the labels
+			std::map<std::string, int> labels;
+			for (int i = 0; i < codes.size(); i++)
+				for (auto l : codes[i].labelAttached)
+					labels[l.name] = i;
+			for (int i = 0; i < codes.size(); i++)
+			{
+				//for JAL, store the absolute address in immediate
+				if (codes[i].codeType == Code::JAL)
+				{
+					//immediate (instr_index should be target address / 4, which is just the index of target instruction)
+					codes[i].immediate = labels[codes[i].label.name];
+				}
+				//for B and BEQ, store the relative address in immediate
+				else if (codes[i].codeType == Code::B || codes[i].codeType == Code::BEQ)
+				{
+					//target address = offset * 4 + $ins + 4
+					//so offset = target address / 4 - $ins / 4 - 1 = target - i - 1
+					int target = labels[codes[i].label.name];
+					codes[i].immediate = target - i - 1;
+				}
+			}
+			
+
+			//no bug will be reported in code generation
+			for (auto code : codes)
+				code.dump(genOut);
+			infoOut << "Code generation is implemented successfully." << std::endl;
+			return true;
+		}
+		else
+		{
+			infoOut << "Code generation failed because can't find main()" << std::endl;
+			return false;
+		}
+
+
+
 	}
 
 	bool Compiler::parse()

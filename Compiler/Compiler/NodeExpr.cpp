@@ -206,6 +206,7 @@ namespace Loonguage {
 			{
 				type = fuc->first.returnType;
 				idenDeco = fuc->first.nameDeco;
+				context.pfunction->caller.push_back(fuc->first.function);
 				return;
 			}
 		}

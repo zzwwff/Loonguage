@@ -8,13 +8,13 @@ namespace Loonguage {
 		int res = 0;
 		if (config.endian == config.BIG)
 		{
-            for (int i = 0; i < width; i++)
+            for (int i = 0; i < width && pos + i < memory.size(); i++)
 				for (int j = 0; j < 8; j++)
                     bits[8 * i + j] = memory[pos + i][j];
 		}
 		else
 		{
-			for (int i = 0; i < width; i++)
+			for (int i = 0; i < width && pos + i < memory.size(); i++)
 				for (int j = 0; j < 8; j++)
                     bits[8 * i + j] = memory[pos + i][j];
 		}
@@ -33,13 +33,13 @@ namespace Loonguage {
 		std::vector<int> bits = int2bit(dat);
 		if (config.endian == config.BIG)
 		{
-			for (int i = 0; i < width; i++)
+			for (int i = 0; i < width && pos + i < memory.size(); i++)
 				for (int j = 0; j < 8; j++)
                     memory[pos + i][j] = bits[8 * i + j];
 		}
 		else
 		{
-			for (int i = 0; i < width; i++)
+			for (int i = 0; i < width && pos + i < memory.size(); i++)
 				for (int j = 0; j < 8; j++)
                     memory[pos + i][j] = bits[8 * i + j];
 		}
@@ -50,20 +50,33 @@ namespace Loonguage {
 	{
 		int val = 0;
 		for (int j = 0; j < 8; j++)
-            if (from)
-                val += memory[pos][j] << j;
-            else
-                val += inout[pos][j] << j;
+			if (from)
+			{
+				if (pos < memory.size())
+					val += memory[pos][j] << j;
+			}
+			else
+			{
+				if (pos < inout.size())
+					val += inout[pos][j] << j;
+			}
 		return val;
 	}
 
     void RunTime::writeChar(int pos, int i, int from = 0)
 	{
 		for (int j = 0; j < 8; j++)
-            if (from)
-                memory[pos][j] = ((unsigned int)i >> j) & 1;
-            else
-                inout[pos][j] = ((unsigned int)i >> j) & 1;
+			if (from)
+			{
+				if (pos < memory.size())
+					memory[pos][j] = ((unsigned int)i >> j) & 1;
+			}
+			else
+			{
+				if (pos < inout.size())
+					inout[pos][j] = ((unsigned int)i >> j) & 1;
+			}
+
 	}
 
 	std::vector<int> RunTime::int2bit(int i) const

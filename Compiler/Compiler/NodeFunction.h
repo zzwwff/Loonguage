@@ -8,7 +8,11 @@ namespace Loonguage {
 	class NodeFunction :
 		public Node
 	{
+	protected:
+		int called;
 	public:
+		void call();
+		std::vector<NodeFunction*> caller;
 		TokenIden returnType;
 		TokenIden name;
 		Symbol nameDeco;

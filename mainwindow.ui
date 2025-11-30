@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>Loonguage</class>
+ <widget class="QMainWindow" name="Loonguage">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>742</width>
-    <height>500</height>
+    <width>902</width>
+    <height>612</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>4</horstretch>
+    <verstretch>4</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
-      <width>721</width>
-      <height>431</height>
+      <y>10</y>
+      <width>881</width>
+      <height>591</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -30,88 +42,209 @@
      <enum>QTabWidget::TabPosition::West</enum>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
       <string>输入输出</string>
      </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>841</width>
+        <height>571</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="label_21">
+         <property name="text">
+          <string>示例代码</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_17">
+         <item>
+          <widget class="QPlainTextEdit" name="plainTextEdit">
+           <property name="plainText">
+            <string>//load and print all the primes &lt;100
+int isPrime(int n)
+{
+    int sign; int test;
+    sign = test = 2;
+    while (test &lt; n){
+        if (n / test * test == n)
+    {    sign = 0; break; }
+    test = test + 1;
+    }
+    return sign;
+}
+
+void main()
+{
+    int i;
+    i = 2;
+    outString(&quot;There are 25 primes less than 100\n&quot;);
+    while (i &lt; 101){
+    if (isPrime(i)) { outInt(i); outString(&quot; &quot;); }
+    i = i + 1;
+    }
+}</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPlainTextEdit" name="plainTextEdit_2"/>
+         </item>
+         <item>
+          <widget class="QPlainTextEdit" name="plainTextEdit_3"/>
+         </item>
+         <item>
+          <widget class="QPlainTextEdit" name="plainTextEdit_4"/>
+         </item>
+         <item>
+          <widget class="QPlainTextEdit" name="plainTextEdit_5"/>
+         </item>
+         <item>
+          <widget class="QPlainTextEdit" name="plainTextEdit_6"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
       <string>源码</string>
      </attribute>
-     <widget class="QPlainTextEdit" name="input">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>671</width>
-        <height>311</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Consolas</family>
-        <pointsize>13</pointsize>
-       </font>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton">
-      <property name="geometry">
-       <rect>
-        <x>590</x>
-        <y>350</y>
-        <width>80</width>
-        <height>61</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>编译运行</string>
-      </property>
-     </widget>
-     <widget class="QWidget" name="horizontalLayoutWidget_3">
+     <widget class="QWidget" name="verticalLayoutWidget_2">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>211</width>
-        <height>21</height>
+        <width>841</width>
+        <height>381</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_10">
        <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>请在这里输入你的源码：</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>请在这里输入你的源码：</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="text">
+            <string>打开自文件...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
-         <property name="text">
-          <string>打开自文件...</string>
+        <widget class="QPlainTextEdit" name="input">
+         <property name="font">
+          <font>
+           <family>Consolas</family>
+           <pointsize>13</pointsize>
+          </font>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QPlainTextEdit" name="infoOut">
+     <widget class="QLabel" name="label_29">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>350</y>
-        <width>571</width>
-        <height>61</height>
+        <y>490</y>
+        <width>185</width>
+        <height>12</height>
        </rect>
       </property>
-      <property name="font">
-       <font>
-        <family>Consolas</family>
-       </font>
+      <property name="text">
+       <string>输出</string>
       </property>
-      <property name="readOnly">
-       <bool>true</bool>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>507</y>
+        <width>841</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_18">
+       <item>
+        <widget class="QPlainTextEdit" name="infoOut">
+         <property name="font">
+          <font>
+           <family>Consolas</family>
+          </font>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>编译运行</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QPlainTextEdit" name="input2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>407</y>
+        <width>841</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="plainText">
+       <string>void out(int ch)@ 
+int getChar(string str, int pos)@
+int getSize(string str)@ 
+void outString(string str){
+        int size; 
+        size = getSize(str); 
+        int i; i = 0; 
+        while(i &lt; size) { out(getChar(str, i)); i = i + 1; }
+}
+void outInts(int n){ 
+    if (n) { outInts(n / 10); out(n - n / 10 * 10 + '0'); }
+}
+void outInt(int n){
+    if (n == 0) out('0'); 
+    if (n &lt; 0) { out('-'); n = 0 - n; } 
+    if(n) outInts(n); 
+}
+@EOF</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_28">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>390</y>
+        <width>185</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>附加输入项</string>
       </property>
      </widget>
     </widget>
@@ -119,388 +252,541 @@
      <attribute name="title">
       <string>词法分析</string>
      </attribute>
-     <widget class="QLabel" name="label_2">
+     <widget class="QWidget" name="verticalLayoutWidget_7">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>71</width>
-        <height>16</height>
+        <width>841</width>
+        <height>571</height>
        </rect>
       </property>
-      <property name="text">
-       <string>词法分析结果：</string>
-      </property>
-     </widget>
-     <widget class="QPlainTextEdit" name="lexSynOut">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>671</width>
-        <height>371</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Consolas</family>
-       </font>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_8">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>词法分析结果：</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="lexSynOut">
+         <property name="font">
+          <font>
+           <family>Consolas</family>
+          </font>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
       <string>语法分析</string>
      </attribute>
-     <widget class="QLabel" name="label_3">
+     <widget class="QWidget" name="verticalLayoutWidget_8">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>61</width>
-        <height>16</height>
+        <width>841</width>
+        <height>571</height>
        </rect>
       </property>
-      <property name="text">
-       <string>语法分析结果:</string>
-      </property>
-     </widget>
-     <widget class="QPlainTextEdit" name="semOut">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>661</width>
-        <height>361</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Consolas</family>
-       </font>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>语法分析结果:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="semOut">
+         <property name="font">
+          <font>
+           <family>Consolas</family>
+          </font>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
       <string>代码生成</string>
      </attribute>
-     <widget class="QWidget" name="verticalLayoutWidget">
+     <widget class="QWidget" name="horizontalLayoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>252</width>
-        <height>401</height>
+        <width>841</width>
+        <height>571</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout_16">
        <item>
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>生成汇编代码</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_6">
-         <property name="text">
-          <string>从头开始执行</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QListView" name="codeOut">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>50</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <family>Consolas</family>
-          </font>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
+        <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QPushButton" name="lastStep">
+          <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>上一步</string>
+            <string>生成汇编代码</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="allStep">
+          <widget class="QPushButton" name="pushButton_6">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
-            <string>全部执行</string>
+            <string>从头开始执行</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="nextStep">
-           <property name="text">
-            <string>下一步</string>
+          <widget class="QListView" name="codeOut">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>50</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Consolas</family>
+            </font>
+           </property>
+           <property name="editTriggers">
+            <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+           </property>
+           <property name="defaultDropAction">
+            <enum>Qt::DropAction::IgnoreAction</enum>
            </property>
           </widget>
          </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="verticalLayoutWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>270</x>
-        <y>10</y>
-        <width>201</width>
-        <height>351</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="sizeConstraint">
-        <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
-       </property>
-       <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>程序员可见窗口</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="3" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_9">
-             <item>
-              <widget class="QLabel" name="label_13">
-               <property name="text">
-                <string>$rfp</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLCDNumber" name="rfpVal"/>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_8">
+            <widget class="QPushButton" name="lastStep">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
-              <string>$rtm</string>
+              <string>上一步</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLCDNumber" name="rtmVal"/>
-           </item>
-          </layout>
-         </item>
-         <item row="5" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_10">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_11">
-             <item>
-              <widget class="QLabel" name="label_22">
-               <property name="text">
-                <string>$rcx</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLCDNumber" name="rcxVal"/>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_23">
+            <widget class="QPushButton" name="allStep">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
-              <string>$rdx</string>
+              <string>全部执行</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLCDNumber" name="rdxVal"/>
-           </item>
-          </layout>
-         </item>
-         <item row="2" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_8">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <item>
-              <widget class="QLabel" name="rsp">
-               <property name="text">
-                <string>$rsp</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLCDNumber" name="rspVal"/>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="ret">
+            <widget class="QPushButton" name="nextStep">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
-              <string>$ret</string>
+              <string>下一步</string>
              </property>
             </widget>
-           </item>
-           <item>
-            <widget class="QLCDNumber" name="retVal"/>
-           </item>
-          </layout>
-         </item>
-         <item row="4" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_7">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
-             <item>
-              <widget class="QLabel" name="label_10">
-               <property name="text">
-                <string>$rax</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLCDNumber" name="raxVal"/>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_11">
-             <property name="text">
-              <string>$rbx</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLCDNumber" name="rbxVal"/>
-           </item>
-          </layout>
-         </item>
-         <item row="6" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_14">
-           <property name="text">
-            <string>寄存器</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_12">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_13">
-             <item>
-              <widget class="QLabel" name="label_24">
-               <property name="text">
-                <string>$rlo</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLCDNumber" name="rloVal"/>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_25">
-             <property name="text">
-              <string>$rhi</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLCDNumber" name="rhiVal"/>
-           </item>
-          </layout>
-         </item>
-         <item row="8" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_14">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_15">
-             <item>
-              <widget class="QLabel" name="label_26">
-               <property name="text">
-                <string>$rin</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLCDNumber" name="rinVal"/>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_27">
-             <property name="text">
-              <string>$rot</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLCDNumber" name="rotVal"/>
            </item>
           </layout>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label_15">
-         <property name="text">
-          <string>程序计数器</string>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="sizeConstraint">
+          <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
          </property>
-        </widget>
+         <item>
+          <widget class="QLabel" name="label_5">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>程序员可见窗口</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="3" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <item>
+                <widget class="QLabel" name="label_13">
+                 <property name="text">
+                  <string>$rfp</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLCDNumber" name="rfpVal">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>$rtm</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLCDNumber" name="rtmVal">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="5" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_11">
+               <item>
+                <widget class="QLabel" name="label_22">
+                 <property name="text">
+                  <string>$rcx</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLCDNumber" name="rcxVal">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_23">
+               <property name="text">
+                <string>$rdx</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLCDNumber" name="rdxVal">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <item>
+                <widget class="QLabel" name="rsp">
+                 <property name="text">
+                  <string>$rsp</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLCDNumber" name="rspVal">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QLabel" name="ret">
+               <property name="text">
+                <string>$ret</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLCDNumber" name="retVal">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="4" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QLabel" name="label_10">
+                 <property name="text">
+                  <string>$rax</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLCDNumber" name="raxVal">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_11">
+               <property name="text">
+                <string>$rbx</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLCDNumber" name="rbxVal">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="6" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_14">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>寄存器</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_12">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_13">
+               <item>
+                <widget class="QLabel" name="label_24">
+                 <property name="text">
+                  <string>$rlo</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLCDNumber" name="rloVal">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_25">
+               <property name="text">
+                <string>$rhi</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLCDNumber" name="rhiVal">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="8" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_14">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_15">
+               <item>
+                <widget class="QLabel" name="label_26">
+                 <property name="text">
+                  <string>$rin</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLCDNumber" name="rinVal">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_27">
+               <property name="text">
+                <string>$rot</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLCDNumber" name="rotVal">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_15">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>程序计数器</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="insVal">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="smallDecimalPoint">
+            <bool>false</bool>
+           </property>
+           <property name="digitCount">
+            <number>20</number>
+           </property>
+           <property name="segmentStyle">
+            <enum>QLCDNumber::SegmentStyle::Filled</enum>
+           </property>
+           <property name="value" stdset="0">
+            <double>0.000000000000000</double>
+           </property>
+           <property name="intValue" stdset="0">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
-       <item>
-        <widget class="QLCDNumber" name="insVal">
-         <property name="smallDecimalPoint">
-          <bool>false</bool>
-         </property>
-         <property name="digitCount">
-          <number>20</number>
-         </property>
-         <property name="segmentStyle">
-          <enum>QLCDNumber::SegmentStyle::Filled</enum>
-         </property>
-         <property name="value" stdset="0">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="intValue" stdset="0">
-          <number>0</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="verticalLayoutWidget_4">
-      <property name="geometry">
-       <rect>
-        <x>480</x>
-        <y>10</y>
-        <width>201</width>
-        <height>431</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
           <widget class="QLabel" name="label_6">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>标准输入</string>
            </property>
@@ -508,6 +794,12 @@
          </item>
          <item>
           <widget class="QPlainTextEdit" name="stdIn">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
@@ -518,6 +810,12 @@
          </item>
          <item>
           <widget class="QLabel" name="label_7">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>标准输出</string>
            </property>
@@ -525,6 +823,12 @@
          </item>
          <item>
           <widget class="QPlainTextEdit" name="stdOut">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
@@ -535,6 +839,12 @@
          </item>
          <item>
           <widget class="QLabel" name="label_20">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>栈预览</string>
            </property>
@@ -542,6 +852,12 @@
          </item>
          <item>
           <widget class="QListView" name="stack">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -570,8 +886,8 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>201</width>
-        <height>411</height>
+        <width>231</width>
+        <height>571</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -607,17 +923,21 @@
         </widget>
        </item>
        <item>
-        <widget class="QListView" name="codeShow"/>
+        <widget class="QListView" name="codeShow">
+         <property name="editTriggers">
+          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
      <widget class="QWidget" name="verticalLayoutWidget_5">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>250</x>
         <y>10</y>
-        <width>461</width>
-        <height>411</height>
+        <width>271</width>
+        <height>571</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -664,7 +984,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </widget>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="testBenchCodes"/>
+        <widget class="QPlainTextEdit" name="testBenchCodes">
+         <property name="plainText">
+          <string>自动汇编代码由源码编译生成，请确认代码在最新修改后进行过编译!</string>
+         </property>
+         <property name="textInteractionFlags">
+          <set>Qt::TextInteractionFlag::LinksAccessibleByKeyboard|Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextBrowserInteraction|Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="generateTestBenchCodes">
@@ -689,20 +1016,700 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_6">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>10</y>
+        <width>321</width>
+        <height>571</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string>参考文档</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="tableWidget">
+         <property name="showGrid">
+          <bool>true</bool>
+         </property>
+         <property name="gridStyle">
+          <enum>Qt::PenStyle::SolidLine</enum>
+         </property>
+         <attribute name="horizontalHeaderMinimumSectionSize">
+          <number>18</number>
+         </attribute>
+         <row>
+          <property name="text">
+           <string>add</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>andi</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>or</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>ori</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>xor</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>xori</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>not</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>add</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>addi</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>sub</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>mul</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>div</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>slt</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>b</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>beq</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>jr</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>jal</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>lb</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>lbu</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>lh</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>lhu</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>lw</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>sb</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>sh</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>sw</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>nop</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>movz</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>mfhi</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>mflo</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>mthi</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>mtlo</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>hlt</string>
+          </property>
+         </row>
+         <column>
+          <property name="text">
+           <string>代码</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>释义</string>
+          </property>
+         </column>
+         <item row="0" column="0">
+          <property name="text">
+           <string>and rd, rs, rt</string>
+          </property>
+         </item>
+         <item row="0" column="1">
+          <property name="text">
+           <string>$rd = $rs &amp; $rt</string>
+          </property>
+         </item>
+         <item row="1" column="0">
+          <property name="text">
+           <string>andi rt, rs, imm</string>
+          </property>
+         </item>
+         <item row="1" column="1">
+          <property name="text">
+           <string>$rt = $rs &amp; imme，无符号扩展</string>
+          </property>
+         </item>
+         <item row="2" column="0">
+          <property name="text">
+           <string>or rd, rs, rt</string>
+          </property>
+         </item>
+         <item row="2" column="1">
+          <property name="text">
+           <string>$rd = $rs | $rt</string>
+          </property>
+         </item>
+         <item row="3" column="0">
+          <property name="text">
+           <string>ori rt, rs, imm</string>
+          </property>
+         </item>
+         <item row="3" column="1">
+          <property name="text">
+           <string>$rt = $rs | imme，无符号扩展</string>
+          </property>
+         </item>
+         <item row="4" column="0">
+          <property name="text">
+           <string>xor rd, rs, rt</string>
+          </property>
+         </item>
+         <item row="4" column="1">
+          <property name="text">
+           <string>$rd = $rs ^ $rt</string>
+          </property>
+         </item>
+         <item row="5" column="0">
+          <property name="text">
+           <string>xori rt, rs, imm</string>
+          </property>
+         </item>
+         <item row="5" column="1">
+          <property name="text">
+           <string>$rt = $rs ^ imme，无符号扩展</string>
+          </property>
+         </item>
+         <item row="6" column="0">
+          <property name="text">
+           <string>not rt, rs</string>
+          </property>
+         </item>
+         <item row="6" column="1">
+          <property name="text">
+           <string>$rt = ~$s</string>
+          </property>
+         </item>
+         <item row="7" column="0">
+          <property name="text">
+           <string>add rd, rs, rt</string>
+          </property>
+         </item>
+         <item row="7" column="1">
+          <property name="text">
+           <string>$rd = $rs + $rt，有符号扩展</string>
+          </property>
+         </item>
+         <item row="8" column="0">
+          <property name="text">
+           <string>addi rt, rs, imm</string>
+          </property>
+         </item>
+         <item row="8" column="1">
+          <property name="text">
+           <string>$rt = $rs + imme，有符号扩展</string>
+          </property>
+         </item>
+         <item row="9" column="0">
+          <property name="text">
+           <string>sub rd, rs, rt</string>
+          </property>
+         </item>
+         <item row="9" column="1">
+          <property name="text">
+           <string>$rd = $rs - $rt，有符号</string>
+          </property>
+         </item>
+         <item row="10" column="0">
+          <property name="text">
+           <string>mul rd, rs, rt</string>
+          </property>
+         </item>
+         <item row="10" column="1">
+          <property name="text">
+           <string>$rd = $rs * $rt，有符号</string>
+          </property>
+         </item>
+         <item row="11" column="0">
+          <property name="text">
+           <string>div rs, rt</string>
+          </property>
+         </item>
+         <item row="11" column="1">
+          <property name="text">
+           <string>商保存在$lo, 余数保存在$hi</string>
+          </property>
+         </item>
+         <item row="12" column="0">
+          <property name="text">
+           <string>slt rd rs rt</string>
+          </property>
+         </item>
+         <item row="12" column="1">
+          <property name="text">
+           <string>$rd = bool($rs &lt; $rt)，有符号</string>
+          </property>
+         </item>
+         <item row="13" column="0">
+          <property name="text">
+           <string>b offset</string>
+          </property>
+         </item>
+         <item row="13" column="1">
+          <property name="text">
+           <string>无条件跳转至(offset &lt;&lt; 2) + pc + 4</string>
+          </property>
+         </item>
+         <item row="14" column="0">
+          <property name="text">
+           <string>beq rs rt offset</string>
+          </property>
+         </item>
+         <item row="14" column="1">
+          <property name="text">
+           <string>if rs == rt, 跳转至(offset &lt;&lt; 2) + pc + 4</string>
+          </property>
+         </item>
+         <item row="15" column="0">
+          <property name="text">
+           <string>jr rs</string>
+          </property>
+         </item>
+         <item row="15" column="1">
+          <property name="text">
+           <string>跳到寄存器$rs，$rs是目标指令位置的最低字节</string>
+          </property>
+         </item>
+         <item row="16" column="0">
+          <property name="text">
+           <string>jal target</string>
+          </property>
+         </item>
+         <item row="16" column="1">
+          <property name="text">
+           <string>跳到instr_index &lt;&lt; 2，并在$ret保留下一条指令的最低字节</string>
+          </property>
+         </item>
+         <item row="17" column="0">
+          <property name="text">
+           <string>lb rt os(base)</string>
+          </property>
+         </item>
+         <item row="17" column="1">
+          <property name="text">
+           <string>rt &lt;- Mem[$base + os(offset的缩写)]，加载1个字节，有符号扩展</string>
+          </property>
+         </item>
+         <item row="18" column="0">
+          <property name="text">
+           <string>lbu rt os(base)</string>
+          </property>
+         </item>
+         <item row="18" column="1">
+          <property name="text">
+           <string>rt &lt;- Mem[$base + os]，加载1个字节，无符号扩展</string>
+          </property>
+         </item>
+         <item row="19" column="0">
+          <property name="text">
+           <string>lh rt os(base)</string>
+          </property>
+         </item>
+         <item row="19" column="1">
+          <property name="text">
+           <string>rt &lt;- Mem[$base + os]，加载2个字节，有符号扩展，os(base)是最低位字节</string>
+          </property>
+         </item>
+         <item row="20" column="0">
+          <property name="text">
+           <string>lhu rt os(base)</string>
+          </property>
+         </item>
+         <item row="20" column="1">
+          <property name="text">
+           <string>rt &lt;- Mem[$base + os]，加载2个字节，无符号扩展，os(base)是最低位字节</string>
+          </property>
+         </item>
+         <item row="21" column="0">
+          <property name="text">
+           <string>lw rt os(base)</string>
+          </property>
+         </item>
+         <item row="21" column="1">
+          <property name="text">
+           <string>rt &lt;- Mem[$base + os]，加载4个字节，os(base)是最低位字节</string>
+          </property>
+         </item>
+         <item row="22" column="0">
+          <property name="text">
+           <string>sb rt os(base)</string>
+          </property>
+         </item>
+         <item row="22" column="1">
+          <property name="text">
+           <string>Mem[$base + os] &lt;- $rt，存一个字节</string>
+          </property>
+         </item>
+         <item row="23" column="0">
+          <property name="text">
+           <string>sh rt os(base)</string>
+          </property>
+         </item>
+         <item row="23" column="1">
+          <property name="text">
+           <string>Mem[$base + os] &lt;- $rt，存2个字节，os(base)是最低位字节</string>
+          </property>
+         </item>
+         <item row="24" column="0">
+          <property name="text">
+           <string>sw rt os(base)</string>
+          </property>
+         </item>
+         <item row="24" column="1">
+          <property name="text">
+           <string>Mem[$base + os] &lt;- $rt，存4个字节，os(base)是最低位字节</string>
+          </property>
+         </item>
+         <item row="25" column="0">
+          <property name="text">
+           <string>nop</string>
+          </property>
+         </item>
+         <item row="25" column="1">
+          <property name="text">
+           <string>暂停一周期</string>
+          </property>
+         </item>
+         <item row="26" column="0">
+          <property name="text">
+           <string>movz rd rs rt</string>
+          </property>
+         </item>
+         <item row="26" column="1">
+          <property name="text">
+           <string>if rt==0, $rd &lt;- $rs</string>
+          </property>
+         </item>
+         <item row="27" column="0">
+          <property name="text">
+           <string>mfhi rd</string>
+          </property>
+         </item>
+         <item row="27" column="1">
+          <property name="text">
+           <string>$rd &lt;- $hi</string>
+          </property>
+         </item>
+         <item row="28" column="0">
+          <property name="text">
+           <string>mflo rd</string>
+          </property>
+         </item>
+         <item row="28" column="1">
+          <property name="text">
+           <string>$rd &lt;- $lo</string>
+          </property>
+         </item>
+         <item row="29" column="0">
+          <property name="text">
+           <string>mthi rs</string>
+          </property>
+         </item>
+         <item row="29" column="1">
+          <property name="text">
+           <string>$hi &lt;- $rs</string>
+          </property>
+         </item>
+         <item row="30" column="0">
+          <property name="text">
+           <string>mtlo rs</string>
+          </property>
+         </item>
+         <item row="30" column="1">
+          <property name="text">
+           <string>$lo &lt;- $rs</string>
+          </property>
+         </item>
+         <item row="31" column="0">
+          <property name="text">
+           <string>hlt</string>
+          </property>
+         </item>
+         <item row="31" column="1">
+          <property name="text">
+           <string>永远暂停</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="tableWidget_2">
+         <row>
+          <property name="text">
+           <string>$rze</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>$rsp</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>$rfp</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>$rax</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>$rtm</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>$rbx</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>$rcx</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>$rdx</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>$rin</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>$rot</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>$ret</string>
+          </property>
+         </row>
+         <column>
+          <property name="text">
+           <string>编号</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>释义</string>
+          </property>
+         </column>
+         <item row="0" column="0">
+          <property name="text">
+           <string>0</string>
+          </property>
+         </item>
+         <item row="0" column="1">
+          <property name="text">
+           <string>始终为0</string>
+          </property>
+         </item>
+         <item row="1" column="0">
+          <property name="text">
+           <string>1</string>
+          </property>
+         </item>
+         <item row="1" column="1">
+          <property name="text">
+           <string>栈指针</string>
+          </property>
+         </item>
+         <item row="2" column="0">
+          <property name="text">
+           <string>2</string>
+          </property>
+         </item>
+         <item row="2" column="1">
+          <property name="text">
+           <string>帧指针</string>
+          </property>
+         </item>
+         <item row="3" column="0">
+          <property name="text">
+           <string>3</string>
+          </property>
+         </item>
+         <item row="3" column="1">
+          <property name="text">
+           <string>返回值</string>
+          </property>
+         </item>
+         <item row="4" column="0">
+          <property name="text">
+           <string>4</string>
+          </property>
+         </item>
+         <item row="4" column="1">
+          <property name="text">
+           <string>临时变量</string>
+          </property>
+         </item>
+         <item row="5" column="0">
+          <property name="text">
+           <string>6</string>
+          </property>
+         </item>
+         <item row="5" column="1">
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item row="6" column="0">
+          <property name="text">
+           <string>7</string>
+          </property>
+         </item>
+         <item row="7" column="0">
+          <property name="text">
+           <string>8</string>
+          </property>
+         </item>
+         <item row="8" column="0">
+          <property name="text">
+           <string>9</string>
+          </property>
+         </item>
+         <item row="8" column="1">
+          <property name="text">
+           <string>输入结尾</string>
+          </property>
+         </item>
+         <item row="9" column="0">
+          <property name="text">
+           <string>10</string>
+          </property>
+         </item>
+         <item row="9" column="1">
+          <property name="text">
+           <string>输出结尾</string>
+          </property>
+         </item>
+         <item row="10" column="0">
+          <property name="text">
+           <string>31</string>
+          </property>
+         </item>
+         <item row="10" column="1">
+          <property name="text">
+           <string>返回地址</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>742</width>
-     <height>17</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

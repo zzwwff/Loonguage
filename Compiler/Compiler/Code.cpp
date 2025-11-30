@@ -18,21 +18,21 @@ namespace Loonguage {
     {
         std::string str;
         cin >> str;
-        if (str == "$ins") r = Register::Registers::ins;
-        if (str == "$rsp") r = Register::Registers::rsp;
-        if (str == "$rfp") r = Register::Registers::rfp;
-        if (str == "$rax") r = Register::Registers::rax;
-        if (str == "$rtm") r = Register::Registers::rtm;
-        if (str == "$rbx") r = Register::Registers::rbx;
-        if (str == "$rcx") r = Register::Registers::rcx;
-        if (str == "$rdx") r = Register::Registers::rdx;
+        if (str == "ins") r = Register::Registers::ins;
+        if (str == "rsp") r = Register::Registers::rsp;
+        if (str == "rfp") r = Register::Registers::rfp;
+        if (str == "rax") r = Register::Registers::rax;
+        if (str == "rtm") r = Register::Registers::rtm;
+        if (str == "rbx") r = Register::Registers::rbx;
+        if (str == "rcx") r = Register::Registers::rcx;
+        if (str == "rdx") r = Register::Registers::rdx;
 
-        if (str == "$rin") r = Register::Registers::rin;
-        if (str == "$rot") r = Register::Registers::rot;
-        if (str == "$rlo") r = Register::Registers::rlo;
-        if (str == "$rhi") r = Register::Registers::rhi;
-        if (str == "$rze") r = Register::Registers::rze;
-        if (str == "$ret") r = Register::Registers::ret;
+        if (str == "rin") r = Register::Registers::rin;
+        if (str == "rot") r = Register::Registers::rot;
+        if (str == "rlo") r = Register::Registers::rlo;
+        if (str == "rhi") r = Register::Registers::rhi;
+        if (str == "rze") r = Register::Registers::rze;
+        if (str == "ret") r = Register::Registers::ret;
         return cin;
     }
 
@@ -41,8 +41,18 @@ namespace Loonguage {
 	{
 		std::string str;
 		for (auto c : stro)
-			if (c != '(' && c != ')')
+		{
+
+			if (c == '$')
+				str.push_back(' ');
+			else if (c == '(' || c == ')')
+				str.push_back(' ');
+			else if (c >= 'A' && c <= 'Z')
+				str.push_back(c - 'A' + 'a');
+			else
 				str.push_back(c);
+		}
+
         std::string ct;
         std::stringstream stream(str);
         stream >> ct;
@@ -279,10 +289,10 @@ namespace Loonguage {
 		if (codeType == DIV) cout << "div " << rs << rt;
 		if (codeType == SLT) cout << "slt " << rd << rs << rt;
 		
-		if (codeType == B) cout << "b " << label;
-		if (codeType == BEQ) cout << "beq " << rs << rt << label;
+		if (codeType == B) cout << "b " << label << "(#" << immediate << ")";
+		if (codeType == BEQ) cout << "beq " << rs << rt << label << "(#" << immediate << ")";
 		if (codeType == JR) cout << "jr " << rs;
-		if (codeType == JAL) cout << "jal " << label;
+		if (codeType == JAL) cout << "jal " << label << "(#" << immediate << ")";
 
 		if (codeType == LB) cout << "lb " << rt << immediate << "(" << rs << ")";
 		if (codeType == LBU) cout << "lbu " << rt << immediate << "(" << rs << ")";
@@ -315,4 +325,7 @@ namespace Loonguage {
 		labelAttached.push_back(l);
 	}
 }
+
+
+
 

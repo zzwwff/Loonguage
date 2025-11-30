@@ -36,8 +36,8 @@ namespace Loonguage {
 			setSection(bit, l, r, 0b01010);
 	}
 
-	BitStream::BitStream(Compiler& compiler):
-        codes(compiler.codes), codeBegin(compiler.codeBegin)
+	BitStream::BitStream(Compiler& compiler) :
+		codes(compiler.codes), codeBegin(compiler.codeBegin), strTable(compiler.strTable), strPosition(compiler.strPosition)
 	{
 	}
 
@@ -156,12 +156,14 @@ namespace Loonguage {
 		if (code.codeType == Code::B)
 		{
 			setSection(res, 31, 16, 0b0001000000000000);
+			setSection(res, 15, 0, code.immediate);
 		}
 		if (code.codeType == Code::BEQ)
 		{
 			setSection(res, 31, 26, 0b000100);
 			setRegister(res, 25, 21, code.rs);
 			setRegister(res, 20, 16, code.rt);
+			setSection(res, 15, 0, code.immediate);
 		}
 		if (code.codeType == Code::JR)
 		{
@@ -172,6 +174,7 @@ namespace Loonguage {
 		if (code.codeType == Code::JAL)
 		{
 			setSection(res, 31, 26, 0b000011);
+			setSection(res, 25, 0, code.immediate);
 		}
 		if (code.codeType == Code::LB)
 		{
@@ -273,20 +276,20 @@ namespace Loonguage {
 		return res;
 	}
 
-	void BitStream::generateTestBench(std::ostream& cout, std::string pattern, int i)
+	//use cout to print bits at i using pattern
+	void BitStream::printTestBench(std::ostream& cout, std::bitset<32> bits, int i, std::string pattern)
 	{
-		std::bitset<32> bits = setCode(codes[i]);
 		std::map<std::string, int> m;
-		m["addr00"] = codeBegin + i * 4;
-		m["addr01"] = codeBegin + i * 4 + 1;
-		m["addr02"] = codeBegin + i * 4 + 2;
-		m["addr03"] = codeBegin + i * 4 + 3;
+        m["addr00"] = i * 4;
+        m["addr01"] = i * 4 + 1;
+        m["addr02"] = i * 4 + 2;
+        m["addr03"] = i * 4 + 3;
 		for (int j = 0; j < 32; j++)
 		{
 			if (j < 10)
-                m[std::string("data0") + std::to_string(j)] = bits[j];
+				m[std::string("data0") + std::to_string(j)] = bits[j];
 			else
-                m[std::string("data") + std::to_string(j)] = bits[j];
+				m[std::string("data") + std::to_string(j)] = bits[j];
 		}
 		for (int j = 0; j < pattern.size(); j++)
 		{
@@ -301,6 +304,65 @@ namespace Loonguage {
 				j += 6;
 			}
 		}
+	}
 
+	void BitStream::generateTestBench(std::ostream& cout, std::string pattern, int i)
+	{
+		if (i < 0)
+		{
+			generateTestBenchString(cout, pattern);
+		}
+		else
+            printTestBench(cout, setCode(codes[i]), codeBegin / 4 + i, pattern);
+		
+
+	}
+
+	void BitStream::generateTestBenchString(std::ostream& cout, std::string pattern)
+	{
+		std::vector<std::bitset<8>> memory(codeBegin);
+		allocateString(memory);
+		for (int i = 0; i * 4 < codeBegin; i++)
+		{
+			std::bitset<32> bits;
+			for (int j = 0; j < 4; j++)
+			{
+				for (int k = 0; k < 8; k++)
+					bits[j * 8 + k] = memory[i * 4 + j][k];
+			}
+            printTestBench(cout, bits, i, pattern);
+		}
+	}
+
+	void BitStream::allocateString(std::vector<std::bitset<8>>& memory)
+	{
+		for (auto& pstr : strTable)
+		{
+			const std::string& str = pstr.first;
+			int pos = strPosition[strTable[str]];
+			if (pos < memory.size())
+			{
+				for (int j = 0; j < 8; j++)
+                    memory[pos][j] = ((unsigned int)str.size() >> j) & 1;
+				for (int i = 0; i < str.size(); i++)
+				{
+					for (int j = 0; j < 8; j++)
+						memory[pos - 1 - i][j] = ((unsigned int)str[i] >> j) & 1;
+				}
+			}
+
+		}
+	}
+
+	void BitStream::generateMemory(std::vector<std::bitset<8>>& memory)
+	{
+		allocateString(memory);
+		for (int i = 0; i < codes.size(); i++)
+		{
+			std::bitset<32> bits = setCode(codes[i]);
+			for (int j = 0; j < 4 && codeBegin + 4 * i + j < memory.size(); j++)
+				for (int k = 0; k < 8; k++)
+					memory[codeBegin + 4 * i + j][k] = bits[8 * j + k];
+		}
 	}
 }
