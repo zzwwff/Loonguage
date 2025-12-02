@@ -107,6 +107,7 @@ namespace Loonguage {
 		return val;
 	}
 
+	//allocate string constand from bottom of stack
 	void RunTime::allocateString(SymbolTable<std::string>& strTable, std::map<Symbol, int> strPosition)
 	{
 		for (auto& pstr : strTable)
@@ -121,6 +122,16 @@ namespace Loonguage {
 		}
 	}
 
+	//alocate input from bottom of inout
+	void RunTime::allocateInput(const std::string& input)
+	{
+		for (int i = 0, target = regs[Reg::rin]; i < input.size(); i++)
+		{
+			writeChar(target, input[i]);
+            target--;
+		}
+	}
+
 	std::vector<int> RunTime::getStack()
 	{
 		std::vector<int> vec;
@@ -131,7 +142,7 @@ namespace Loonguage {
 		return vec;
 	}
 
-    RunTime::RunTime(RunTimeConfig c, Compiler& compiler) :
+    RunTime::RunTime(RunTimeConfig c, Compiler& compiler, const std::string& input = "") :
 		config(c), codeBegin(compiler.codeBegin)
 	{
         codes = compiler.codes;
@@ -168,6 +179,7 @@ namespace Loonguage {
 		}
         currentCode = 0;
 		allocateString(compiler.strTable, compiler.strPosition);
+		allocateInput(input);
 	}
 	
 	//advance a step
@@ -333,6 +345,12 @@ namespace Loonguage {
 				int val = regs[nextCode.rs];
 				writeChar(regs[Reg::rot], val);
 				regs[Reg::rot]++;
+			}
+			else if (nextCode.codeType == Code::IN)
+			{
+				int val = readChar(regs[Reg::rin]);
+				regs[nextCode.rs] = val;
+				regs[Reg::rin]--;
 			}
 		}
 		//set index of current code, so current code will be highlighted in QT

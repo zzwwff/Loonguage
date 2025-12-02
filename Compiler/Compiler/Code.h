@@ -42,8 +42,8 @@ namespace Loonguage {
 			MTHI,
 			MTLO,
 			HLT,
-			OUT//,
-			//IN
+			OUT,
+			IN
 		};
 		CodeType codeType;
 		Register::Registers rs;

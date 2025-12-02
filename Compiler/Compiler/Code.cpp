@@ -36,14 +36,14 @@ namespace Loonguage {
         return cin;
     }
 
-
+	//initiate code from string input
 	Code::Code(std::string stro, bool& signal) 
 	{
 		std::string str;
 		for (auto c : stro)
 		{
-
-			if (c == '$')
+			//ignore symbols like $ ( ) ,, turn uppercase into lowercase letter
+			if (c == '$' || c == ',')
 				str.push_back(' ');
 			else if (c == '(' || c == ')')
 				str.push_back(' ');
@@ -210,6 +210,16 @@ namespace Loonguage {
 		}
 		else if (ct == "hlt")
 			codeType = HLT;
+		else if (ct == "in")
+		{
+			codeType = IN;
+			stream >> rs;
+		}
+		else if (ct == "out")
+		{
+			codeType = OUT;
+			stream >> rs;
+		}
 		else signal = false;
 	}
 
@@ -314,6 +324,7 @@ namespace Loonguage {
 		if (codeType == MTLO) cout << "mtlo " << rs;	
 
         if (codeType == OUT) cout << "out " << rs;
+		if (codeType == IN) cout << "out " << rs;
 
 		if (codeType == HLT) cout << "hlt ";
 

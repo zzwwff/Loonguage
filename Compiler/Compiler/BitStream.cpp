@@ -273,6 +273,19 @@ namespace Loonguage {
 		{
 			setSection(res, 31, 0, 0b00000100000000000000000000000000);
 		}
+		if (code.codeType == Code::IN)
+		{
+			setSection(res, 31, 26, 0b000000);
+			setRegister(res, 25, 21, code.rs);
+			setSection(res, 20, 0, 0b000000000000000110000);
+		}
+		if (code.codeType == Code::OUT)
+		{
+			setSection(res, 31, 26, 0b000000);
+			setRegister(res, 25, 21, code.rs);
+			setSection(res, 20, 0, 0b000000000000000110001);
+		}
+
 		return res;
 	}
 

@@ -48,7 +48,7 @@ QStandardItemModel* MainWindow::setListView(QListView* view, std::vector<Loongua
     return model;
 }
 
-
+//Compiling button
 void MainWindow::on_pushButton_clicked()
 {
     //clear existed resources
@@ -98,7 +98,7 @@ void MainWindow::on_pushButton_clicked()
     }
 }
 
-
+//Run button
 void MainWindow::on_pushButton_6_clicked()
 {
     if (compiler != nullptr && compiler->runable)
@@ -109,7 +109,7 @@ void MainWindow::on_pushButton_6_clicked()
         config.stdIn = ui->stdIn->toPlainText().toStdString();
         //if (runtime != nullptr)
         //    delete runtime;
-        runtime = std::make_shared<Loonguage::RunTime>(config, *compiler);
+        runtime = std::make_shared<Loonguage::RunTime>(config, *compiler, ui->stdIn->toPlainText().toStdString());
         updateData();
     }
     else
@@ -196,6 +196,7 @@ void MainWindow::on_generateTestBenchCodes_clicked()
     QString pattern = ui->pattern->toPlainText();
     QStandardItemModel* model = new QStandardItemModel();
     std::string output;
+    //start from -1, -1 means print string constant allocation
     for (int i = -1; i < (int)bitstream->codes.size(); i++)
     {
         std::stringstream stream;

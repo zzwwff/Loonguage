@@ -25,6 +25,7 @@ namespace Loonguage {
         std::vector<int> int2bit(int) const;
         int bit2int(std::vector<int>) const;
 		void allocateString(SymbolTable<std::string>&, std::map<Symbol, int>);
+		void allocateInput(const std::string&);
 	public:
 		//start pointer of stack and stack data, used for stack data display
 		int stackBegin;
@@ -44,7 +45,7 @@ namespace Loonguage {
 		std::vector<Code> codes;
 		std::map<std::string, int> labels;
 		RunTimeConfig config;
-        RunTime(RunTimeConfig, Compiler& compiler);
+        RunTime(RunTimeConfig, Compiler& compiler, const std::string&);
 		//advance a step
         int tick();
 		std::string stdOut() const;

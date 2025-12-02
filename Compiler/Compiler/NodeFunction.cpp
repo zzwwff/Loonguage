@@ -254,5 +254,9 @@ namespace Loonguage {
 			codes.push_back(Code(Code::LW, Reg::rfp, Reg::rax, 0));
 			codes.push_back(Code(Code::LBU, Reg::rax, Reg::rax, 0));
         }
-    }
+		if (nameDeco.getString() == "in")
+		{
+			codes.push_back(Code(Code::IN, Reg::rax));
+		}
+	}
 }
