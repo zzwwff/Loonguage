@@ -240,7 +240,7 @@ namespace Loonguage {
         if (nameDeco.getString() == "out@int")
         {
             codes.push_back(Code(Code::LW, Reg::rfp, Reg::rax, 0));
-            codes.push_back(Code(Code::OUT, Reg::rax));
+            codes.push_back(Code(Code::STDIN, Reg::rax));
         }
         if (nameDeco.getString() == "getChar@string@int")
         {
@@ -256,7 +256,11 @@ namespace Loonguage {
         }
 		if (nameDeco.getString() == "in")
 		{
-			codes.push_back(Code(Code::IN, Reg::rax));
+			codes.push_back(Code(Code::STDOUT, Reg::rax));
 		}
+        if (nameDeco.getString() == "nop")
+        {
+            codes.push_back(Code(Code::NOP));
+        }
 	}
 }

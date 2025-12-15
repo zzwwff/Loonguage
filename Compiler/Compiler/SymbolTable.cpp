@@ -3,7 +3,7 @@
 namespace Loonguage{
 
 
-	//WATCH OUT!
+	//WATCH STDIN!
 	//some definitions are put in header, turn to SymbolTable.h for more detals
 
 }

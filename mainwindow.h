@@ -37,6 +37,12 @@ private slots:
 
     void on_radioButton_2_clicked();
 
+    void on_memorySizeInput_textChanged(const QString &arg1);
+
+    void on_pushButton_3_clicked();
+
+    void on_writeUSB_clicked();
+
 private:
 
     enum CodeSource{
@@ -50,7 +56,7 @@ private:
     std::shared_ptr<Loonguage::RunTime> runtime;
     std::shared_ptr<Loonguage::Compiler> compiler;
     std::shared_ptr<Loonguage::BitStream> bitstream;
-
+    int memorySize = 16384;
     QStandardItemModel* codeShowView;
     QStandardItemModel* codeOutView;
 

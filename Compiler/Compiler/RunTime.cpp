@@ -143,7 +143,7 @@ namespace Loonguage {
 	}
 
     RunTime::RunTime(RunTimeConfig c, Compiler& compiler, const std::string& input = "") :
-		config(c), codeBegin(compiler.codeBegin)
+		config(c), stringBegin(compiler.stringBegin)
 	{
         codes = compiler.codes;
 		//initiate registers
@@ -166,8 +166,8 @@ namespace Loonguage {
 		//64 width = 64 bits = 8 bytes
 		//32 width = 32 bits = 4 bytes
 		width = 4;
-		//0 ~ codeBegin - 1 are reserved for strings
-        regs[Reg::ins] = codeBegin;
+		//0 ~ stringBegin - 1 are reserved for strings
+        regs[Reg::ins] = 0;
         regs[Reg::rsp] = config.memorySize - width;
 		stackBegin = regs[Reg::rsp];
 		regs[Reg::rfp] = regs[Reg::rsp];
@@ -185,8 +185,8 @@ namespace Loonguage {
 	//advance a step
     int RunTime::tick()
 	{
-		//real position of nextInstruction is ($ins - codeBegin) / width
-        int nextInstruction = (regs[Reg::ins] - codeBegin) / width;
+		//real position of nextInstruction is ($ins - stringBegin) / width
+        int nextInstruction = (regs[Reg::ins] - 0) / width;
 		Code nextCode = codes[nextInstruction];
 		if (nextCode.codeType == Code::B)
 		{
@@ -340,13 +340,13 @@ namespace Loonguage {
 			{
 				return 1;
 			}
-			else if (nextCode.codeType == Code::OUT)
+			else if (nextCode.codeType == Code::STDIN)
 			{
 				int val = regs[nextCode.rs];
 				writeChar(regs[Reg::rot], val);
 				regs[Reg::rot]++;
 			}
-			else if (nextCode.codeType == Code::IN)
+			else if (nextCode.codeType == Code::STDOUT)
 			{
 				int val = readChar(regs[Reg::rin]);
 				regs[nextCode.rs] = val;
@@ -354,7 +354,7 @@ namespace Loonguage {
 			}
 		}
 		//set index of current code, so current code will be highlighted in QT
-        currentCode = (regs[Reg::ins] - codeBegin) / width;;
+        currentCode = (regs[Reg::ins] - 0) / width;;
         return 0;
 	}
 

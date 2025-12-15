@@ -598,7 +598,7 @@ namespace Loonguage {
 
 	void NodeEInt::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
-		codes.push_back(Code(Code::ORI, Reg::rze, Reg::rax, int_.getValue()));
+        codes.push_back(Code(Code::ADDI, Reg::rze, Reg::rax, int_.getValue()));
 	}
 
 	NodeEStr::NodeEStr(TokenString s):
@@ -627,7 +627,8 @@ namespace Loonguage {
 
 	void NodeEStr::codeGen(CodeGenContext& context, std::vector<Code>& codes)
 	{
-		codes.push_back(Code(Code::ORI, Reg::rze, Reg::rax, context.strPosition[str.value]));
+        codes.push_back(Code(Code::ADDI, Reg::rze, Reg::rax, context.strPosition[str.value]));
+		codes.back().strPositionToBeAdded = true;
 	}
 
 }

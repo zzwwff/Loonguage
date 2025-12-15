@@ -179,17 +179,29 @@ namespace Loonguage {
 			pmain->call();
 			//string allocation must be put before code generation
 			//because address of string is used in codes
-			codeBegin = allocateString();
-			if (codeBegin % 4)
-				codeBegin = codeBegin + 4 - codeBegin % 4;
+			//we will add the delta(stringBegin) after code generation
+			stringEnd = allocateString();
 			std::shared_ptr<LabelAllocator> alloc = std::make_shared<LabelAllocator>();
 			CodeGenContext context;
 			context.width = 4;
 			context.allocator = alloc;
 			context.strPosition = strPosition;
-			codes.push_back(Code(Code::JAL, Label("call@main")));
+			//reset $rsp and $rfp at top
+            //codes.push_back(Code(Code::ORI, Register::Registers::rze, Register::Registers::rfp, size - 4));
+            //codes.push_back(Code(Code::ORI, Register::Registers::rze, Register::Registers::rsp, size - 4));
+
+            codes.push_back(Code(Code::JAL, Label("call@main")));
 			codes.push_back(Code(Code::HLT));
-			program->codeGen(context, codes);
+			program->codeGen(context, codes);	
+			stringBegin = codes.size() * 4;
+			stringEnd += codes.size() * 4;
+			if (stringEnd % 4)
+				stringEnd = stringEnd - stringEnd % 4 + 4;
+			for (auto& code : codes)
+				if (code.strPositionToBeAdded)
+					code.immediate += stringBegin;
+			for (auto& p : strPosition)
+				p.second += stringBegin;
 
 			//link jal, b and beq
 			//load all the labels
@@ -232,8 +244,9 @@ namespace Loonguage {
 
 	}
 
-	bool Compiler::parse()
+	bool Compiler::parse(int sz)
 	{
+		size = sz;
 		infoOut << "Compiling begin..." << std::endl;
 		//There are altogether 4 phases in compiling, all are integrated into function Compiler::parse()
 		//In parse(), the 4 phases will be executed one by one, and if error(s) occurred, will immediately terminate

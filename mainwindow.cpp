@@ -6,6 +6,8 @@
 #include <QMessageBox>
 #include <QTime>
 #include <QFile>
+#include <QRegularExpression>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -23,6 +25,9 @@ MainWindow::MainWindow(QWidget *parent)
             ui->input->appendPlainText(line);
         }
     }
+    QRegularExpression regExp("[0-9]*");
+    QRegularExpressionValidator *pattern = new QRegularExpressionValidator(regExp, this);
+    ui->memorySizeInput->setValidator(pattern);
 
 }
 
@@ -79,7 +84,7 @@ void MainWindow::on_pushButton_clicked()
     std::stringstream in, infoOut, synOut, semOut, genOut;
     in << input;
     compiler = std::make_shared<Loonguage::Compiler>(in, infoOut, synOut, semOut, genOut);
-    bool sign = compiler->parse();
+    bool sign = compiler->parse(memorySize);
     QString qinfoOut = QString::fromStdString(infoOut.str());
     QString qsynOut = QString::fromStdString(synOut.str());
     QString qsemOut = QString::fromStdString(semOut.str());
@@ -104,8 +109,8 @@ void MainWindow::on_pushButton_6_clicked()
     if (compiler != nullptr && compiler->runable)
     {
         config.endian = config.BIG;
-        config.memorySize = 16384;
-        config.inoutSize = 16384;
+        config.memorySize = memorySize;
+        config.inoutSize = memorySize;
         config.stdIn = ui->stdIn->toPlainText().toStdString();
         //if (runtime != nullptr)
         //    delete runtime;
@@ -179,7 +184,7 @@ void MainWindow::on_generateTestBenchCodes_clicked()
         std::string input = ui->codeInput->toPlainText().toStdString();
         std::stringstream stream(input);
         bool signal = true;
-        bitstream = std::make_shared<Loonguage::BitStream>(stream, signal);
+        bitstream = std::make_shared<Loonguage::BitStream>(stream, signal, memorySize);
         if (!signal)
         {
             bitstream = nullptr;
@@ -230,5 +235,58 @@ void MainWindow::on_radioButton_2_clicked()
     if (compiler != nullptr)
         setListView(ui->codeShow, compiler->codes);
     ui->testBenchCodes->setPlainText("自动汇编代码由源码编译生成，请确认代码在最新修改后进行过编译!");
+}
+
+
+
+
+void MainWindow::on_memorySizeInput_textChanged(const QString &arg1)
+{
+    int num = arg1.toInt();
+    if (num >= 16 && num <= 131072)
+        memorySize = num;
+}
+
+//generate COE file
+void MainWindow::on_pushButton_3_clicked()
+{
+    if (bitstream == nullptr)
+    {
+        QMessageBox::about(NULL, "About", "No available codes!");
+        return;
+    }
+    QString fileString = QFileDialog::getSaveFileName(
+        this,
+        tr("保存文件"),
+        QDir::currentPath() + "/data",
+        tr("数据文件 (*.coe);")
+    );;
+    std::string data;
+    std::stringstream ss(data);
+    bitstream->generateCoe(ss);
+    data = ss.str();
+    QFile file(fileString);
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    file.write(QString::fromStdString(data).toUtf8());
+    file.close();
+}
+
+
+void MainWindow::on_writeUSB_clicked()
+{
+    if (bitstream == nullptr)
+    {
+        QMessageBox::about(NULL, "About", "No available codes!");
+        return;
+    }
+    QString portName = ui->portName->toPlainText();
+    wchar_t portname[255];
+    memset(portname, 0, sizeof(portname));
+    int length = portName.toWCharArray(portname);
+    std::string res = bitstream->writeUSB(portname, length);
+    if (res.size())
+        QMessageBox::about(NULL, "About", res.c_str());
+    else
+        QMessageBox::about(NULL, "About", "成功写入!");
 }
 

@@ -1,17 +1,28 @@
 ﻿  BitStream.cpp
-E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1034,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+E:\source\repos\Loonguage\Compiler\Compiler\BitStream.cpp(278,32): error C2589: “)”:“::”右边的非法标记
+E:\source\repos\Loonguage\Compiler\Compiler\BitStream.cpp(278,24): error C2062: 意外的类型“unknown-type” 
+E:\source\repos\Loonguage\Compiler\Compiler\BitStream.cpp(279,3): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\source\repos\Loonguage\Compiler\Compiler\BitStream.cpp(284,33): error C2589: “)”:“::”右边的非法标记
+E:\source\repos\Loonguage\Compiler\Compiler\BitStream.cpp(284,24): error C2062: 意外的类型“unknown-type” 
+E:\source\repos\Loonguage\Compiler\Compiler\BitStream.cpp(285,3): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+E:\source\repos\Loonguage\Compiler\Compiler\BitStream.cpp(454,40): warning C4267: “初始化”: 从“size_t”转换到“wchar_t”，可能丢失数据
   Code.cpp
   Compiler.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\Compiler.cpp(78,13): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\Compiler.cpp(195,31): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\Compiler.cpp(196,30): warning C4267: “+=”: 从“size_t”转换到“int”，可能丢失数据
 E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1034,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
 E:\source\repos\Loonguage\Compiler\Compiler\SymbolTable.h(99,33): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
   FunctionDeco.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\SymbolTable.h(99,33): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
   LoonParser.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1034,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
+  Node.cpp
+  NodeActual.cpp
   NodeExpr.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\NodeExpr.cpp(237,56): warning C4146: 一元负运算符应用于无符号类型，结果仍为无符号类型
 E:\source\repos\Loonguage\Compiler\Compiler\NodeExpr.cpp(237,79): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  NodeFormal.cpp
   NodeFunction.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\NodeFunction.cpp(83,48): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
 E:\source\repos\Loonguage\Compiler\Compiler\NodeFunction.cpp(218,55): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
@@ -20,8 +31,8 @@ E:\source\repos\Loonguage\Compiler\Compiler\NodeFunction.cpp(230,71): warning C4
   NodeSentence.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\NodeSentence.cpp(125,15): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
   RunTime.cpp
-E:\source\repos\Loonguage\Compiler\Compiler\RunTime.cpp(116,36): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
-E:\source\repos\Loonguage\Compiler\Compiler\RunTime.cpp(148,33): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\RunTime.cpp(117,36): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+E:\source\repos\Loonguage\Compiler\Compiler\RunTime.cpp(159,33): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
 E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1034,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   lex.Loon_.cc
 D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\stdint.h(49,9): warning C4005: “INT8_MIN”: 宏重定义
@@ -37,4 +48,3 @@ E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1034,9): warning C406
   main.cpp
 E:\source\repos\Loonguage\Compiler\Compiler\LoonParser.hpp(1034,9): warning C4065: switch 语句包含“default”但是未包含“case”标签
   正在生成代码...
-  Compiler.vcxproj -> E:\source\repos\Loonguage\Compiler\x64\Debug\Compiler.exe

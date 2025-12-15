@@ -30,7 +30,7 @@ namespace Loonguage {
 		//start pointer of stack and stack data, used for stack data display
 		int stackBegin;
 		//start pointer of code
-		int codeBegin;
+		int stringBegin;
 		std::vector<int> getStack();
 		//index of next instruction to be executed, used for codeOut
         int currentCode;
@@ -39,7 +39,7 @@ namespace Loonguage {
 		//a byte unit
 		std::vector<std::bitset<8>> memory;
 		//a byte unit of inout space
-		//IN from top, OUT from bottom
+		//STDOUT from top, STDIN from bottom
 		std::vector<std::bitset<8>> inout;
 		//instructions
 		std::vector<Code> codes;

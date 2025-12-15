@@ -212,12 +212,12 @@ namespace Loonguage {
 			codeType = HLT;
 		else if (ct == "in")
 		{
-			codeType = IN;
+			codeType = STDOUT;
 			stream >> rs;
 		}
 		else if (ct == "out")
 		{
-			codeType = OUT;
+			codeType = STDIN;
 			stream >> rs;
 		}
 		else signal = false;
@@ -323,8 +323,8 @@ namespace Loonguage {
 		if (codeType == MTHI) cout << "mthi " << rs;
 		if (codeType == MTLO) cout << "mtlo " << rs;	
 
-        if (codeType == OUT) cout << "out " << rs;
-		if (codeType == IN) cout << "out " << rs;
+        if (codeType == STDIN) cout << "out " << rs;
+		if (codeType == STDOUT) cout << "out " << rs;
 
 		if (codeType == HLT) cout << "hlt ";
 

@@ -48,15 +48,17 @@ namespace Loonguage {
 		std::ostream& semOut;
 		std::ostream& genOut;
 		std::istream& cin;
-
+		
 	public:
+		int size;
         //whether is it able to run
         bool runable;
         //Phase 4
         //code generation
         std::vector<Code> codes;
 		std::map<Symbol, int> strPosition;
-		int codeBegin;
+		int stringBegin;
+		int stringEnd;
 		int allocateString();
 
         //cin of file path
@@ -69,7 +71,7 @@ namespace Loonguage {
 		//Phase 4
 		bool codeGeneration();
 		//Integrated all phases into one function
-		bool parse();
+		bool parse(int);
 	};
 }
 
