@@ -1,0 +1,52 @@
+#include "NodeFormal.h"
+namespace Loonguage {
+	Loonguage::NodeFormal::NodeFormal(TokenIden t, TokenIden n) :
+		Node(t.line, Node::NdFormal), type(t), name(n)
+	{
+	}
+
+
+	void NodeFormal::dumpAST(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeActual (Type:" << type.getString() 
+			<< ", Name: " << name.getString() << ")" << std::endl;
+	}
+
+	void NodeFormal::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeActual (Type:" << type.getString()
+			<< ", NameDeco: " << nameDeco.getString() << ")" << std::endl;
+	}
+
+	void NodeFormals::dumpAST(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeActuals (Size:" << size()
+			<< ")" << std::endl;
+		for (const auto ac : *this)
+			ac->dumpAST(cout, indent + 2);
+	}
+
+	void NodeFormals::dumpSem(std::ostream& cout, int indent) const
+	{
+		Node::indent(cout, indent);
+		cout << "#" << line << ": NodeActuals (Size:" << size()
+			<< ")" << std::endl;
+		for (const auto ac : *this)
+			ac->dumpSem(cout, indent + 2);
+	}
+
+	NodeFormals::NodeFormals(std::shared_ptr<NodeFormal> a):
+		Node(a->getLine(), Node::NodeType::NdFormals)
+	{
+		push_back(a);
+	}
+
+	NodeFormals::NodeFormals(int l):
+		Node(l, Node::NodeType::NdFormals)
+	{
+	}
+}
+

@@ -48,6 +48,10 @@ extern YYSTYPE cool_yylval;
 
 %}
 
+%union {
+      int i;
+    }
+
 /*
  * Define names for regular expressions here.
  */

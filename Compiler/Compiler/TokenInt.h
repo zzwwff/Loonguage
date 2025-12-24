@@ -7,8 +7,14 @@ namespace Loonguage {
 	{	
 		int value;									//value of int literal
 	public:
-		void dump(std::ostream& cout) const;		//override
-		TokenInt(int, int);							//constructor
+		//override
+		void dump(std::ostream&) const;
+		int getValue() const;
+		//constructor
+		TokenInt();
+		TokenInt(int, int);
+		TokenInt(std::istream&);
+
 	};
 }
 

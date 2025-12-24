@@ -6,9 +6,19 @@ namespace Loonguage {
 			<< ", \"symbol\" : \"" << symbol << "\" }";
 	}
 
+
+	TokenSymbol::TokenSymbol()
+	{
+	}
+
 	TokenSymbol::TokenSymbol(int l, char ch) :
 		Token(TokenType::TokenSymbol, l), symbol(ch)
 	{
 
+	}
+	TokenSymbol::TokenSymbol(std::istream& cin)
+	{
+		tokenType = TokenType::TokenSymbol;
+		cin >> line >> symbol;
 	}
 };

@@ -1,49 +1,121 @@
-/* scanner for a toy Pascal-like language */
-%option noyywrap
+%option c++
 
 %{
-#include "unistd.h"
+#include "synScan.tab.hh"
+#include <string.h>
+#include <stdlib.h>
+#include "lexicalConfig.h"
+ 
 int curLine = 1;
+
+char last[4096];
+char output[4096];
+char buffer[1024];
+int len = 0;
+
+void addString()
+{
+    int newLen = len + strlen(buffer);
+    strcat_s(output + len, sizeof(output) - len, buffer);
+    strcpy_s(last, sizeof(last), output);
+    len = newLen;
+}
 %}
 
+%x COMMENT
+%x SINGLE_COMMENT
+
+
 UNSIGNEDDIGIT [0-9]
-DIGIT [-]*{UNSIGNEDDIGIT}+
-IDEN [a-z][a-z0-9]*
+DIGIT {UNSIGNEDDIGIT}+
+IDEN [a-zA-Z][a-zA-Z0-9]*
+
+
 
 NEW_LINE \n
-BLANK_CHAR [ \f\r\t\v]
-BLANK_STRING {BLANK_CHAR}+
+BLANK [" "\f\r\t\v]+
 
 %%
 
-{NEW_LINE}  { curLine++; }
+EOF { yyterminate(); }
 
-BLANK_STRING { }
+<INITIAL>"/*" BEGIN(COMMENT);
+<INITIAL>"//" BEGIN(SINGLE_COMMENT);
 
-{DIGIT}    {
-                printf("#%d:digit %s\n", curLine, yytext);
+<COMMENT>{NEW_LINE} { curLine++; }
+<COMMENT>[^*\n]* { }       /* eat anything that's not a '*' */
+<COMMENT>"*"+[^*/\n]* { }  /* eat up '*'s not followed by '/'s */
+<COMMENT>"*/" BEGIN(INITIAL);
+
+<SINGLE_COMMENT>[^\n]
+<SINGLE_COMMENT>\n {
+    curLine++;
+    BEGIN(INITIAL);
+}
+
+<INITIAL>{NEW_LINE}  { curLine++; }
+
+<INITIAL>{BLANK} { }
+
+
+<INITIAL>{DIGIT}    {
+                snprintf(buffer, sizeof(buffer), " TokenInt %d %s", curLine, yytext);
+                addString();
+                strcpy(yylval->text, yytext);
+                return yy::parser::token::INT;
             }
 
-if        {
-                printf("#%d:if\n", curLine);
+<INITIAL>if        {
+                snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordIf", curLine);
+                addString();
+                strcpy(yylval->text, yytext);
+                return yy::parser::token::IF;
             }
 
-while        {
-                printf("#%d:while\n", curLine);
+<INITIAL>while        {
+                snprintf(buffer, sizeof(buffer), " TokenKeyWord %d KeyWordWhile", curLine);
+                addString();
+                strcpy(yylval->text, yytext);
+                return yy::parser::token::WHILE;
             }
 
-{IDEN}  {
-                printf("#%d:iden %s\n", curLine, yytext);
+<INITIAL>{IDEN}  {
+                snprintf(buffer, sizeof(buffer), " TokenIden %d %s", curLine, yytext);
+                addString();
+                strcpy(yylval->text, yytext);
+                return yy::parser::token::IDEN;
             }
 
-"+"|"-"|"*"|"/"   printf( "#%d: An operator: %s\n", curLine, yytext );
+<INITIAL>==  {
+                snprintf(buffer, sizeof(buffer), " TokenSymbol %d #", curLine);
+                addString();
+                return '#';
+            }
 
+<INITIAL>"+"|"-"|"*"|"/"|"{"|"}"|"("|")"|";"|"="|"&"|"|"|"^"|"<"|"~"|"," {
+                snprintf(buffer, sizeof(buffer), " TokenSymbol %d %c", curLine, yytext[0]);
+                addString();
+                return yytext[0];
+            }
 
-.           printf( "Unrecognized character: %s\n", yytext );
-
-%%
-
-void lexical(  )
-    {
-    yylex();
+. {
+    if (strlen(last) < 10)
+        snprintf(yylval->errorMsg, sizeof(yylval->errorMsg), "An error occurs at lexical analysis at line %d after %s.", curLine, last);
+    else{
+        last[10] = 0;
+        snprintf(yylval->errorMsg, sizeof(yylval->errorMsg), "An error occurs at lexical analysis at line %d after %s...", curLine, last);
     }
+    return yy::parser::token::ERROR;
+}
+
+%%
+ 
+int yywrap()
+{
+    return 1;
+}
+
+int lexical(const char* input)
+{
+    return 0;
+}

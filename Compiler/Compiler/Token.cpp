@@ -11,6 +11,23 @@ namespace Loonguage {
 			return "TokenKeyWord";
 		if (tokenType == TokenType::TokenSymbol)
 			return "TokenSymbol";
+		if (tokenType == TokenType::TokenString)
+			return "TokenString";
+		throw;
+	}
+
+	void Token::string2TokenType(const std::string& str)
+	{
+		if (str == "TokenIden")
+			tokenType = TokenType::TokenIden;
+		if (str == "TokenInt")
+			tokenType = TokenType::TokenInt;
+		if (str == "TokenKeyWord")
+			tokenType = TokenType::TokenKeyWord;
+		if (str == "TokenSymbol")
+			tokenType = TokenType::TokenSymbol;
+		if (str == "TokenString")
+			tokenType = TokenType::TokenString;
 		throw;
 	}
 
@@ -19,10 +36,16 @@ namespace Loonguage {
 		cout << "{ \"tokenType\" : \"" << tokenType2String() << "\", \"line\" : " << line << "\" }";
 	}
 
+
 	Token::Token(TokenType t, int i) :
 		tokenType(t), line(i)
 	{
 
+	}
+
+	Token::Token():
+		tokenType(TokenType::TokenNoType), line(0)
+	{
 	}
 
 };
